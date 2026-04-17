@@ -1,0 +1,313 @@
+---
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Juan Jesús Gómez — Physics / Gameplay Programmer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg: #0c0c0e;
+        --surface: #131316;
+        --surface-hover: #1a1a1f;
+        --border: #232328;
+        --border-hover: #333340;
+        --text: #ececec;
+        --muted: #777780;
+        --muted-bright: #9999a8;
+        --accent: #b8e832;
+        --font: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+
+      html { background: var(--bg); }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 1fr min(692px, calc(100% - 48px)) 1fr;
+      }
+      .container > * { grid-column: 2; }
+
+      /* NAV */
+      .nav-wrapper { border-bottom: 1px solid var(--border); }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+      }
+      nav .name { font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
+      nav .links { display: flex; gap: 20px; }
+      nav .links a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.15s;
+      }
+      nav .links a:hover { color: var(--text); }
+
+      /* HERO */
+      .hero { padding: 80px 0 64px; }
+      .hero h1 {
+        font-size: clamp(36px, 6vw, 52px);
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin-bottom: 20px;
+      }
+      .hero h1 .line2 { color: var(--accent); display: block; }
+      .hero p {
+        color: var(--muted-bright);
+        font-size: 17px;
+        line-height: 1.65;
+        max-width: 480px;
+      }
+      .hero .badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 28px;
+      }
+      .badge {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--muted);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 4px 12px;
+        letter-spacing: 0.01em;
+      }
+
+      /* STORY */
+      .story {
+        padding: 48px 0 40px;
+      }
+      .story p {
+        color: var(--muted-bright);
+        font-size: 16px;
+        line-height: 1.75;
+        max-width: 560px;
+        margin-bottom: 16px;
+      }
+      .story p:last-child { margin-bottom: 0; }
+      .story p strong {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      /* PROJECT CARD */
+      .project {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 24px 28px;
+        margin-bottom: 48px;
+        transition: border-color 0.2s, background 0.2s;
+      }
+      .project:hover {
+        border-color: var(--border-hover);
+        background: var(--surface-hover);
+      }
+      .project-header {
+        margin-bottom: 8px;
+      }
+      .project h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+      .project p {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+        margin-bottom: 0;
+      }
+      .project-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 20px;
+        padding: 12px 16px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        text-decoration: none;
+        transition: border-color 0.2s, background 0.2s;
+      }
+      .project-link:hover {
+        border-color: var(--accent);
+        background: rgba(184, 232, 50, 0.04);
+      }
+      .project-link .link-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted-bright);
+        transition: color 0.2s;
+      }
+      .project-link:hover .link-label { color: var(--accent); }
+      .project-link .link-arrow {
+        font-size: 16px;
+        color: var(--muted);
+        transition: color 0.2s, transform 0.2s;
+      }
+      .project-link:hover .link-arrow { color: var(--accent); transform: translateX(3px); }
+
+      /* TAGS */
+      .tags {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .tag {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 2px 8px;
+        letter-spacing: 0.02em;
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 28px 0 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+        gap: 16px;
+      }
+      footer a { color: var(--muted); text-decoration: none; transition: color 0.15s; }
+      footer a:hover { color: var(--muted-bright); }
+
+      @media (max-width: 520px) {
+        .hero h1 { font-size: 34px; }
+        .project { padding: 20px; }
+        footer { flex-direction: column; align-items: flex-start; gap: 6px; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="nav-wrapper">
+      <div class="container">
+        <nav>
+          <span class="name">Juan Jesús Gómez</span>
+          <div class="links">
+            <a href="https://github.com/jesusgomeznz" target="_blank">GitHub</a>
+            <a href="https://linkedin.com/in/jesus-gomeznz" target="_blank">LinkedIn</a>
+            <a href="mailto:jesus.gomeznuz@gmail.com">Email</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="hero">
+        <h1>
+          Physics &amp; Gameplay
+          <span class="line2">Programmer</span>
+        </h1>
+        <p>I build systems that simulate physics and generate content automatically. Rust, C#, Unity. Based in Mexico.</p>
+        <div class="badges">
+          <span class="badge">Rust</span>
+          <span class="badge">C# / Unity</span>
+          <span class="badge">Physics Simulation</span>
+          <span class="badge">Rapier</span>
+          <span class="badge">Open to work</span>
+        </div>
+      </div>
+
+      <div class="story">
+        <p>
+          In 2024 I set out to answer a question: <strong>could a video write itself?</strong>
+          A music track goes in. A physics simulation runs. A finished video comes out.
+          No manual editing, no intervention.
+        </p>
+        <p>
+          I built the pipeline in Unity and C#. The first video I published reached tens of thousands of views organically.
+        </p>
+      </div>
+
+      <div class="project">
+        <div class="project-header">
+          <h2>Canicas Brawl</h2>
+        </div>
+        <p>Automated pipeline: music in, physics-based marble race video out. Unity simulation, programmatic render, zero manual editing.</p>
+        <div class="tags">
+          <span class="tag">Unity C#</span>
+          <span class="tag">Physics Simulation</span>
+          <span class="tag">Video Pipeline</span>
+          <span class="tag">Automation</span>
+        </div>
+        <a class="project-link" href="https://github.com/jesusgomeznz/canicas-brawl" target="_blank">
+          <span class="link-label">Ver código en GitHub</span>
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+
+      <div class="story">
+        <p>
+          <strong>Jammable</strong>, a London AI music startup, found the project.
+          They reached out and hired me as a contract Software Engineer to rebuild the pipeline for their platform.
+        </p>
+        <p>
+          I rebuilt it at production scale. Creators using it went viral.
+          The system that started as a personal experiment worked again — this time for a real product, with real users.
+        </p>
+      </div>
+
+      <div class="story" style="padding-top: 0;">
+        <p>
+          After shipping, I wanted to go deeper — not just use a physics engine but understand it at the source level.
+          I rebuilt the same simulation in <strong>Rust</strong> using Bevy and Rapier, then compiled it to WASM to run in the browser.
+        </p>
+      </div>
+
+      <div class="project">
+        <div class="project-header">
+          <h2>Rapier Physics Demo</h2>
+        </div>
+        <p>Rigid body simulation in Rust (Bevy + Rapier). Includes a live web version via react-three-rapier — same simulation, compiled to WASM.</p>
+        <div class="tags">
+          <span class="tag">Rust</span>
+          <span class="tag">Bevy</span>
+          <span class="tag">Rapier</span>
+          <span class="tag">Physics Engine</span>
+          <span class="tag">WASM</span>
+        </div>
+        <a class="project-link" href="https://github.com/jesusgomeznz/rapier-bevy" target="_blank">
+          <span class="link-label">Ver código en GitHub</span>
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="container">
+      <footer>
+        <span>Juan Jesús Gómez Núñez</span>
+        <a href="mailto:jesus.gomeznuz@gmail.com">jesus.gomeznuz@gmail.com</a>
+      </footer>
+    </div>
+
+  </body>
+</html>

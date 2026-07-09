@@ -325,7 +325,8 @@ function Marble({
   const faceTexture = useTexture(character.image);
   const body = useRef<RapierRigidBody | null>(null);
   const visual = useRef<THREE.Group>(null);
-  const label = useRef<THREE.Group>(null);
+  const labelUpright = useRef<THREE.Group>(null);
+  const parentQuaternion = useRef(new THREE.Quaternion());
   const ringMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const iceMaterial = useRef<THREE.MeshStandardMaterial>(null);
   const frozen = fx.frozenUntil > 0;
@@ -337,9 +338,11 @@ function Marble({
       const current = visual.current.scale.x;
       visual.current.scale.setScalar(current + (targetScale - current) * 0.3);
     }
-    if (label.current && body.current) {
-      const position = body.current.translation();
-      label.current.position.set(position.x, position.y + 0.13, position.z);
+    // El label vive DENTRO del cuerpo (hereda la posición interpolada del
+    // mesh, sin lag) y este grupo cancela el giro para que no orbite.
+    if (labelUpright.current?.parent) {
+      labelUpright.current.parent.getWorldQuaternion(parentQuaternion.current);
+      labelUpright.current.quaternion.copy(parentQuaternion.current.invert());
     }
     if (ringMaterial.current) {
       const remaining = fx.ringUntil - now;
@@ -351,7 +354,6 @@ function Marble({
   });
 
   return (
-    <>
     <RigidBody
       ref={(instance) => {
         body.current = instance;
@@ -404,15 +406,14 @@ function Marble({
           <meshBasicMaterial ref={ringMaterial} color="#b34df2" transparent opacity={0} depthWrite={false} />
         </mesh>
       </group>
+      <group ref={labelUpright}>
+        <Html center position={[0, 0.13, 0]} style={{ pointerEvents: 'none' }}>
+          <div className="canicas-label">
+            {isLeader && <img src="/canicas/img/crown.png" alt="" />}
+            {character.name}
+          </div>
+        </Html>
+      </group>
     </RigidBody>
-    <group ref={label} position={[start[0], start[1] + 0.13, 0]}>
-      <Html center style={{ pointerEvents: 'none' }}>
-        <div className="canicas-label">
-          {isLeader && <img src="/canicas/img/crown.png" alt="" />}
-          {character.name}
-        </div>
-      </Html>
-    </group>
-    </>
   );
 }

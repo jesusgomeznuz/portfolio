@@ -115,8 +115,6 @@ export function Race({
       switch (pickup.variant) {
         case 'freeze': {
           if (marbleFx.frozenUntil > now) return;
-          body.setBodyType(2, true); // KinematicPositionBased
-          body.collider(0)?.setCollisionGroups(FROZEN_GROUPS);
           marbleFx.frozenUntil = now + FREEZE_SECS;
           break;
         }
@@ -227,10 +225,8 @@ export function Race({
         if (blocked) {
           marbleFx.frozenUntil = now + 0.1;
         } else {
-          body.setBodyType(0, true); // Dynamic
-          body.collider(0)?.setCollisionGroups(MARBLE_GROUPS);
-          body.wakeUp();
           marbleFx.frozenUntil = 0;
+          body.wakeUp();
           fxChanged = true;
         }
       }
@@ -318,9 +314,12 @@ function Marble({
   isLeader: boolean;
 }) {
   const faceTexture = useTexture(character.image);
+  const body = useRef<RapierRigidBody | null>(null);
   const visual = useRef<THREE.Group>(null);
+  const label = useRef<THREE.Group>(null);
   const ringMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const iceMaterial = useRef<THREE.MeshStandardMaterial>(null);
+  const frozen = fx.frozenUntil > 0;
 
   useFrame(() => {
     const now = simTime.current;
@@ -329,19 +328,27 @@ function Marble({
       const current = visual.current.scale.x;
       visual.current.scale.setScalar(current + (targetScale - current) * 0.3);
     }
+    if (label.current && body.current) {
+      const position = body.current.translation();
+      label.current.position.set(position.x, position.y + 0.13, position.z);
+    }
     if (ringMaterial.current) {
       const remaining = fx.ringUntil - now;
       ringMaterial.current.opacity = remaining > 0 ? Math.min(1, remaining / 1.5) : 0;
     }
     if (iceMaterial.current) {
-      iceMaterial.current.opacity = fx.frozenUntil > now ? 0.55 : 0;
+      iceMaterial.current.opacity = frozen ? 0.55 : 0;
     }
   });
 
   return (
+    <>
     <RigidBody
-      ref={registerBody}
-      type="dynamic"
+      ref={(instance) => {
+        body.current = instance;
+        registerBody(instance);
+      }}
+      type={frozen ? 'kinematicPosition' : 'dynamic'}
       position={[start[0], start[1], 0]}
       colliders={false}
       ccd
@@ -357,7 +364,7 @@ function Marble({
         rotation={[Math.PI / 2, 0, 0]}
         friction={0.3}
         restitution={0.6}
-        collisionGroups={MARBLE_GROUPS}
+        collisionGroups={frozen ? FROZEN_GROUPS : MARBLE_GROUPS}
       />
       <group ref={visual}>
         <mesh rotation={[Math.PI / 2, 0, 0]}>
@@ -388,12 +395,15 @@ function Marble({
           <meshBasicMaterial ref={ringMaterial} color="#b34df2" transparent opacity={0} depthWrite={false} />
         </mesh>
       </group>
-      <Html center position={[0, 0.15, 0]} style={{ pointerEvents: 'none' }}>
+    </RigidBody>
+    <group ref={label} position={[start[0], start[1] + 0.13, 0]}>
+      <Html center style={{ pointerEvents: 'none' }}>
         <div className="canicas-label">
-          {isLeader ? '👑 ' : ''}
+          {isLeader && <img src="/canicas/img/crown.png" alt="" />}
           {character.name}
         </div>
       </Html>
-    </RigidBody>
+    </group>
+    </>
   );
 }

@@ -2,8 +2,8 @@
 // y pone el overlay DOM (título, ganadores, botón de otra carrera).
 import { Suspense, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Stars } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
+import { Background } from './Background';
 import { Race } from './Race';
 import {
   CAMERA_FOV_DEG,
@@ -57,12 +57,13 @@ export default function CanicasDemo() {
       {!loadError && !modulesData && <div className="canicas-status">cargando módulos…</div>}
       {modulesData && (
         <Canvas
+          flat
           camera={{ fov: CAMERA_FOV_DEG, position: [0, -0.1, CAMERA_Z], near: 0.05, far: 120 }}
           gl={{ antialias: true, alpha: true }}
         >
-          <ambientLight intensity={1.1} />
-          <directionalLight position={[-2, 3, 4]} intensity={1.6} />
-          <Stars radius={40} depth={30} count={900} factor={1.5} saturation={0.4} fade speed={0.6} />
+          <ambientLight intensity={1.6} />
+          <directionalLight position={[3, 4.2, 8.6]} intensity={8} />
+          <Background seed={seed} />
           <Suspense fallback={null}>
             <Physics gravity={[0, GRAVITY_Y, 0]} timeStep={1 / 60}>
               <Race
@@ -108,7 +109,8 @@ export default function CanicasDemo() {
           margin: 0 auto;
           border-radius: 18px;
           overflow: hidden;
-          background: linear-gradient(180deg, #073b4c 0%, #0e7c92 45%, #13a0ae 75%, #1eb6be 100%);
+          container-type: size;
+          background: linear-gradient(180deg, #0e7c92 0%, #13a0ae 60%, #1eb6be 100%);
           box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
         }
         .canicas-demo canvas { display: block; }
@@ -170,13 +172,17 @@ export default function CanicasDemo() {
         .canicas-results button:hover,
         .canicas-restart:hover { background: rgba(14, 86, 105, 0.95); }
         .canicas-label {
+          display: flex;
+          align-items: center;
+          gap: 0.2em;
           color: #ffffff;
-          font-family: ui-monospace, monospace;
-          font-size: 10px;
+          font-family: 'DM Sans', Inter, system-ui, sans-serif;
+          font-weight: 500;
+          font-size: clamp(10px, 2.2cqh, 22px);
           white-space: nowrap;
-          text-shadow: 0 0 3px #000, 0 0 3px #000, 0 1px 2px #000;
-          transform: translateY(-6px);
+          text-shadow: -1.5px 0 rgba(0,0,0,0.88), 1.5px 0 rgba(0,0,0,0.88), 0 -1.5px rgba(0,0,0,0.88), 0 1.5px rgba(0,0,0,0.88);
         }
+        .canicas-label img { height: 1.1em; }
       `}</style>
     </div>
   );

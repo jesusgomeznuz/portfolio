@@ -1,11 +1,12 @@
 // El escenario: obstáculos, pickups, paredes y meta — el espejo visual de
 // world/modules.rs + world/structures.rs + world/pickups.rs.
-import { useEffect, useRef, useState, Suspense } from 'react';
+import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useTexture } from '@react-three/drei';
+import { RoundedBox, useGLTF, useTexture } from '@react-three/drei';
 import {
   RigidBody,
   CuboidCollider,
+  RoundCuboidCollider,
   BallCollider,
   interactionGroups,
   type RapierRigidBody,
@@ -31,7 +32,8 @@ export const SENSOR_GROUPS = interactionGroups(GROUP_WORLD, [GROUP_MARBLE]);
 export const MARBLE_GROUPS = interactionGroups(GROUP_MARBLE, [GROUP_MARBLE, GROUP_WORLD]);
 export const FROZEN_GROUPS = interactionGroups(GROUP_FROZEN, [GROUP_WORLD]);
 
-const OBSTACLE_COLOR = '#8fb3bd'; // blanco tintado con la paleta azul (obstacle_color)
+// palette.rs::obstacle_color() — white_matte (0.92,0.92,0.90) mezclado 50% con #073B4C
+const OBSTACLE_COLOR = '#799399';
 
 function spins(angvel: [number, number, number]): boolean {
   return angvel[0] !== 0 || angvel[1] !== 0 || angvel[2] !== 0;
@@ -82,16 +84,36 @@ function ObstacleBox({ box }: { box: ResolvedBox }) {
           : undefined
       }
     >
-      <CuboidCollider
-        args={[box.hx, box.hy, HALF_DEPTH]}
-        friction={box.friction}
-        restitution={box.restitution}
-        collisionGroups={WORLD_GROUPS}
-      />
-      <mesh ref={visual}>
-        <boxGeometry args={[box.hx * 2, box.hy * 2, HALF_DEPTH * 2]} />
-        <meshStandardMaterial color={box.bouncy ? '#d98fbd' : OBSTACLE_COLOR} roughness={0.85} />
-      </mesh>
+      {box.borderRadius > 0 ? (
+        <RoundCuboidCollider
+          args={[
+            Math.max(box.hx - box.borderRadius, 0.001),
+            Math.max(box.hy - box.borderRadius, 0.001),
+            Math.max(HALF_DEPTH - box.borderRadius, 0.001),
+            box.borderRadius,
+          ]}
+          friction={box.friction}
+          restitution={box.restitution}
+          collisionGroups={WORLD_GROUPS}
+        />
+      ) : (
+        <CuboidCollider
+          args={[box.hx, box.hy, HALF_DEPTH]}
+          friction={box.friction}
+          restitution={box.restitution}
+          collisionGroups={WORLD_GROUPS}
+        />
+      )}
+      {box.borderRadius > 0 ? (
+        <RoundedBox ref={visual} args={[box.hx * 2, box.hy * 2, HALF_DEPTH * 2]} radius={box.borderRadius} smoothness={4}>
+          <meshStandardMaterial color={OBSTACLE_COLOR} roughness={0.85} />
+        </RoundedBox>
+      ) : (
+        <mesh ref={visual}>
+          <boxGeometry args={[box.hx * 2, box.hy * 2, HALF_DEPTH * 2]} />
+          <meshStandardMaterial color={OBSTACLE_COLOR} roughness={0.85} />
+        </mesh>
+      )}
       <BouncyPulseClock pulse={pulse} enabled={box.bouncy} />
     </RigidBody>
   );
@@ -187,39 +209,29 @@ function ModuleImage({ image }: { image: { x: number; y: number; w: number; h: n
   );
 }
 
-const PICKUP_LOOKS: Record<PickupVariant, { color: string; speed: number; axis: 'y' | 'z' }> = {
-  freeze: { color: '#59e0ff', speed: 1.0, axis: 'y' },
-  shrink: { color: '#59ff73', speed: 1.0, axis: 'y' },
-  swap: { color: '#b34df2', speed: 2.0, axis: 'z' },
+// Los MISMOS .glb del juego (assets/effects/) con el tuning de pickups.rs
+const ICON_TUNING: Record<PickupVariant, { axis: 'y' | 'z'; speed: number; scale: number }> = {
+  freeze: { axis: 'y', speed: 1.0, scale: 13.5 },
+  shrink: { axis: 'y', speed: 1.0, scale: 0.046 },
+  swap: { axis: 'z', speed: 2.0, scale: 0.25 },
 };
 
+useGLTF.preload('/canicas/effects/freeze.glb');
+useGLTF.preload('/canicas/effects/shrink.glb');
+useGLTF.preload('/canicas/effects/swap.glb');
+
 function PickupIcon({ variant }: { variant: PickupVariant }) {
+  const { scene } = useGLTF(`/canicas/effects/${variant}.glb`);
+  const model = useMemo(() => scene.clone(true), [scene]);
   const icon = useRef<THREE.Group>(null);
-  const look = PICKUP_LOOKS[variant];
+  const tuning = ICON_TUNING[variant];
   useFrame((_, delta) => {
     if (!icon.current) return;
-    icon.current.rotation[look.axis] += look.speed * delta;
+    icon.current.rotation[tuning.axis] += tuning.speed * delta;
   });
   return (
-    <group ref={icon}>
-      {variant === 'freeze' && (
-        <mesh>
-          <octahedronGeometry args={[0.045]} />
-          <meshStandardMaterial color={look.color} emissive={look.color} emissiveIntensity={1.5} />
-        </mesh>
-      )}
-      {variant === 'shrink' && (
-        <mesh rotation={[Math.PI, 0, 0]}>
-          <coneGeometry args={[0.035, 0.07, 12]} />
-          <meshStandardMaterial color={look.color} emissive={look.color} emissiveIntensity={1.5} />
-        </mesh>
-      )}
-      {variant === 'swap' && (
-        <mesh>
-          <torusGeometry args={[0.035, 0.012, 10, 24]} />
-          <meshStandardMaterial color={look.color} emissive={look.color} emissiveIntensity={1.5} />
-        </mesh>
-      )}
+    <group ref={icon} scale={tuning.scale}>
+      <primitive object={model} />
     </group>
   );
 }
@@ -242,7 +254,9 @@ export function Pickup({
           if (userData?.marbleIndex !== undefined) onHit(pickup, userData.marbleIndex);
         }}
       />
-      <PickupIcon variant={pickup.variant} />
+      <Suspense fallback={null}>
+        <PickupIcon variant={pickup.variant} />
+      </Suspense>
     </RigidBody>
   );
 }

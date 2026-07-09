@@ -46,6 +46,7 @@ export interface ResolvedBox {
   x: number; y: number; hx: number; hy: number; rot: number;
   angvel: [number, number, number];
   friction: number; restitution: number; bouncy: boolean;
+  borderRadius: number;
 }
 export interface ResolvedSphere {
   x: number; y: number; radius: number;
@@ -204,6 +205,7 @@ export function resolveModule(
           friction: object.friction ?? 0.15,
           restitution: object.restitution ?? 0.05,
           bouncy: object.bouncy ?? false,
+          borderRadius: object.border_radius ?? 0,
         });
         break;
       case 'Sphere':

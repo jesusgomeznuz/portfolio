@@ -1,0 +1,22 @@
+{
+  "segments": [
+    {
+      "sensor_time": 28.175,
+      "sensor_pos": [
+        1.149756,
+        -1.148129
+      ],
+      "start_time": 28.175,
+      "end_time": 30.14
+    },
+    {
+      "sensor_time": 35.996,
+      "sensor_pos": [
+        5.476907,
+        -1.272059
+      ],
+      "start_time": 35.996,
+      "end_time": 38.47
+    }
+  ]
+}

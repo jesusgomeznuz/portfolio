@@ -1,0 +1,34 @@
+{
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 10.403,
+      "character": "perla"
+    },
+    {
+      "start": 10.403,
+      "end": 16.646,
+      "character": "marceline"
+    },
+    {
+      "start": 16.646,
+      "end": 28.646,
+      "character": "ben10"
+    },
+    {
+      "start": 28.646,
+      "end": 40.646,
+      "character": "dulceprincesa"
+    },
+    {
+      "start": 40.646,
+      "end": 52.077,
+      "character": "mordecai"
+    },
+    {
+      "start": 52.077,
+      "end": 60.0,
+      "character": "perla"
+    }
+  ]
+}

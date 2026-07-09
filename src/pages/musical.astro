@@ -1,0 +1,50 @@
+---
+import MusicalDemo from '../components/musical-demo/MusicalDemo';
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Musical Path — demo en vivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { min-height: 100%; background: #0c0c0e; }
+      body {
+        color: #ececec;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        padding: 28px 16px 40px;
+      }
+      a { color: #b8e832; text-decoration: none; }
+      a:hover { color: #cff05a; }
+      .page-title { font: 800 22px Inter; letter-spacing: -0.02em; }
+      .page-subtitle {
+        font: 500 13px 'JetBrains Mono', monospace;
+        color: #9a9aa2;
+        text-align: center;
+        max-width: 560px;
+      }
+      .demo-frame { width: min(92vw, 46vh); }
+      .back { font: 600 12px 'JetBrains Mono', monospace; }
+    </style>
+  </head>
+  <body>
+    <a class="back" href="/">← portfolio</a>
+    <h1 class="page-title">Musical Path</h1>
+    <p class="page-subtitle">
+      El inverso de CanicasBrawl: aquí no hay física — la trayectoria ES la canción. Cada rebote
+      cae en un beat, cada galleta cambia la voz, las bombas rompen la pared en los golpes fuertes.
+    </p>
+    <div class="demo-frame">
+      <MusicalDemo client:only="react" />
+    </div>
+  </body>
+</html>

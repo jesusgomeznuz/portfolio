@@ -10,19 +10,28 @@ import {
   CAMERA_Z,
   GRAVITY_Y,
   MODULE_NAMES,
+  PALETTES,
   ROSTER,
+  obstacleColorFor,
   type ModuleJson,
+  type PaletteName,
 } from './race_rules';
 
 function freshSeed(): number {
   return Math.floor(Math.random() * 2 ** 31);
 }
 
+const PALETTE_ORDER: PaletteName[] = ['azul', 'neon', 'rosa'];
+
 export default function CanicasDemo() {
   const [modulesData, setModulesData] = useState<Record<string, ModuleJson> | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [seed, setSeed] = useState(freshSeed);
   const [finishers, setFinishers] = useState<string[]>([]);
+  const [playing, setPlaying] = useState(false);
+  const [paletteName, setPaletteName] = useState<PaletteName>('azul');
+  const palette = PALETTES[paletteName];
+  const obstacleColor = obstacleColorFor(palette);
 
   useEffect(() => {
     let cancelled = false;
@@ -46,13 +55,22 @@ export default function CanicasDemo() {
 
   const restart = () => {
     setFinishers([]);
+    setPlaying(false);
     setSeed(freshSeed());
+  };
+
+  const nextPalette = () => {
+    const index = PALETTE_ORDER.indexOf(paletteName);
+    setPaletteName(PALETTE_ORDER[(index + 1) % PALETTE_ORDER.length]);
   };
 
   const winner = finishers[0] ?? null;
 
   return (
-    <div className="canicas-demo">
+    <div
+      className="canicas-demo"
+      style={{ background: `linear-gradient(180deg, ${palette.skyStops[1][1]} 0%, ${palette.skyStops[3][1]} 100%)` }}
+    >
       {loadError && <div className="canicas-status">⚠️ {loadError}</div>}
       {!loadError && !modulesData && <div className="canicas-status">cargando módulos…</div>}
       {modulesData && (
@@ -63,14 +81,16 @@ export default function CanicasDemo() {
         >
           <ambientLight intensity={1.6} />
           <directionalLight position={[3, 4.2, 8.6]} intensity={8} />
-          <Background seed={seed} />
+          <Background seed={seed} palette={palette} />
           <Suspense fallback={null}>
-            <Physics gravity={[0, GRAVITY_Y, 0]} timeStep={1 / 60}>
+            <Physics gravity={[0, GRAVITY_Y, 0]} timeStep={1 / 60} paused={!playing}>
               <Race
                 key={seed}
                 seed={seed}
                 modulesData={modulesData}
                 onFinisher={(name) => setFinishers((current) => [...current, name])}
+                playing={playing}
+                obstacleColor={obstacleColor}
               />
             </Physics>
           </Suspense>
@@ -93,11 +113,18 @@ export default function CanicasDemo() {
             <button onClick={restart}>🎲 otra carrera</button>
           </div>
         )}
-        {!winner && (
-          <button className="canicas-restart" onClick={restart}>
-            🎲 otra carrera
+        {!winner && !playing && modulesData && (
+          <button className="canicas-play-big" onClick={() => setPlaying(true)}>
+            ▶
           </button>
         )}
+        <div className="canicas-controls">
+          {!winner && (
+            <button onClick={() => setPlaying((current) => !current)}>{playing ? '⏸ pausa' : '▶ jugar'}</button>
+          )}
+          <button onClick={nextPalette}>🎨 {paletteName}</button>
+          <button onClick={restart}>🎲 otra carrera</button>
+        </div>
       </div>
 
       <style>{`
@@ -157,7 +184,7 @@ export default function CanicasDemo() {
         .canicas-winner { font-size: 1.15rem; margin-bottom: 8px; }
         .canicas-results ol { margin: 0 0 12px; padding-left: 1.4em; text-align: left; font-size: 0.85rem; }
         .canicas-results button,
-        .canicas-restart {
+        .canicas-controls button {
           pointer-events: auto;
           border: 1px solid rgba(120, 220, 235, 0.5);
           background: rgba(9, 58, 72, 0.85);
@@ -168,9 +195,30 @@ export default function CanicasDemo() {
           font-size: 0.8rem;
           cursor: pointer;
         }
-        .canicas-restart { align-self: flex-end; }
+        .canicas-controls {
+          align-self: flex-end;
+          display: flex;
+          gap: 8px;
+        }
         .canicas-results button:hover,
-        .canicas-restart:hover { background: rgba(14, 86, 105, 0.95); }
+        .canicas-controls button:hover { background: rgba(14, 86, 105, 0.95); }
+        .canicas-play-big {
+          pointer-events: auto;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 74px;
+          height: 74px;
+          border-radius: 50%;
+          border: 2px solid rgba(255, 255, 255, 0.75);
+          background: rgba(4, 34, 44, 0.72);
+          color: #ffffff;
+          font-size: 1.7rem;
+          padding-left: 6px;
+          cursor: pointer;
+        }
+        .canicas-play-big:hover { background: rgba(9, 58, 72, 0.9); }
         .canicas-label {
           display: flex;
           align-items: center;

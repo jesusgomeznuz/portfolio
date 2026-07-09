@@ -57,10 +57,14 @@ export function Race({
   seed,
   modulesData,
   onFinisher,
+  playing,
+  obstacleColor,
 }: {
   seed: number;
   modulesData: Record<string, ModuleJson>;
   onFinisher: (name: string) => void;
+  playing: boolean;
+  obstacleColor: string;
 }) {
   const rng = useMemo(() => makeRng(seed), [seed]);
   const bodies = useRef<(RapierRigidBody | null)[]>(Array(ROSTER.length).fill(null));
@@ -149,12 +153,9 @@ export function Race({
 
   useFrame((state, delta) => {
     const dt = Math.min(delta, 1 / 30);
-    simTime.current += dt;
-    const now = simTime.current;
     const d = director.current;
-    d.time = now;
 
-    // ── el líder: la canica más baja ──
+    // ── el líder: la canica más baja (también en pausa, para encuadre y corona) ──
     let leaderY = Infinity;
     let lowestIndex: number | null = null;
     bodies.current.forEach((body, index) => {
@@ -166,6 +167,28 @@ export function Race({
       }
     });
     if (lowestIndex !== null && lowestIndex !== leaderIndex) setLeaderIndex(lowestIndex);
+
+    // ── la cámara sigue a la más baja ──
+    const camera = state.camera;
+    const targetY = (leaderY === Infinity ? -0.1 : leaderY) + 0.2;
+    if (!d.cameraStarted) {
+      camera.position.set(0, targetY, CAMERA_Z);
+      d.cameraStarted = true;
+    } else {
+      const alpha = 1 - Math.exp(-10 * dt);
+      camera.position.y += (targetY - camera.position.y) * alpha;
+      camera.position.x = 0;
+      camera.position.z = CAMERA_Z;
+    }
+    camera.rotation.set(0, 0, 0);
+    cameraY.current = camera.position.y;
+
+    // ── en pausa el reloj de la carrera no corre: ni director, ni efectos, ni meta ──
+    if (!playing) return;
+
+    simTime.current += dt;
+    const now = simTime.current;
+    d.time = now;
 
     // ── el director: generar pista o cerrar con la meta ──
     if (!d.finishSpawned && leaderY !== Infinity) {
@@ -192,21 +215,6 @@ export function Race({
         }
       }
     }
-
-    // ── la cámara sigue a la más baja ──
-    const camera = state.camera;
-    const targetY = (leaderY === Infinity ? -0.1 : leaderY) + 0.2;
-    if (!d.cameraStarted) {
-      camera.position.set(0, targetY, CAMERA_Z);
-      d.cameraStarted = true;
-    } else {
-      const alpha = 1 - Math.exp(-10 * dt);
-      camera.position.y += (targetY - camera.position.y) * alpha;
-      camera.position.x = 0;
-      camera.position.z = CAMERA_Z;
-    }
-    camera.rotation.set(0, 0, 0);
-    cameraY.current = camera.position.y;
 
     // ── expirar efectos ──
     let fxChanged = false;
@@ -260,7 +268,7 @@ export function Race({
 
   return (
     <>
-      <WallSegment top={WALLS_TOP} bottom={FIRST_MODULE_TOP} />
+      <WallSegment top={WALLS_TOP} bottom={FIRST_MODULE_TOP} color={obstacleColor} />
       {modules.map((spawnedModule) => (
         <Module
           key={spawnedModule.key}
@@ -269,12 +277,13 @@ export function Race({
           resolved={spawnedModule.resolved}
           consumed={consumed}
           onPickupHit={applyPickup}
+          obstacleColor={obstacleColor}
         />
       ))}
       {finish && (
         <>
-          <WallSegment top={director.current.nextTop} bottom={finish.floorY} />
-          <FloorBlock floorY={finish.floorY} />
+          <WallSegment top={director.current.nextTop} bottom={finish.floorY} color={obstacleColor} />
+          <FloorBlock floorY={finish.floorY} color={obstacleColor} />
           <Suspense fallback={null}>
             <FinishLineVisual finishY={finish.finishY} />
           </Suspense>

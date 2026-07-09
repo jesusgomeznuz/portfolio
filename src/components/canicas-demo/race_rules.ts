@@ -258,6 +258,68 @@ export function resolveModule(
   return resolved;
 }
 
+// Las paletas de palette.rs — cielo, nubes y tinte de obstáculos.
+export type PaletteName = 'azul' | 'neon' | 'rosa';
+
+export interface Palette {
+  skyStops: Array<[number, string]>;
+  cloudNear: string;
+  cloudMid: string;
+  cloudFar: string;
+  obstacleTint: [number, number, number];
+}
+
+export const PALETTES: Record<PaletteName, Palette> = {
+  azul: {
+    skyStops: [
+      [0.0, '#073B4C'],
+      [0.4, '#0E7C92'],
+      [0.66, '#13A0AE'],
+      [0.84, '#1EB6BE'],
+      [1.0, '#1EB6BE'],
+    ],
+    cloudNear: '#ebf5ff',
+    cloudMid: '#99d1e6',
+    cloudFar: '#3899b8',
+    obstacleTint: [0.027, 0.231, 0.298],
+  },
+  neon: {
+    skyStops: [
+      [0.0, '#171540'],
+      [0.4, '#46266E'],
+      [0.66, '#C0417E'],
+      [0.84, '#FF7E6B'],
+      [1.0, '#FF7E6B'],
+    ],
+    cloudNear: '#8f7ac2',
+    cloudMid: '#635294',
+    cloudFar: '#3b2b66',
+    obstacleTint: [0.27, 0.15, 0.43],
+  },
+  rosa: {
+    skyStops: [
+      [0.0, '#5C0844'],
+      [0.35, '#B82078'],
+      [0.62, '#EE55A4'],
+      [0.82, '#FF99CC'],
+      [1.0, '#FFBBDD'],
+    ],
+    cloudNear: '#ffffff',
+    cloudMid: '#fad1eb',
+    cloudFar: '#eda6d4',
+    obstacleTint: [0.361, 0.031, 0.267],
+  },
+};
+
+// palette.rs::obstacle_color() — white_matte (0.92,0.92,0.90) mezclado 50/50 con el tinte.
+export function obstacleColorFor(palette: Palette): string {
+  const strength = 0.5;
+  const white = 1 - strength;
+  const [r, g, b] = palette.obstacleTint;
+  const channel = (base: number, tint: number) => Math.round((base * white + tint * strength) * 255);
+  return `rgb(${channel(0.92, r)}, ${channel(0.92, g)}, ${channel(0.9, b)})`;
+}
+
 // El roster default con los colores dominantes calculados con el MISMO
 // algoritmo del juego (faces.rs::dominant_color_from_png) sobre los PNG reales.
 export interface Character { name: string; color: string; image: string }

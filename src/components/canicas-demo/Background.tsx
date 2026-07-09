@@ -3,33 +3,21 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { makeRng } from './race_rules';
+import { makeRng, type Palette } from './race_rules';
 
-// palette.rs::azul()
-const SKY_STOPS: Array<[number, string]> = [
-  [0.0, '#073B4C'],
-  [0.4, '#0E7C92'],
-  [0.66, '#13A0AE'],
-  [0.84, '#1EB6BE'],
-  [1.0, '#1EB6BE'],
-];
-const CLOUD_NEAR = '#ebf5ff';
-const CLOUD_MID = '#99d1e6';
-const CLOUD_FAR = '#3899b8';
-
-export function Background({ seed }: { seed: number }) {
+export function Background({ seed, palette }: { seed: number; palette: Palette }) {
   return (
     <>
-      <Sky />
+      <Sky palette={palette} />
       <StarField seed={seed} />
-      <Clouds seed={seed} />
+      <Clouds seed={seed} palette={palette} />
     </>
   );
 }
 
 // El cielo es un quad gigante detrás de todo que sigue a la cámara: en
 // pantalla solo se ve la rebanada media del gradiente, igual que en sky.rs.
-function Sky() {
+function Sky({ palette }: { palette: Palette }) {
   const mesh = useRef<THREE.Mesh>(null);
   const texture = useMemo(() => {
     const canvas = document.createElement('canvas');
@@ -37,11 +25,11 @@ function Sky() {
     canvas.height = 256;
     const context = canvas.getContext('2d')!;
     const gradient = context.createLinearGradient(0, 0, 0, 256);
-    for (const [t, color] of SKY_STOPS) gradient.addColorStop(t, color);
+    for (const [t, color] of palette.skyStops) gradient.addColorStop(t, color);
     context.fillStyle = gradient;
     context.fillRect(0, 0, 1, 256);
     return new THREE.CanvasTexture(canvas);
-  }, []);
+  }, [palette]);
 
   useFrame(({ camera }) => {
     if (mesh.current) mesh.current.position.y = camera.position.y;
@@ -162,9 +150,9 @@ const CLOUD_BLOBS: Array<[number, number, number, number]> = [
 ];
 
 const CLOUD_LAYERS = [
-  { z: -8, count: 4, color: CLOUD_NEAR, scaleMin: 0.42, scaleMax: 0.65, xSpread: 4.0, floatAmplitude: 0.22, parallaxFactor: 0.6 },
-  { z: -12, count: 6, color: CLOUD_MID, scaleMin: 0.36, scaleMax: 0.56, xSpread: 5.5, floatAmplitude: 0.13, parallaxFactor: 0.78 },
-  { z: -14, count: 8, color: CLOUD_FAR, scaleMin: 0.28, scaleMax: 0.44, xSpread: 6.5, floatAmplitude: 0.06, parallaxFactor: 0.93 },
+  { z: -8, count: 4, tone: 'near' as const, scaleMin: 0.42, scaleMax: 0.65, xSpread: 4.0, floatAmplitude: 0.22, parallaxFactor: 0.6 },
+  { z: -12, count: 6, tone: 'mid' as const, scaleMin: 0.36, scaleMax: 0.56, xSpread: 5.5, floatAmplitude: 0.13, parallaxFactor: 0.78 },
+  { z: -14, count: 8, tone: 'far' as const, scaleMin: 0.28, scaleMax: 0.44, xSpread: 6.5, floatAmplitude: 0.06, parallaxFactor: 0.93 },
 ];
 
 interface Cloud {
@@ -180,9 +168,10 @@ interface Cloud {
   parallaxFactor: number;
 }
 
-function Clouds({ seed }: { seed: number }) {
+function Clouds({ seed, palette }: { seed: number; palette: Palette }) {
   const clouds = useMemo<Cloud[]>(() => {
     const rng = makeRng((seed ^ 0x07bb0142) >>> 0);
+    const tones = { near: palette.cloudNear, mid: palette.cloudMid, far: palette.cloudFar };
     const list: Cloud[] = [];
     for (const layer of CLOUD_LAYERS) {
       const cols = Math.round(Math.sqrt(layer.count));
@@ -197,7 +186,7 @@ function Clouds({ seed }: { seed: number }) {
             baseX: -layer.xSpread + col * cellW + rng() * cellW,
             baseY: -ySpread + row * cellH + rng() * cellH,
             z: layer.z,
-            color: layer.color,
+            color: tones[layer.tone],
             scale: layer.scaleMin + rng() * (layer.scaleMax - layer.scaleMin),
             phase: rng() * Math.PI * 2,
             frequency: 0.04 + rng() * 0.08,
@@ -209,7 +198,7 @@ function Clouds({ seed }: { seed: number }) {
       }
     }
     return list;
-  }, [seed]);
+  }, [seed, palette]);
 
   const groups = useRef<(THREE.Group | null)[]>([]);
 

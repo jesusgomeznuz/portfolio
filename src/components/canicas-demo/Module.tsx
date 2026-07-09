@@ -32,14 +32,11 @@ export const SENSOR_GROUPS = interactionGroups(GROUP_WORLD, [GROUP_MARBLE]);
 export const MARBLE_GROUPS = interactionGroups(GROUP_MARBLE, [GROUP_MARBLE, GROUP_WORLD]);
 export const FROZEN_GROUPS = interactionGroups(GROUP_FROZEN, [GROUP_WORLD]);
 
-// palette.rs::obstacle_color() — white_matte (0.92,0.92,0.90) mezclado 50% con #073B4C
-const OBSTACLE_COLOR = '#799399';
-
 function spins(angvel: [number, number, number]): boolean {
   return angvel[0] !== 0 || angvel[1] !== 0 || angvel[2] !== 0;
 }
 
-function ObstacleBox({ box }: { box: ResolvedBox }) {
+function ObstacleBox({ box, color }: { box: ResolvedBox; color: string }) {
   const body = useRef<RapierRigidBody>(null);
   const visual = useRef<THREE.Mesh>(null);
   const pulse = useRef({ startedAt: -1, cooldownUntil: -1 });
@@ -106,12 +103,12 @@ function ObstacleBox({ box }: { box: ResolvedBox }) {
       )}
       {box.borderRadius > 0 ? (
         <RoundedBox ref={visual} args={[box.hx * 2, box.hy * 2, HALF_DEPTH * 2]} radius={box.borderRadius} smoothness={4}>
-          <meshStandardMaterial color={OBSTACLE_COLOR} roughness={0.85} />
+          <meshStandardMaterial color={color} roughness={0.85} />
         </RoundedBox>
       ) : (
         <mesh ref={visual}>
           <boxGeometry args={[box.hx * 2, box.hy * 2, HALF_DEPTH * 2]} />
-          <meshStandardMaterial color={OBSTACLE_COLOR} roughness={0.85} />
+          <meshStandardMaterial color={color} roughness={0.85} />
         </mesh>
       )}
       <BouncyPulseClock pulse={pulse} enabled={box.bouncy} />
@@ -136,26 +133,60 @@ function BouncyPulseClock({
   return null;
 }
 
-function ObstacleSphere({ sphere }: { sphere: ResolvedSphere }) {
+function ObstacleSphere({ sphere, color }: { sphere: ResolvedSphere; color: string }) {
+  const visual = useRef<THREE.Mesh>(null);
+  const pulse = useRef({ startedAt: -1, cooldownUntil: -1 });
+
+  useFrame(({ clock }) => {
+    if (!sphere.bouncy || !visual.current) return;
+    const now = clock.elapsedTime;
+    const pulseDuration = 0.18;
+    if (pulse.current.startedAt >= 0) {
+      const t = (now - pulse.current.startedAt) / pulseDuration;
+      if (t >= 1) {
+        visual.current.scale.setScalar(1);
+        pulse.current.startedAt = -1;
+        pulse.current.cooldownUntil = now + 0.5;
+      } else {
+        visual.current.scale.setScalar(1 + 0.12 * Math.sin(t * Math.PI));
+      }
+    }
+  });
+
   return (
-    <RigidBody type="fixed" position={[sphere.x, sphere.y, 0]} colliders={false}>
+    <RigidBody
+      type="fixed"
+      position={[sphere.x, sphere.y, 0]}
+      colliders={false}
+      onCollisionEnter={
+        sphere.bouncy
+          ? () => {
+              const clockNow = performance.now() / 1000;
+              if (pulse.current.startedAt < 0 && clockNow > pulse.current.cooldownUntil) {
+                pulse.current.startedAt = -2; // se fija al reloj del frame siguiente
+              }
+            }
+          : undefined
+      }
+    >
       <BallCollider
         args={[sphere.radius]}
         friction={sphere.friction}
         restitution={sphere.restitution}
         collisionGroups={WORLD_GROUPS}
       />
-      <mesh>
+      <mesh ref={visual}>
         <sphereGeometry args={[sphere.radius, 24, 24]} />
-        <meshStandardMaterial color={OBSTACLE_COLOR} roughness={0.85} />
+        <meshStandardMaterial color={color} roughness={0.85} />
       </mesh>
+      <BouncyPulseClock pulse={pulse} enabled={sphere.bouncy} />
     </RigidBody>
   );
 }
 
 // El colisionador del torus es un anillo de bolas — la aproximación web del
 // .compound VHACD que usa el juego nativo.
-function ObstacleTorus({ torus }: { torus: ResolvedTorus }) {
+function ObstacleTorus({ torus, color }: { torus: ResolvedTorus; color: string }) {
   const body = useRef<RapierRigidBody>(null);
   useEffect(() => {
     if (spins(torus.angvel) && body.current) {
@@ -193,7 +224,7 @@ function ObstacleTorus({ torus }: { torus: ResolvedTorus }) {
       ))}
       <mesh>
         <torusGeometry args={[torus.majorRadius, torus.minorRadius, 16, 48]} />
-        <meshStandardMaterial color={OBSTACLE_COLOR} roughness={0.85} />
+        <meshStandardMaterial color={color} roughness={0.85} />
       </mesh>
     </RigidBody>
   );
@@ -261,7 +292,7 @@ export function Pickup({
   );
 }
 
-export function WallSegment({ top, bottom }: { top: number; bottom: number }) {
+export function WallSegment({ top, bottom, color }: { top: number; bottom: number; color: string }) {
   const halfHeight = (top - bottom) / 2;
   const centerY = (top + bottom) / 2;
   return (
@@ -276,7 +307,7 @@ export function WallSegment({ top, bottom }: { top: number; bottom: number }) {
           />
           <mesh>
             <boxGeometry args={[0.1, halfHeight * 2, HALF_DEPTH * 2]} />
-            <meshStandardMaterial color={OBSTACLE_COLOR} roughness={0.85} />
+            <meshStandardMaterial color={color} roughness={0.85} />
           </mesh>
         </RigidBody>
       ))}
@@ -284,7 +315,7 @@ export function WallSegment({ top, bottom }: { top: number; bottom: number }) {
   );
 }
 
-export function FloorBlock({ floorY }: { floorY: number }) {
+export function FloorBlock({ floorY, color }: { floorY: number; color: string }) {
   const halfHeight = 3.0;
   return (
     <RigidBody type="fixed" position={[0, floorY - halfHeight, 0]} colliders={false}>
@@ -296,7 +327,7 @@ export function FloorBlock({ floorY }: { floorY: number }) {
       />
       <mesh>
         <boxGeometry args={[20, halfHeight * 2, 6]} />
-        <meshStandardMaterial color={OBSTACLE_COLOR} roughness={0.85} />
+        <meshStandardMaterial color={color} roughness={0.85} />
       </mesh>
     </RigidBody>
   );
@@ -318,23 +349,25 @@ export function Module({
   resolved,
   consumed,
   onPickupHit,
+  obstacleColor,
 }: {
   name: string;
   top: number;
   resolved: ResolvedModule;
   consumed: Set<string>;
   onPickupHit: (pickup: ResolvedPickup, marbleIndex: number) => void;
+  obstacleColor: string;
 }) {
   return (
     <group name={`module-${name}`}>
       {resolved.boxes.map((box, i) => (
-        <ObstacleBox key={i} box={box} />
+        <ObstacleBox key={i} box={box} color={obstacleColor} />
       ))}
       {resolved.spheres.map((sphere, i) => (
-        <ObstacleSphere key={i} sphere={sphere} />
+        <ObstacleSphere key={i} sphere={sphere} color={obstacleColor} />
       ))}
       {resolved.tori.map((torus, i) => (
-        <ObstacleTorus key={i} torus={torus} />
+        <ObstacleTorus key={i} torus={torus} color={obstacleColor} />
       ))}
       <Suspense fallback={null}>
         {resolved.images.map((image, i) => (
@@ -346,7 +379,7 @@ export function Module({
         .map((pickup) => (
           <Pickup key={pickup.id} pickup={pickup} onHit={onPickupHit} />
         ))}
-      <WallSegment top={top} bottom={resolved.bottom} />
+      <WallSegment top={top} bottom={resolved.bottom} color={obstacleColor} />
     </group>
   );
 }

@@ -183,10 +183,10 @@ export function Race({
     camera.rotation.set(0, 0, 0);
     cameraY.current = camera.position.y;
 
-    // ── en pausa el reloj de la carrera no corre: ni director, ni efectos, ni meta ──
-    if (!playing) return;
-
-    simTime.current += dt;
+    // ── en pausa solo se congela el reloj: el director sigue generando la
+    // pista visible (igual que el juego, que ya tiene módulos en el frame 1);
+    // efectos y meta dependen del reloj congelado, así que quedan quietos ──
+    if (playing) simTime.current += dt;
     const now = simTime.current;
     d.time = now;
 

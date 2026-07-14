@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-14",
-  "sourceCommit": "23b1ba6",
+  "sourceCommit": "11b0647",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -101,7 +101,7 @@
       "phase": "on_start",
       "kind": "group",
       "file": "src/game/world/mod.rs",
-      "line": 12
+      "line": 13
     },
     {
       "id": "game::world::level_generation::LevelSeed",
@@ -150,6 +150,16 @@
       "ritmo": "Startup",
       "file": "src/game/camera.rs",
       "line": 7
+    },
+    {
+      "id": "game::leader::spawn_crown",
+      "name": "spawn_crown",
+      "level": 2,
+      "phase": "build_the_world",
+      "kind": "system",
+      "ritmo": "Startup",
+      "file": "src/game/leader.rs",
+      "line": 37
     },
     {
       "id": "game::background::paint_the_backdrop",
@@ -225,16 +235,6 @@
       "kind": "group",
       "file": "src/game/mod.rs",
       "line": 30
-    },
-    {
-      "id": "game::leader::spawn_crown",
-      "name": "spawn_crown",
-      "level": 2,
-      "phase": "track_the_leader",
-      "kind": "system",
-      "ritmo": "Startup",
-      "file": "src/game/leader.rs",
-      "line": 37
     },
     {
       "id": "game::finish::check_finish_crossing",
@@ -471,7 +471,7 @@
       "phase": "on_update",
       "kind": "group",
       "file": "src/game/world/mod.rs",
-      "line": 30
+      "line": 32
     },
     {
       "id": "game::world::level_generation::generate_level",

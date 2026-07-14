@@ -161,7 +161,7 @@ function extractGroupReferences(body, hostModule, hostFunctionNames) {
 function extractModes() {
   const source = readSource(path.join(GAME_REPO, 'src/main.rs'));
   const modes = [];
-  const armRegex = /Command::(\w+)(?:\([^)]*\))?\s*=>\s*([\w:]+)\(/g;
+  const armRegex = /Command::(\w+)(?:\([^)]*\))?\s*=>\s*\{?\s*([\w:]+)\(/g;
   let match;
   while ((match = armRegex.exec(source)) !== null) {
     const line = source.slice(0, match.index).split('\n').length;
@@ -325,6 +325,30 @@ function syncOverlay(generated) {
   return Object.keys(overlay).length;
 }
 
+/// LA LEY: el código del juego es exclusivamente juego — los flags de modo
+/// solo existen en la puerta (args.rs/main.rs) y en el engine. Si alguien mete
+/// una pregunta de modo a game/ o simulation.rs, esto truena con la lista.
+function enforceGameHasNoModeFlags() {
+  const forbidden = /\b(timeline_path|record_duration|write_timeline_duration|session_duration_secs)\s*\(/;
+  const zone = [path.join(GAME_REPO, 'src/simulation.rs')];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith('.rs')) zone.push(full);
+    }
+  };
+  walk(path.join(GAME_REPO, 'src/game'));
+  const violations = zone.filter((file) => forbidden.test(fs.readFileSync(file, 'utf8')));
+  if (violations.length > 0) {
+    console.error('✗ El juego está preguntando por modos — la ley dice que el juego es solo juego:');
+    for (const violation of violations) console.error(`    ${path.relative(GAME_REPO, violation)}`);
+    console.error('  Los flags viven en la puerta (args.rs) y en el engine. Etiqueta, no preguntes.');
+    process.exit(1);
+  }
+}
+
+enforceGameHasNoModeFlags();
 const generated = generate();
 fs.writeFileSync(OUTPUT, JSON.stringify(generated, null, 2) + '\n');
 const curated = syncOverlay(generated);

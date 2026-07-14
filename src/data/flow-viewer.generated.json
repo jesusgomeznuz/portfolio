@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-14",
-  "sourceCommit": "bf3bc19",
+  "sourceCommit": "dd25a66",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -31,7 +31,7 @@
       "phase": null,
       "kind": "mode",
       "file": "src/main.rs",
-      "line": 16
+      "line": 18
     },
     {
       "id": "main::PreprocessConcaveColliders",
@@ -41,7 +41,7 @@
       "phase": null,
       "kind": "mode",
       "file": "src/main.rs",
-      "line": 17
+      "line": 19
     },
     {
       "id": "simulation::on_start",
@@ -50,7 +50,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 35
+      "line": 32
     },
     {
       "id": "game::cast_the_race",
@@ -230,7 +230,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 43
+      "line": 40
     },
     {
       "id": "game::track_the_leader",
@@ -383,7 +383,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 53
+      "line": 47
     },
     {
       "id": "game::background::animate_the_backdrop",
@@ -473,7 +473,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 59
+      "line": 53
     },
     {
       "id": "game::labels::update_marble_labels",
@@ -509,7 +509,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 71
+      "line": 65
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -527,7 +527,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 91
+      "line": 88
     },
     {
       "id": "game::roster::build_roster",
@@ -554,7 +554,7 @@
       "phase": "on_start",
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 103
+      "line": 100
     },
     {
       "id": "simulation::react_to_real_collisions",
@@ -563,7 +563,7 @@
       "phase": "on_step",
       "kind": "branch",
       "file": "src/simulation.rs",
-      "line": 75
+      "line": 71
     },
     {
       "id": "game::world::level_generation::generate_level",

@@ -561,7 +561,8 @@
       "name": "react_to_real_collisions",
       "level": 1,
       "phase": "on_step",
-      "kind": "branch",
+      "kind": "group",
+      "gated": "RealCollisions",
       "file": "src/simulation.rs",
       "line": 71
     },

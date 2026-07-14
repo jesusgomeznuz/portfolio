@@ -15,6 +15,7 @@ interface FlowNode {
   file: string;
   line: number | null;
   target?: string;
+  gated?: string;
 }
 
 interface Criterio {
@@ -70,7 +71,9 @@ export default function FlowViewer() {
   const phases = nodes.filter((node) => node.level === 1 && node.kind === 'phase' && !node.phase);
   const runHelpers = nodes.filter((node) => node.level === 1 && node.kind === 'helper');
   const branchesOf = (phase: string) =>
-    nodes.filter((node) => node.kind === 'branch' && node.phase === phase);
+    nodes.filter(
+      (node) => node.level === 1 && node.phase === phase && (node.kind === 'branch' || node.kind === 'group'),
+    );
   const systemsOf = (phase: string) =>
     nodes.filter((node) => node.level === 2 && node.phase === phase);
   const nodesInFile = (file: string) => nodes.filter((node) => node.file === file);
@@ -190,6 +193,13 @@ export default function FlowViewer() {
           color: #8a8a92;
           vertical-align: middle;
         }
+        .fv-badge-gated {
+          display: block;
+          margin: 4px auto 0;
+          width: fit-content;
+          border-color: #fb923c66;
+          color: #fb923c;
+        }
         .fv-branch-label {
           font-size: 10.5px;
           color: #fb923c;
@@ -300,13 +310,16 @@ export default function FlowViewer() {
             {branchesOf(view.name).map((branch) => (
               <span key={branch.id} style={{ display: 'contents' }}>
                 <span className="fv-arrow" />
-                <div className="fv-branch-label">rama:</div>
+                {branch.kind === 'branch' && <div className="fv-branch-label">rama:</div>}
                 <button
                   className="fv-node"
-                  style={{ '--kind-color': KIND_COLORS.branch } as React.CSSProperties}
+                  style={{ '--kind-color': KIND_COLORS[branch.kind] } as React.CSSProperties}
                   onClick={() => enter({ kind: 'phase', name: branch.name })}
                 >
                   {branch.name}()
+                  {branch.gated && (
+                    <span className="fv-badge fv-badge-gated">⚡ solo física real — en --play la apaga el engine</span>
+                  )}
                 </button>
               </span>
             ))}

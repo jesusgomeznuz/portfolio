@@ -210,15 +210,20 @@ function generate() {
   }
 
   for (const { name: phase, parent } of phases) {
-    // Fases se llaman on_*/after_*; una rama condicional (react_*) o un
-    // helper local (resolve_*) se distinguen por el nombre — parseable.
-    const kind = /^(on_|after_)/.test(phase) ? 'phase' : /^react_/.test(phase) ? 'branch' : 'helper';
+    // La clase se decide por CONTENIDO: fase (on_*/after_*), gorda local
+    // (registra en el App) o helper. Si lleva .in_set(RealCollisions), va
+    // marcada: el engine la apaga en --play — el juego solo etiquetó.
+    const body = functions.get(phase).body;
+    const kind = /^(on_|after_)/.test(phase)
+      ? 'phase'
+      : registersInApp(body) ? 'group' : 'helper';
     nodes.push({
       id: `simulation::${phase}`,
       name: phase,
       level: 1,
       phase: parent,
       kind,
+      gated: /in_set\(RealCollisions\)/.test(body) ? 'RealCollisions' : undefined,
       file: 'src/simulation.rs',
       line: functions.get(phase).line,
     });

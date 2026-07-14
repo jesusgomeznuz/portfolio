@@ -1,0 +1,593 @@
+{
+  "generatedAt": "2026-07-14",
+  "sourceCommit": "0a0693d",
+  "repo": "canicasbrawl-rapier",
+  "phases": [
+    "on_start",
+    "on_step",
+    "on_frame_update",
+    "after_frame_update",
+    "on_exit",
+    "resolve_roster",
+    "finish_target_secs",
+    "react_to_real_collisions"
+  ],
+  "nodes": [
+    {
+      "id": "simulation::on_start",
+      "name": "on_start",
+      "level": 1,
+      "phase": null,
+      "kind": "phase",
+      "file": "src/simulation.rs",
+      "line": 35
+    },
+    {
+      "id": "game::roster::Roster",
+      "name": "Roster",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "resource",
+      "file": "src/game/roster.rs",
+      "line": null
+    },
+    {
+      "id": "game::world::level_generation::LevelSeed",
+      "name": "LevelSeed",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "resource",
+      "file": "src/game/world/level_generation.rs",
+      "line": null
+    },
+    {
+      "id": "game::world::level_generation::FinishTarget",
+      "name": "FinishTarget",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "resource",
+      "file": "src/game/world/level_generation.rs",
+      "line": null
+    },
+    {
+      "id": "game::camera::spawn_camera_and_lights",
+      "name": "spawn_camera_and_lights",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "system",
+      "file": "src/game/camera.rs",
+      "line": 7
+    },
+    {
+      "id": "game::leader::spawn_crown",
+      "name": "spawn_crown",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "system",
+      "file": "src/game/leader.rs",
+      "line": 37
+    },
+    {
+      "id": "game::world::setup::setup",
+      "name": "setup",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "system",
+      "file": "src/game/world/setup.rs",
+      "line": 10
+    },
+    {
+      "id": "game::world::setup::set_gravity",
+      "name": "set_gravity",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "system",
+      "file": "src/game/world/setup.rs",
+      "line": 53
+    },
+    {
+      "id": "game::background::sky::spawn_sky",
+      "name": "spawn_sky",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "system",
+      "file": "src/game/background/sky.rs",
+      "line": 10
+    },
+    {
+      "id": "game::background::stars::spawn_stars",
+      "name": "spawn_stars",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "system",
+      "file": "src/game/background/stars.rs",
+      "line": 23
+    },
+    {
+      "id": "game::background::clouds::spawn_clouds",
+      "name": "spawn_clouds",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "system",
+      "file": "src/game/background/clouds.rs",
+      "line": 22
+    },
+    {
+      "id": "simulation::on_step",
+      "name": "on_step",
+      "level": 1,
+      "phase": null,
+      "kind": "phase",
+      "file": "src/simulation.rs",
+      "line": 63
+    },
+    {
+      "id": "game::finish::check_finish_crossing",
+      "name": "check_finish_crossing",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/finish.rs",
+      "line": 39
+    },
+    {
+      "id": "game::leader::update_race_leader",
+      "name": "update_race_leader",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/leader.rs",
+      "line": 17
+    },
+    {
+      "id": "production::voice_tracker::track_race_leader",
+      "name": "track_race_leader",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/production/voice_tracker.rs",
+      "line": 49
+    },
+    {
+      "id": "game::race_events::emit_race_events_from_timeline",
+      "name": "emit_race_events_from_timeline",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/race_events.rs",
+      "line": 101
+    },
+    {
+      "id": "game::race_events::send_race_events_to_timeline",
+      "name": "send_race_events_to_timeline",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/race_events.rs",
+      "line": 91
+    },
+    {
+      "id": "game::staging::stage_race_events",
+      "name": "stage_race_events",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/staging.rs",
+      "line": 19
+    },
+    {
+      "id": "game::sensors::freeze::try_unfreeze",
+      "name": "try_unfreeze",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/sensors/freeze.rs",
+      "line": 56
+    },
+    {
+      "id": "game::sensors::shrink::try_unshrink",
+      "name": "try_unshrink",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/sensors/shrink.rs",
+      "line": 53
+    },
+    {
+      "id": "game::sensors::swap::fade_swap_rings",
+      "name": "fade_swap_rings",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/sensors/swap.rs",
+      "line": 56
+    },
+    {
+      "id": "game::sensors::icons::spin_icons",
+      "name": "spin_icons",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/sensors/icons.rs",
+      "line": 9
+    },
+    {
+      "id": "game::sensors::bouncy::animate_bounce_pulse",
+      "name": "animate_bounce_pulse",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/sensors/bouncy.rs",
+      "line": 51
+    },
+    {
+      "id": "game::sensors::bouncy::tick_bounce_cooldown",
+      "name": "tick_bounce_cooldown",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/sensors/bouncy.rs",
+      "line": 72
+    },
+    {
+      "id": "game::camera::camera_follows_lowest_marble",
+      "name": "camera_follows_lowest_marble",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "system",
+      "file": "src/game/camera.rs",
+      "line": 47
+    },
+    {
+      "id": "simulation::on_frame_update",
+      "name": "on_frame_update",
+      "level": 1,
+      "phase": null,
+      "kind": "phase",
+      "file": "src/simulation.rs",
+      "line": 103
+    },
+    {
+      "id": "game::background::sky::update_sky_with_camera",
+      "name": "update_sky_with_camera",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "system",
+      "file": "src/game/background/sky.rs",
+      "line": 31
+    },
+    {
+      "id": "game::background::stars::stars_follow_camera",
+      "name": "stars_follow_camera",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "system",
+      "file": "src/game/background/stars.rs",
+      "line": 83
+    },
+    {
+      "id": "game::background::stars::twinkle_stars",
+      "name": "twinkle_stars",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "system",
+      "file": "src/game/background/stars.rs",
+      "line": 94
+    },
+    {
+      "id": "game::background::clouds::update_clouds",
+      "name": "update_clouds",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "system",
+      "file": "src/game/background/clouds.rs",
+      "line": 112
+    },
+    {
+      "id": "game::sensors::freeze::manage_freeze_badges",
+      "name": "manage_freeze_badges",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "system",
+      "file": "src/game/sensors/freeze.rs",
+      "line": 89
+    },
+    {
+      "id": "game::sensors::shrink::manage_shrink_badges",
+      "name": "manage_shrink_badges",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "system",
+      "file": "src/game/sensors/shrink.rs",
+      "line": 66
+    },
+    {
+      "id": "production::stall_detector::detect_stall",
+      "name": "detect_stall",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "system",
+      "file": "src/production/stall_detector.rs",
+      "line": 11
+    },
+    {
+      "id": "simulation::after_frame_update",
+      "name": "after_frame_update",
+      "level": 1,
+      "phase": null,
+      "kind": "phase",
+      "file": "src/simulation.rs",
+      "line": 118
+    },
+    {
+      "id": "game::labels::update_marble_labels",
+      "name": "update_marble_labels",
+      "level": 2,
+      "phase": "after_frame_update",
+      "kind": "system",
+      "file": "src/game/labels.rs",
+      "line": 50
+    },
+    {
+      "id": "game::leader::crown_follows_leader",
+      "name": "crown_follows_leader",
+      "level": 2,
+      "phase": "after_frame_update",
+      "kind": "system",
+      "file": "src/game/leader.rs",
+      "line": 58
+    },
+    {
+      "id": "game::sensors::badges::update_badges",
+      "name": "update_badges",
+      "level": 2,
+      "phase": "after_frame_update",
+      "kind": "system",
+      "file": "src/game/sensors/badges.rs",
+      "line": 73
+    },
+    {
+      "id": "simulation::on_exit",
+      "name": "on_exit",
+      "level": 1,
+      "phase": null,
+      "kind": "phase",
+      "file": "src/simulation.rs",
+      "line": 130
+    },
+    {
+      "id": "production::voice_tracker::save_voice_tracker_on_exit",
+      "name": "save_voice_tracker_on_exit",
+      "level": 2,
+      "phase": "on_exit",
+      "kind": "system",
+      "file": "src/production/voice_tracker.rs",
+      "line": 71
+    },
+    {
+      "id": "simulation::resolve_roster",
+      "name": "resolve_roster",
+      "level": 1,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/simulation.rs",
+      "line": 150
+    },
+    {
+      "id": "game::roster::build_roster",
+      "name": "build_roster",
+      "level": 2,
+      "phase": "resolve_roster",
+      "kind": "system",
+      "file": "src/game/roster.rs",
+      "line": 11
+    },
+    {
+      "id": "game::roster::slots_roster",
+      "name": "slots_roster",
+      "level": 2,
+      "phase": "resolve_roster",
+      "kind": "system",
+      "file": "src/game/roster.rs",
+      "line": 24
+    },
+    {
+      "id": "simulation::finish_target_secs",
+      "name": "finish_target_secs",
+      "level": 1,
+      "phase": "on_start",
+      "kind": "helper",
+      "file": "src/simulation.rs",
+      "line": 162
+    },
+    {
+      "id": "simulation::react_to_real_collisions",
+      "name": "react_to_real_collisions",
+      "level": 1,
+      "phase": "on_step",
+      "kind": "branch",
+      "file": "src/simulation.rs",
+      "line": 134
+    },
+    {
+      "id": "game::world::level_generation::generate_level",
+      "name": "generate_level",
+      "level": 2,
+      "phase": "react_to_real_collisions",
+      "kind": "system",
+      "file": "src/game/world/level_generation.rs",
+      "line": 43
+    },
+    {
+      "id": "game::world::level_generation::disable_modules_above_screen",
+      "name": "disable_modules_above_screen",
+      "level": 2,
+      "phase": "react_to_real_collisions",
+      "kind": "system",
+      "file": "src/game/world/level_generation.rs",
+      "line": 147
+    },
+    {
+      "id": "game::sensors::freeze::on_freeze_contact",
+      "name": "on_freeze_contact",
+      "level": 2,
+      "phase": "react_to_real_collisions",
+      "kind": "system",
+      "file": "src/game/sensors/freeze.rs",
+      "line": 22
+    },
+    {
+      "id": "game::sensors::shrink::on_shrink_contact",
+      "name": "on_shrink_contact",
+      "level": 2,
+      "phase": "react_to_real_collisions",
+      "kind": "system",
+      "file": "src/game/sensors/shrink.rs",
+      "line": 21
+    },
+    {
+      "id": "game::sensors::swap::on_swap_contact",
+      "name": "on_swap_contact",
+      "level": 2,
+      "phase": "react_to_real_collisions",
+      "kind": "system",
+      "file": "src/game/sensors/swap.rs",
+      "line": 18
+    },
+    {
+      "id": "game::sensors::bouncy::trigger_bouncy_pulse",
+      "name": "trigger_bouncy_pulse",
+      "level": 2,
+      "phase": "react_to_real_collisions",
+      "kind": "system",
+      "file": "src/game/sensors/bouncy.rs",
+      "line": 20
+    },
+    {
+      "id": "game::world::level_generation::new",
+      "name": "new",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/level_generation.rs",
+      "line": 31
+    },
+    {
+      "id": "game::world::level_generation::spawn_level_module",
+      "name": "spawn_level_module",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/level_generation.rs",
+      "line": 76
+    },
+    {
+      "id": "game::world::level_generation::close_level_with_finish",
+      "name": "close_level_with_finish",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/level_generation.rs",
+      "line": 112
+    },
+    {
+      "id": "game::camera::world_pos_on_screen",
+      "name": "world_pos_on_screen",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/camera.rs",
+      "line": 76
+    },
+    {
+      "id": "game::camera::world_y_above_screen",
+      "name": "world_y_above_screen",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/camera.rs",
+      "line": 91
+    },
+    {
+      "id": "game::finish::spawn_finish_line",
+      "name": "spawn_finish_line",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/finish.rs",
+      "line": 16
+    },
+    {
+      "id": "game::race_events::payload",
+      "name": "payload",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/race_events.rs",
+      "line": 31
+    },
+    {
+      "id": "game::race_events::parse",
+      "name": "parse",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/race_events.rs",
+      "line": 48
+    },
+    {
+      "id": "game::sensors::freeze::spawn_frozen_visual",
+      "name": "spawn_frozen_visual",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/sensors/freeze.rs",
+      "line": 112
+    },
+    {
+      "id": "game::sensors::freeze::marble_groups",
+      "name": "marble_groups",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/sensors/freeze.rs",
+      "line": 133
+    },
+    {
+      "id": "game::sensors::freeze::frozen_groups",
+      "name": "frozen_groups",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/sensors/freeze.rs",
+      "line": 138
+    },
+    {
+      "id": "game::sensors::swap::spawn_swap_rings",
+      "name": "spawn_swap_rings",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/sensors/swap.rs",
+      "line": 77
+    },
+    {
+      "id": "game::labels::spawn_marble_label",
+      "name": "spawn_marble_label",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/labels.rs",
+      "line": 14
+    },
+    {
+      "id": "game::sensors::badges::spawn_badge",
+      "name": "spawn_badge",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/sensors/badges.rs",
+      "line": 24
+    }
+  ]
+}

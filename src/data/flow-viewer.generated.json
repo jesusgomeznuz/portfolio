@@ -14,6 +14,36 @@
   ],
   "nodes": [
     {
+      "id": "main::Simulation",
+      "name": "Simulation",
+      "target": "simulation::run",
+      "level": 0,
+      "phase": null,
+      "kind": "mode",
+      "file": "src/main.rs",
+      "line": 15
+    },
+    {
+      "id": "main::BuildModules",
+      "name": "BuildModules",
+      "target": "process_modules::run",
+      "level": 0,
+      "phase": null,
+      "kind": "mode",
+      "file": "src/main.rs",
+      "line": 16
+    },
+    {
+      "id": "main::PreprocessConcaveColliders",
+      "name": "PreprocessConcaveColliders",
+      "target": "preprocess_concave_colliders",
+      "level": 0,
+      "phase": null,
+      "kind": "mode",
+      "file": "src/main.rs",
+      "line": 17
+    },
+    {
       "id": "simulation::on_start",
       "name": "on_start",
       "level": 1,

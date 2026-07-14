@@ -190,5 +190,14 @@
   },
   "game::sensors::badges::spawn_badge": {
     "nivel": 3
+  },
+  "main::Simulation": {
+    "nivel": 0
+  },
+  "main::BuildModules": {
+    "nivel": 0
+  },
+  "main::PreprocessConcaveColliders": {
+    "nivel": 0
   }
 }

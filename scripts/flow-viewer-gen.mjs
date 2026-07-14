@@ -105,6 +105,19 @@ function helpersOf(file, registeredNames) {
 
 // ── El flowchart de la capa viewer ────────────────────────────────────────────
 
+/// N0: los brazos del match de main.rs — los modos del programa.
+function extractModes() {
+  const source = readSource(path.join(GAME_REPO, 'src/main.rs'));
+  const modes = [];
+  const armRegex = /Command::(\w+)(?:\([^)]*\))?\s*=>\s*([\w:]+)\(/g;
+  let match;
+  while ((match = armRegex.exec(source)) !== null) {
+    const line = source.slice(0, match.index).split('\n').length;
+    modes.push({ command: match[1], target: match[2], line });
+  }
+  return modes;
+}
+
 function generate() {
   const source = readSource(SIMULATION);
   const functions = extractFunctions(source);
@@ -130,6 +143,19 @@ function generate() {
 
   const nodes = [];
   const filesInPlay = new Map(); // file → Set(nombres registrados)
+
+  for (const mode of extractModes()) {
+    nodes.push({
+      id: `main::${mode.command}`,
+      name: mode.command,
+      target: mode.target,
+      level: 0,
+      phase: null,
+      kind: 'mode',
+      file: 'src/main.rs',
+      line: mode.line,
+    });
+  }
 
   for (const { name: phase, parent } of phases) {
     // Fases se llaman on_*/after_*; una rama condicional (react_*) o un

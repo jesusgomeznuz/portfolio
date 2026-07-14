@@ -1,5 +1,6 @@
 ---
 import FlowViewer from '../components/FlowViewer';
+import generated from '../data/flow-viewer.generated.json';
 ---
 
 <html lang="es">
@@ -39,7 +40,7 @@ import FlowViewer from '../components/FlowViewer';
   <body>
     <a href="/">← portfolio</a>
     <h1 class="page-title">Explorador de código — borrador funcional</h1>
-    <p class="page-note">64 nodos parseados de canicasbrawl-rapier @ 0a0693d · la estética viene después</p>
+    <p class="page-note">{generated.nodes.length} nodos parseados de {generated.repo} @ {generated.sourceCommit} · la estética viene después</p>
     <div class="viewer-frame">
       <FlowViewer client:only="react" />
     </div>

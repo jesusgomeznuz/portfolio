@@ -11,9 +11,10 @@ interface FlowNode {
   name: string;
   level: number;
   phase: string | null;
-  kind: 'phase' | 'branch' | 'helper' | 'system' | 'resource';
+  kind: 'mode' | 'phase' | 'branch' | 'helper' | 'system' | 'resource';
   file: string;
   line: number | null;
+  target?: string;
 }
 
 interface Criterio {
@@ -24,11 +25,13 @@ interface Criterio {
 }
 
 type View =
+  | { kind: 'main' }
   | { kind: 'root' }
   | { kind: 'phase'; name: string }
   | { kind: 'file'; file: string };
 
 const KIND_COLORS: Record<FlowNode['kind'], string> = {
+  mode: '#e5e5e5',
   phase: '#4ade80',
   branch: '#fb923c',
   system: '#4fc3f7',
@@ -48,7 +51,7 @@ function visibleNodes(): FlowNode[] {
 
 export default function FlowViewer() {
   const nodes = useMemo(visibleNodes, []);
-  const [stack, setStack] = useState<View[]>([{ kind: 'root' }]);
+  const [stack, setStack] = useState<View[]>([{ kind: 'main' }]);
   const view = stack[stack.length - 1];
 
   const enter = (next: View) => setStack((current) => [...current, next]);
@@ -62,10 +65,17 @@ export default function FlowViewer() {
     nodes.filter((node) => node.level === 2 && node.phase === phase);
   const nodesInFile = (file: string) => nodes.filter((node) => node.file === file);
 
+  const modes = nodes.filter((node) => node.kind === 'mode');
+
   const crumbLabel = (item: View): string => {
+    if (item.kind === 'main') return 'main.rs';
     if (item.kind === 'root') return 'simulation.rs';
     if (item.kind === 'phase') return `${item.name}()`;
     return item.file.replace('src/', '');
+  };
+
+  const enterMode = (mode: FlowNode) => {
+    if (mode.target?.startsWith('simulation')) enter({ kind: 'root' });
   };
 
   return (
@@ -181,6 +191,33 @@ export default function FlowViewer() {
       </nav>
 
       <div className="fv-canvas">
+        {view.kind === 'main' && (
+          <div className="fv-column">
+            <div
+              className="fv-node static"
+              style={{ '--kind-color': '#2dd4bf' } as React.CSSProperties}
+            >
+              args::parse_command()
+            </div>
+            <span className="fv-arrow" />
+            <div className="fv-section" style={{ margin: '4px 0 8px' }}>match command</div>
+            {modes.map((mode) => (
+              <button
+                key={mode.id}
+                className={`fv-node${mode.target?.startsWith('simulation') ? '' : ' static'}`}
+                style={{
+                  '--kind-color': mode.target?.startsWith('simulation') ? '#4fc3f7' : KIND_COLORS.mode,
+                  marginBottom: 10,
+                } as React.CSSProperties}
+                onClick={() => enterMode(mode)}
+              >
+                {mode.name}
+                <span className="fv-meta">→ {mode.target}()</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {view.kind === 'root' && (
           <div className="fv-column">
             {phases.map((phase, index) => (

@@ -211,23 +211,23 @@ function syncOverlay(generated) {
       process.exit(1);
     }
   }
-  // Los nodos nuevos entran con frase vacía — la hoja de trabajo del criterio.
+  // Los nombres del código son el contenido — el overlay solo guarda el
+  // criterio: nivel (si difiere del parser), devOnly, hidden, media.
   for (const node of generated.nodes) {
     if (!overlay[node.id]) {
-      overlay[node.id] = { frase: '', nivel: node.level };
+      overlay[node.id] = { nivel: node.level };
     }
   }
   fs.writeFileSync(OVERLAY, JSON.stringify(overlay, null, 2) + '\n');
-  const pending = Object.values(overlay).filter((entry) => !entry.frase).length;
-  return pending;
+  return Object.keys(overlay).length;
 }
 
 const generated = generate();
 fs.writeFileSync(OUTPUT, JSON.stringify(generated, null, 2) + '\n');
-const pending = syncOverlay(generated);
+const curated = syncOverlay(generated);
 
 const byLevel = [1, 2, 3].map(
   (level) => `N${level}: ${generated.nodes.filter((node) => node.level === level).length}`,
 );
 console.log(`✓ flow-viewer.generated.json — ${generated.nodes.length} nodos (${byLevel.join(', ')}) @ ${generated.sourceCommit}`);
-console.log(`✓ flow-viewer-overlay.json — ${pending} frases pendientes de escribir`);
+console.log(`✓ flow-viewer-overlay.json — ${curated} nodos bajo tu criterio`);

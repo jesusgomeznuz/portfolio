@@ -1,0 +1,47 @@
+---
+import FlowViewer from '../components/FlowViewer';
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Explorador de código — capa viewer (borrador)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { min-height: 100%; background: #0c0c0e; }
+      body {
+        color: #ececec;
+        font-family: 'Inter', system-ui, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        padding: 28px 16px 40px;
+      }
+      a { color: #b8e832; text-decoration: none; }
+      .page-title { font: 800 20px Inter; letter-spacing: -0.02em; }
+      .page-note { font: 500 12px 'JetBrains Mono', monospace; color: #6f6f78; }
+      .viewer-frame {
+        width: min(94vw, 420px);
+        height: 78vh;
+        border: 1px solid #1a1a1e;
+        border-radius: 14px;
+        padding: 10px 14px;
+        background: #0a0a0c;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/">← portfolio</a>
+    <h1 class="page-title">Explorador de código — borrador funcional</h1>
+    <p class="page-note">64 nodos parseados de canicasbrawl-rapier @ 0a0693d · la estética viene después</p>
+    <div class="viewer-frame">
+      <FlowViewer client:only="react" />
+    </div>
+  </body>
+</html>

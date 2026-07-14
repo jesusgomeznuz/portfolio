@@ -177,7 +177,7 @@ function generate() {
   if (!run) throw new Error('simulation.rs sin fn run() — el contrato del parser se rompió');
 
   // N1: las llamadas de run() a funciones locales de simulation.rs — y las
-  // ramas: fns locales llamadas desde una fase (react_to_real_collisions).
+  // fns locales llamadas desde una fase (helpers como finish_target_secs).
   const locals = [...functions.keys()].filter((name) => name !== 'run');
   const calledBy = (callerBody) =>
     locals.filter((name) => new RegExp(`\\b${name}\\s*\\(`).test(callerBody));
@@ -211,8 +211,9 @@ function generate() {
 
   for (const { name: phase, parent } of phases) {
     // La clase se decide por CONTENIDO: fase (on_*/after_*), gorda local
-    // (registra en el App) o helper. Si lleva .in_set(RealCollisions), va
-    // marcada: el engine la apaga en --play — el juego solo etiquetó.
+    // (registra en el App) o helper. Aquí no hay marcas de modos: el juego
+    // declara necesidades (choques, dados) y el engine duerme en la oscuridad
+    // a quien declare lo que su mundo no tiene.
     const body = functions.get(phase).body;
     const kind = /^(on_|after_)/.test(phase)
       ? 'phase'
@@ -223,7 +224,6 @@ function generate() {
       level: 1,
       phase: parent,
       kind,
-      gated: /in_set\(RealCollisions\)/.test(body) ? 'RealCollisions' : undefined,
       file: 'src/simulation.rs',
       line: functions.get(phase).line,
     });

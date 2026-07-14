@@ -15,7 +15,6 @@ interface FlowNode {
   file: string;
   line: number | null;
   target?: string;
-  gated?: string;
 }
 
 interface Criterio {
@@ -193,13 +192,6 @@ export default function FlowViewer() {
           color: #8a8a92;
           vertical-align: middle;
         }
-        .fv-badge-gated {
-          display: block;
-          margin: 4px auto 0;
-          width: fit-content;
-          border-color: #fb923c66;
-          color: #fb923c;
-        }
         .fv-branch-label {
           font-size: 10.5px;
           color: #fb923c;
@@ -317,9 +309,6 @@ export default function FlowViewer() {
                   onClick={() => enter({ kind: 'phase', name: branch.name })}
                 >
                   {branch.name}()
-                  {branch.gated && (
-                    <span className="fv-badge fv-badge-gated">⚡ solo física real — en --play la apaga el engine</span>
-                  )}
                 </button>
               </span>
             ))}

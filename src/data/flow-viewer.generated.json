@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-14",
-  "sourceCommit": "dd25a66",
+  "sourceCommit": "e853de9",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -9,8 +9,7 @@
     "after_frame_update",
     "on_exit",
     "resolve_roster",
-    "finish_target_secs",
-    "react_to_real_collisions"
+    "finish_target_secs"
   ],
   "nodes": [
     {
@@ -104,7 +103,7 @@
       "phase": "on_start",
       "kind": "group",
       "file": "src/game/world/mod.rs",
-      "line": 11
+      "line": 12
     },
     {
       "id": "game::world::level_generation::LevelSeed",
@@ -113,7 +112,7 @@
       "phase": "build_the_world",
       "kind": "resource",
       "file": "src/game/world/level_generation.rs",
-      "line": 15
+      "line": 11
     },
     {
       "id": "game::world::level_generation::FinishTarget",
@@ -122,7 +121,7 @@
       "phase": "build_the_world",
       "kind": "resource",
       "file": "src/game/world/level_generation.rs",
-      "line": 18
+      "line": 14
     },
     {
       "id": "game::world::setup::setup",
@@ -140,7 +139,7 @@
       "phase": "build_the_world",
       "kind": "system",
       "file": "src/game/world/setup.rs",
-      "line": 53
+      "line": 52
     },
     {
       "id": "game::camera::spawn_camera_and_lights",
@@ -314,19 +313,55 @@
       "line": 19
     },
     {
-      "id": "game::sensors::tick_the_sensors",
-      "name": "tick_the_sensors",
+      "id": "game::sensors::run_the_sensors",
+      "name": "run_the_sensors",
       "level": 2,
       "phase": "on_step",
       "kind": "group",
       "file": "src/game/sensors/mod.rs",
-      "line": 12
+      "line": 15
+    },
+    {
+      "id": "game::sensors::freeze::on_freeze_contact",
+      "name": "on_freeze_contact",
+      "level": 2,
+      "phase": "run_the_sensors",
+      "kind": "system",
+      "file": "src/game/sensors/freeze.rs",
+      "line": 22
+    },
+    {
+      "id": "game::sensors::shrink::on_shrink_contact",
+      "name": "on_shrink_contact",
+      "level": 2,
+      "phase": "run_the_sensors",
+      "kind": "system",
+      "file": "src/game/sensors/shrink.rs",
+      "line": 21
+    },
+    {
+      "id": "game::sensors::swap::on_swap_contact",
+      "name": "on_swap_contact",
+      "level": 2,
+      "phase": "run_the_sensors",
+      "kind": "system",
+      "file": "src/game/sensors/swap.rs",
+      "line": 18
+    },
+    {
+      "id": "game::sensors::bouncy::trigger_bouncy_pulse",
+      "name": "trigger_bouncy_pulse",
+      "level": 2,
+      "phase": "run_the_sensors",
+      "kind": "system",
+      "file": "src/game/sensors/bouncy.rs",
+      "line": 20
     },
     {
       "id": "game::sensors::freeze::try_unfreeze",
       "name": "try_unfreeze",
       "level": 2,
-      "phase": "tick_the_sensors",
+      "phase": "run_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/freeze.rs",
       "line": 56
@@ -335,7 +370,7 @@
       "id": "game::sensors::shrink::try_unshrink",
       "name": "try_unshrink",
       "level": 2,
-      "phase": "tick_the_sensors",
+      "phase": "run_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/shrink.rs",
       "line": 53
@@ -344,7 +379,7 @@
       "id": "game::sensors::swap::fade_swap_rings",
       "name": "fade_swap_rings",
       "level": 2,
-      "phase": "tick_the_sensors",
+      "phase": "run_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/swap.rs",
       "line": 56
@@ -353,7 +388,7 @@
       "id": "game::sensors::icons::spin_icons",
       "name": "spin_icons",
       "level": 2,
-      "phase": "tick_the_sensors",
+      "phase": "run_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/icons.rs",
       "line": 9
@@ -362,7 +397,7 @@
       "id": "game::sensors::bouncy::animate_bounce_pulse",
       "name": "animate_bounce_pulse",
       "level": 2,
-      "phase": "tick_the_sensors",
+      "phase": "run_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/bouncy.rs",
       "line": 51
@@ -371,10 +406,37 @@
       "id": "game::sensors::bouncy::tick_bounce_cooldown",
       "name": "tick_bounce_cooldown",
       "level": 2,
-      "phase": "tick_the_sensors",
+      "phase": "run_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/bouncy.rs",
       "line": 72
+    },
+    {
+      "id": "game::world::generate_the_level",
+      "name": "generate_the_level",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "group",
+      "file": "src/game/world/mod.rs",
+      "line": 30
+    },
+    {
+      "id": "game::world::level_generation::generate_level",
+      "name": "generate_level",
+      "level": 2,
+      "phase": "generate_the_level",
+      "kind": "system",
+      "file": "src/game/world/level_generation.rs",
+      "line": 37
+    },
+    {
+      "id": "game::world::level_generation::disable_modules_above_screen",
+      "name": "disable_modules_above_screen",
+      "level": 2,
+      "phase": "generate_the_level",
+      "kind": "system",
+      "file": "src/game/world/level_generation.rs",
+      "line": 142
     },
     {
       "id": "simulation::on_frame_update",
@@ -437,7 +499,7 @@
       "phase": "on_frame_update",
       "kind": "group",
       "file": "src/game/sensors/mod.rs",
-      "line": 28
+      "line": 42
     },
     {
       "id": "game::sensors::freeze::manage_freeze_badges",
@@ -527,7 +589,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 88
+      "line": 69
     },
     {
       "id": "game::roster::build_roster",
@@ -554,71 +616,7 @@
       "phase": "on_start",
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 100
-    },
-    {
-      "id": "simulation::react_to_real_collisions",
-      "name": "react_to_real_collisions",
-      "level": 1,
-      "phase": "on_step",
-      "kind": "group",
-      "gated": "RealCollisions",
-      "file": "src/simulation.rs",
-      "line": 71
-    },
-    {
-      "id": "game::world::level_generation::generate_level",
-      "name": "generate_level",
-      "level": 2,
-      "phase": "react_to_real_collisions",
-      "kind": "system",
-      "file": "src/game/world/level_generation.rs",
-      "line": 43
-    },
-    {
-      "id": "game::world::level_generation::disable_modules_above_screen",
-      "name": "disable_modules_above_screen",
-      "level": 2,
-      "phase": "react_to_real_collisions",
-      "kind": "system",
-      "file": "src/game/world/level_generation.rs",
-      "line": 147
-    },
-    {
-      "id": "game::sensors::freeze::on_freeze_contact",
-      "name": "on_freeze_contact",
-      "level": 2,
-      "phase": "react_to_real_collisions",
-      "kind": "system",
-      "file": "src/game/sensors/freeze.rs",
-      "line": 22
-    },
-    {
-      "id": "game::sensors::shrink::on_shrink_contact",
-      "name": "on_shrink_contact",
-      "level": 2,
-      "phase": "react_to_real_collisions",
-      "kind": "system",
-      "file": "src/game/sensors/shrink.rs",
-      "line": 21
-    },
-    {
-      "id": "game::sensors::swap::on_swap_contact",
-      "name": "on_swap_contact",
-      "level": 2,
-      "phase": "react_to_real_collisions",
-      "kind": "system",
-      "file": "src/game/sensors/swap.rs",
-      "line": 18
-    },
-    {
-      "id": "game::sensors::bouncy::trigger_bouncy_pulse",
-      "name": "trigger_bouncy_pulse",
-      "level": 2,
-      "phase": "react_to_real_collisions",
-      "kind": "system",
-      "file": "src/game/sensors/bouncy.rs",
-      "line": 20
+      "line": 81
     },
     {
       "id": "game::finish::spawn_finish_line",
@@ -636,7 +634,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/level_generation.rs",
-      "line": 31
+      "line": 26
     },
     {
       "id": "game::world::level_generation::spawn_level_module",
@@ -645,7 +643,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/level_generation.rs",
-      "line": 76
+      "line": 71
     },
     {
       "id": "game::world::level_generation::close_level_with_finish",
@@ -654,7 +652,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/level_generation.rs",
-      "line": 112
+      "line": 107
     },
     {
       "id": "game::camera::world_pos_on_screen",

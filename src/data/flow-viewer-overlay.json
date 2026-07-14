@@ -95,7 +95,7 @@
   "game::staging::stage_race_events": {
     "nivel": 2
   },
-  "game::sensors::tick_the_sensors": {
+  "game::sensors::run_the_sensors": {
     "nivel": 2
   },
   "game::sensors::freeze::try_unfreeze": {
@@ -179,8 +179,8 @@
   "simulation::finish_target_secs": {
     "nivel": 1
   },
-  "simulation::react_to_real_collisions": {
-    "nivel": 1
+  "game::world::generate_the_level": {
+    "nivel": 2
   },
   "game::world::level_generation::generate_level": {
     "nivel": 2

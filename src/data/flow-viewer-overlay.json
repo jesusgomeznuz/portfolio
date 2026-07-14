@@ -11,9 +11,6 @@
   "simulation::on_start": {
     "nivel": 1
   },
-  "game::cast_the_race": {
-    "nivel": 2
-  },
   "game::finish::RaceResult": {
     "nivel": 2
   },
@@ -59,9 +56,6 @@
   "game::leader::spawn_crown": {
     "nivel": 2
   },
-  "production::setup_production": {
-    "nivel": 2
-  },
   "production::voice_tracker::VoiceTracker": {
     "nivel": 2
   },
@@ -75,15 +69,6 @@
     "nivel": 2
   },
   "production::voice_tracker::track_race_leader": {
-    "nivel": 2
-  },
-  "game::race_events::run_the_event_band": {
-    "nivel": 2
-  },
-  "game::race_events::emit_race_events_from_timeline": {
-    "nivel": 2
-  },
-  "game::race_events::send_race_events_to_timeline": {
     "nivel": 2
   },
   "game::staging::stage_race_events": {
@@ -200,12 +185,6 @@
   "game::camera::world_y_above_screen": {
     "nivel": 3
   },
-  "game::race_events::payload": {
-    "nivel": 3
-  },
-  "game::race_events::parse": {
-    "nivel": 3
-  },
   "game::sensors::freeze::spawn_frozen_visual": {
     "nivel": 3
   },
@@ -228,6 +207,12 @@
     "nivel": 1
   },
   "game::labels::follow_the_marbles": {
+    "nivel": 2
+  },
+  "game::prepare_the_race": {
+    "nivel": 2
+  },
+  "production::initialize_voice_tracker": {
     "nivel": 2
   }
 }

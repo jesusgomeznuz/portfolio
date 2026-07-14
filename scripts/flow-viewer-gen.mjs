@@ -155,6 +155,15 @@ function extractGroupReferences(body, hostModule, hostFunctionNames) {
   return references;
 }
 
+/// El ritmo de un hijo: el schedule del add_systems más cercano hacia atrás.
+/// Es vocabulario de Bevy expuesto tal cual — Startup, FixedUpdate, Update,
+/// PostUpdate, Last — derivado del código, sin curar nada.
+function scheduleAt(body, index) {
+  const before = body.slice(0, index);
+  const matches = [...before.matchAll(/add_systems\(\s*(\w+)/g)];
+  return matches.length > 0 ? matches[matches.length - 1][1] : undefined;
+}
+
 // ── El flowchart de la capa viewer ────────────────────────────────────────────
 
 /// N0: los brazos del match de main.rs — los modos del programa.
@@ -261,6 +270,7 @@ function generate() {
           level: 2,
           phase: resolved.name,
           kind: child.kind,
+          ritmo: child.kind === 'system' ? scheduleAt(target.body, child.at) : undefined,
           file: childResolved.file,
           line: lineOf(childResolved.file, childResolved.name),
         });

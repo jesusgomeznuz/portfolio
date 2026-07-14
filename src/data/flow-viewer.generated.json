@@ -1,12 +1,10 @@
 {
   "generatedAt": "2026-07-14",
-  "sourceCommit": "e853de9",
+  "sourceCommit": "23b1ba6",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
-    "on_step",
-    "on_frame_update",
-    "after_frame_update",
+    "on_update",
     "on_exit",
     "resolve_roster",
     "finish_target_secs"
@@ -49,7 +47,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 32
+      "line": 29
     },
     {
       "id": "game::cast_the_race",
@@ -58,7 +56,7 @@
       "phase": "on_start",
       "kind": "group",
       "file": "src/game/mod.rs",
-      "line": 18
+      "line": 19
     },
     {
       "id": "game::finish::RaceResult",
@@ -129,6 +127,7 @@
       "level": 2,
       "phase": "build_the_world",
       "kind": "system",
+      "ritmo": "Startup",
       "file": "src/game/world/setup.rs",
       "line": 10
     },
@@ -138,6 +137,7 @@
       "level": 2,
       "phase": "build_the_world",
       "kind": "system",
+      "ritmo": "Startup",
       "file": "src/game/world/setup.rs",
       "line": 52
     },
@@ -147,6 +147,7 @@
       "level": 2,
       "phase": "build_the_world",
       "kind": "system",
+      "ritmo": "Startup",
       "file": "src/game/camera.rs",
       "line": 7
     },
@@ -165,6 +166,7 @@
       "level": 2,
       "phase": "paint_the_backdrop",
       "kind": "system",
+      "ritmo": "Startup",
       "file": "src/game/background/sky.rs",
       "line": 10
     },
@@ -174,6 +176,7 @@
       "level": 2,
       "phase": "paint_the_backdrop",
       "kind": "system",
+      "ritmo": "Startup",
       "file": "src/game/background/stars.rs",
       "line": 23
     },
@@ -183,17 +186,9 @@
       "level": 2,
       "phase": "paint_the_backdrop",
       "kind": "system",
+      "ritmo": "Startup",
       "file": "src/game/background/clouds.rs",
       "line": 22
-    },
-    {
-      "id": "game::leader::spawn_crown",
-      "name": "spawn_crown",
-      "level": 2,
-      "phase": "on_start",
-      "kind": "system",
-      "file": "src/game/leader.rs",
-      "line": 37
     },
     {
       "id": "production::setup_production",
@@ -202,7 +197,7 @@
       "phase": "on_start",
       "kind": "group",
       "file": "src/production/mod.rs",
-      "line": 7
+      "line": 6
     },
     {
       "id": "production::voice_tracker::VoiceTracker",
@@ -214,17 +209,8 @@
       "line": 16
     },
     {
-      "id": "production::stall_detector::StallDetector",
-      "name": "StallDetector",
-      "level": 2,
-      "phase": "setup_production",
-      "kind": "resource",
-      "file": "src/production/stall_detector.rs",
-      "line": 6
-    },
-    {
-      "id": "simulation::on_step",
-      "name": "on_step",
+      "id": "simulation::on_update",
+      "name": "on_update",
       "level": 1,
       "phase": null,
       "kind": "phase",
@@ -235,10 +221,20 @@
       "id": "game::track_the_leader",
       "name": "track_the_leader",
       "level": 2,
-      "phase": "on_step",
+      "phase": "on_update",
       "kind": "group",
       "file": "src/game/mod.rs",
-      "line": 27
+      "line": 30
+    },
+    {
+      "id": "game::leader::spawn_crown",
+      "name": "spawn_crown",
+      "level": 2,
+      "phase": "track_the_leader",
+      "kind": "system",
+      "ritmo": "Startup",
+      "file": "src/game/leader.rs",
+      "line": 37
     },
     {
       "id": "game::finish::check_finish_crossing",
@@ -246,6 +242,7 @@
       "level": 2,
       "phase": "track_the_leader",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/finish.rs",
       "line": 39
     },
@@ -255,6 +252,7 @@
       "level": 2,
       "phase": "track_the_leader",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/leader.rs",
       "line": 17
     },
@@ -264,6 +262,7 @@
       "level": 2,
       "phase": "track_the_leader",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/production/voice_tracker.rs",
       "line": 49
     },
@@ -273,14 +272,25 @@
       "level": 2,
       "phase": "track_the_leader",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/camera.rs",
       "line": 47
+    },
+    {
+      "id": "game::leader::crown_follows_leader",
+      "name": "crown_follows_leader",
+      "level": 2,
+      "phase": "track_the_leader",
+      "kind": "system",
+      "ritmo": "PostUpdate",
+      "file": "src/game/leader.rs",
+      "line": 58
     },
     {
       "id": "game::race_events::run_the_event_band",
       "name": "run_the_event_band",
       "level": 2,
-      "phase": "on_step",
+      "phase": "on_update",
       "kind": "group",
       "file": "src/game/race_events.rs",
       "line": 112
@@ -291,6 +301,7 @@
       "level": 2,
       "phase": "run_the_event_band",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/race_events.rs",
       "line": 101
     },
@@ -300,6 +311,7 @@
       "level": 2,
       "phase": "run_the_event_band",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/race_events.rs",
       "line": 91
     },
@@ -309,6 +321,7 @@
       "level": 2,
       "phase": "run_the_event_band",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/staging.rs",
       "line": 19
     },
@@ -316,10 +329,10 @@
       "id": "game::sensors::run_the_sensors",
       "name": "run_the_sensors",
       "level": 2,
-      "phase": "on_step",
+      "phase": "on_update",
       "kind": "group",
       "file": "src/game/sensors/mod.rs",
-      "line": 15
+      "line": 18
     },
     {
       "id": "game::sensors::freeze::on_freeze_contact",
@@ -327,6 +340,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/freeze.rs",
       "line": 22
     },
@@ -336,6 +350,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/shrink.rs",
       "line": 21
     },
@@ -345,6 +360,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/swap.rs",
       "line": 18
     },
@@ -354,6 +370,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/bouncy.rs",
       "line": 20
     },
@@ -363,6 +380,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/freeze.rs",
       "line": 56
     },
@@ -372,6 +390,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/shrink.rs",
       "line": 53
     },
@@ -381,6 +400,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/swap.rs",
       "line": 56
     },
@@ -390,6 +410,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/icons.rs",
       "line": 9
     },
@@ -399,6 +420,7 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/bouncy.rs",
       "line": 51
     },
@@ -408,14 +430,45 @@
       "level": 2,
       "phase": "run_the_sensors",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/sensors/bouncy.rs",
       "line": 72
+    },
+    {
+      "id": "game::sensors::freeze::manage_freeze_badges",
+      "name": "manage_freeze_badges",
+      "level": 2,
+      "phase": "run_the_sensors",
+      "kind": "system",
+      "ritmo": "Update",
+      "file": "src/game/sensors/freeze.rs",
+      "line": 89
+    },
+    {
+      "id": "game::sensors::shrink::manage_shrink_badges",
+      "name": "manage_shrink_badges",
+      "level": 2,
+      "phase": "run_the_sensors",
+      "kind": "system",
+      "ritmo": "Update",
+      "file": "src/game/sensors/shrink.rs",
+      "line": 66
+    },
+    {
+      "id": "game::sensors::badges::update_badges",
+      "name": "update_badges",
+      "level": 2,
+      "phase": "run_the_sensors",
+      "kind": "system",
+      "ritmo": "PostUpdate",
+      "file": "src/game/sensors/badges.rs",
+      "line": 73
     },
     {
       "id": "game::world::generate_the_level",
       "name": "generate_the_level",
       "level": 2,
-      "phase": "on_step",
+      "phase": "on_update",
       "kind": "group",
       "file": "src/game/world/mod.rs",
       "line": 30
@@ -426,6 +479,7 @@
       "level": 2,
       "phase": "generate_the_level",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/world/level_generation.rs",
       "line": 37
     },
@@ -435,23 +489,15 @@
       "level": 2,
       "phase": "generate_the_level",
       "kind": "system",
+      "ritmo": "FixedUpdate",
       "file": "src/game/world/level_generation.rs",
       "line": 142
-    },
-    {
-      "id": "simulation::on_frame_update",
-      "name": "on_frame_update",
-      "level": 1,
-      "phase": null,
-      "kind": "phase",
-      "file": "src/simulation.rs",
-      "line": 47
     },
     {
       "id": "game::background::animate_the_backdrop",
       "name": "animate_the_backdrop",
       "level": 2,
-      "phase": "on_frame_update",
+      "phase": "on_update",
       "kind": "group",
       "file": "src/game/background/mod.rs",
       "line": 19
@@ -462,6 +508,7 @@
       "level": 2,
       "phase": "animate_the_backdrop",
       "kind": "system",
+      "ritmo": "Update",
       "file": "src/game/background/sky.rs",
       "line": 31
     },
@@ -471,6 +518,7 @@
       "level": 2,
       "phase": "animate_the_backdrop",
       "kind": "system",
+      "ritmo": "Update",
       "file": "src/game/background/stars.rs",
       "line": 83
     },
@@ -480,6 +528,7 @@
       "level": 2,
       "phase": "animate_the_backdrop",
       "kind": "system",
+      "ritmo": "Update",
       "file": "src/game/background/stars.rs",
       "line": 94
     },
@@ -489,80 +538,28 @@
       "level": 2,
       "phase": "animate_the_backdrop",
       "kind": "system",
+      "ritmo": "Update",
       "file": "src/game/background/clouds.rs",
       "line": 112
     },
     {
-      "id": "game::sensors::show_the_badges",
-      "name": "show_the_badges",
+      "id": "game::labels::follow_the_marbles",
+      "name": "follow_the_marbles",
       "level": 2,
-      "phase": "on_frame_update",
+      "phase": "on_update",
       "kind": "group",
-      "file": "src/game/sensors/mod.rs",
-      "line": 42
-    },
-    {
-      "id": "game::sensors::freeze::manage_freeze_badges",
-      "name": "manage_freeze_badges",
-      "level": 2,
-      "phase": "show_the_badges",
-      "kind": "system",
-      "file": "src/game/sensors/freeze.rs",
-      "line": 89
-    },
-    {
-      "id": "game::sensors::shrink::manage_shrink_badges",
-      "name": "manage_shrink_badges",
-      "level": 2,
-      "phase": "show_the_badges",
-      "kind": "system",
-      "file": "src/game/sensors/shrink.rs",
-      "line": 66
-    },
-    {
-      "id": "production::stall_detector::detect_stall",
-      "name": "detect_stall",
-      "level": 2,
-      "phase": "on_frame_update",
-      "kind": "system",
-      "file": "src/production/stall_detector.rs",
-      "line": 11
-    },
-    {
-      "id": "simulation::after_frame_update",
-      "name": "after_frame_update",
-      "level": 1,
-      "phase": null,
-      "kind": "phase",
-      "file": "src/simulation.rs",
-      "line": 53
+      "file": "src/game/labels.rs",
+      "line": 8
     },
     {
       "id": "game::labels::update_marble_labels",
       "name": "update_marble_labels",
       "level": 2,
-      "phase": "after_frame_update",
+      "phase": "follow_the_marbles",
       "kind": "system",
+      "ritmo": "PostUpdate",
       "file": "src/game/labels.rs",
-      "line": 50
-    },
-    {
-      "id": "game::leader::crown_follows_leader",
-      "name": "crown_follows_leader",
-      "level": 2,
-      "phase": "after_frame_update",
-      "kind": "system",
-      "file": "src/game/leader.rs",
-      "line": 58
-    },
-    {
-      "id": "game::sensors::badges::update_badges",
-      "name": "update_badges",
-      "level": 2,
-      "phase": "after_frame_update",
-      "kind": "system",
-      "file": "src/game/sensors/badges.rs",
-      "line": 73
+      "line": 60
     },
     {
       "id": "simulation::on_exit",
@@ -571,7 +568,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 65
+      "line": 49
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -589,7 +586,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 69
+      "line": 53
     },
     {
       "id": "game::roster::build_roster",
@@ -616,7 +613,7 @@
       "phase": "on_start",
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 81
+      "line": 65
     },
     {
       "id": "game::finish::spawn_finish_line",
@@ -727,21 +724,21 @@
       "line": 77
     },
     {
-      "id": "game::labels::spawn_marble_label",
-      "name": "spawn_marble_label",
-      "level": 3,
-      "phase": null,
-      "kind": "helper",
-      "file": "src/game/labels.rs",
-      "line": 14
-    },
-    {
       "id": "game::sensors::badges::spawn_badge",
       "name": "spawn_badge",
       "level": 3,
       "phase": null,
       "kind": "helper",
       "file": "src/game/sensors/badges.rs",
+      "line": 24
+    },
+    {
+      "id": "game::labels::spawn_marble_label",
+      "name": "spawn_marble_label",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/labels.rs",
       "line": 24
     }
   ]

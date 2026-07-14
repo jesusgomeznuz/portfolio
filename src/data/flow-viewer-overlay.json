@@ -65,12 +65,6 @@
   "production::voice_tracker::VoiceTracker": {
     "nivel": 2
   },
-  "production::stall_detector::StallDetector": {
-    "nivel": 2
-  },
-  "simulation::on_step": {
-    "nivel": 1
-  },
   "game::track_the_leader": {
     "nivel": 2
   },
@@ -119,9 +113,6 @@
   "game::camera::camera_follows_lowest_marble": {
     "nivel": 2
   },
-  "simulation::on_frame_update": {
-    "nivel": 1
-  },
   "game::background::animate_the_backdrop": {
     "nivel": 2
   },
@@ -137,20 +128,11 @@
   "game::background::clouds::update_clouds": {
     "nivel": 2
   },
-  "game::sensors::show_the_badges": {
-    "nivel": 2
-  },
   "game::sensors::freeze::manage_freeze_badges": {
     "nivel": 2
   },
   "game::sensors::shrink::manage_shrink_badges": {
     "nivel": 2
-  },
-  "production::stall_detector::detect_stall": {
-    "nivel": 2
-  },
-  "simulation::after_frame_update": {
-    "nivel": 1
   },
   "game::labels::update_marble_labels": {
     "nivel": 2
@@ -241,5 +223,11 @@
   },
   "game::sensors::badges::spawn_badge": {
     "nivel": 3
+  },
+  "simulation::on_update": {
+    "nivel": 1
+  },
+  "game::labels::follow_the_marbles": {
+    "nivel": 2
   }
 }

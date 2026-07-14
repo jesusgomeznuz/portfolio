@@ -15,6 +15,7 @@ interface FlowNode {
   file: string;
   line: number | null;
   target?: string;
+  ritmo?: string;
 }
 
 interface Criterio {
@@ -294,6 +295,7 @@ export default function FlowViewer() {
                   }
                 >
                   {node.kind === 'group' ? `${node.name}()` : node.id.replace(/^(game|production)::/, '')}
+                  {node.ritmo && <span className="fv-badge">{node.ritmo}</span>}
                   {criterioOf(node.id).devOnly && <span className="fv-badge">solo dev</span>}
                   <span className="fv-meta">{node.file.replace('src/', '')}:{node.line}</span>
                 </button>

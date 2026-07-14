@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-14",
-  "sourceCommit": "0a0693d",
+  "sourceCommit": "e927772",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -53,31 +53,130 @@
       "line": 35
     },
     {
+      "id": "game::cast_the_race",
+      "name": "cast_the_race",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "group",
+      "file": "src/game/mod.rs",
+      "line": 18
+    },
+    {
+      "id": "game::finish::RaceResult",
+      "name": "RaceResult",
+      "level": 2,
+      "phase": "cast_the_race",
+      "kind": "resource",
+      "file": "src/game/finish.rs",
+      "line": 12
+    },
+    {
+      "id": "game::finish::FinishLineY",
+      "name": "FinishLineY",
+      "level": 2,
+      "phase": "cast_the_race",
+      "kind": "resource",
+      "file": "src/game/finish.rs",
+      "line": 9
+    },
+    {
+      "id": "game::leader::RaceLeader",
+      "name": "RaceLeader",
+      "level": 2,
+      "phase": "cast_the_race",
+      "kind": "resource",
+      "file": "src/game/leader.rs",
+      "line": 9
+    },
+    {
       "id": "game::roster::Roster",
       "name": "Roster",
       "level": 2,
-      "phase": "on_start",
+      "phase": "cast_the_race",
       "kind": "resource",
       "file": "src/game/roster.rs",
-      "line": null
+      "line": 9
+    },
+    {
+      "id": "game::world::build_the_world",
+      "name": "build_the_world",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "group",
+      "file": "src/game/world/mod.rs",
+      "line": 10
     },
     {
       "id": "game::world::level_generation::LevelSeed",
       "name": "LevelSeed",
       "level": 2,
-      "phase": "on_start",
+      "phase": "build_the_world",
       "kind": "resource",
       "file": "src/game/world/level_generation.rs",
-      "line": null
+      "line": 15
     },
     {
       "id": "game::world::level_generation::FinishTarget",
       "name": "FinishTarget",
       "level": 2,
-      "phase": "on_start",
+      "phase": "build_the_world",
       "kind": "resource",
       "file": "src/game/world/level_generation.rs",
-      "line": null
+      "line": 18
+    },
+    {
+      "id": "game::world::setup::setup",
+      "name": "setup",
+      "level": 2,
+      "phase": "build_the_world",
+      "kind": "system",
+      "file": "src/game/world/setup.rs",
+      "line": 10
+    },
+    {
+      "id": "game::world::setup::set_gravity",
+      "name": "set_gravity",
+      "level": 2,
+      "phase": "build_the_world",
+      "kind": "system",
+      "file": "src/game/world/setup.rs",
+      "line": 53
+    },
+    {
+      "id": "game::background::paint_the_backdrop",
+      "name": "paint_the_backdrop",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "group",
+      "file": "src/game/background/mod.rs",
+      "line": 9
+    },
+    {
+      "id": "game::background::sky::spawn_sky",
+      "name": "spawn_sky",
+      "level": 2,
+      "phase": "paint_the_backdrop",
+      "kind": "system",
+      "file": "src/game/background/sky.rs",
+      "line": 10
+    },
+    {
+      "id": "game::background::stars::spawn_stars",
+      "name": "spawn_stars",
+      "level": 2,
+      "phase": "paint_the_backdrop",
+      "kind": "system",
+      "file": "src/game/background/stars.rs",
+      "line": 23
+    },
+    {
+      "id": "game::background::clouds::spawn_clouds",
+      "name": "spawn_clouds",
+      "level": 2,
+      "phase": "paint_the_backdrop",
+      "kind": "system",
+      "file": "src/game/background/clouds.rs",
+      "line": 22
     },
     {
       "id": "game::camera::spawn_camera_and_lights",
@@ -98,49 +197,31 @@
       "line": 37
     },
     {
-      "id": "game::world::setup::setup",
-      "name": "setup",
+      "id": "production::setup_production",
+      "name": "setup_production",
       "level": 2,
       "phase": "on_start",
-      "kind": "system",
-      "file": "src/game/world/setup.rs",
-      "line": 10
+      "kind": "group",
+      "file": "src/production/mod.rs",
+      "line": 7
     },
     {
-      "id": "game::world::setup::set_gravity",
-      "name": "set_gravity",
+      "id": "production::voice_tracker::VoiceTracker",
+      "name": "VoiceTracker",
       "level": 2,
-      "phase": "on_start",
-      "kind": "system",
-      "file": "src/game/world/setup.rs",
-      "line": 53
+      "phase": "setup_production",
+      "kind": "resource",
+      "file": "src/production/voice_tracker.rs",
+      "line": 16
     },
     {
-      "id": "game::background::sky::spawn_sky",
-      "name": "spawn_sky",
+      "id": "production::stall_detector::StallDetector",
+      "name": "StallDetector",
       "level": 2,
-      "phase": "on_start",
-      "kind": "system",
-      "file": "src/game/background/sky.rs",
-      "line": 10
-    },
-    {
-      "id": "game::background::stars::spawn_stars",
-      "name": "spawn_stars",
-      "level": 2,
-      "phase": "on_start",
-      "kind": "system",
-      "file": "src/game/background/stars.rs",
-      "line": 23
-    },
-    {
-      "id": "game::background::clouds::spawn_clouds",
-      "name": "spawn_clouds",
-      "level": 2,
-      "phase": "on_start",
-      "kind": "system",
-      "file": "src/game/background/clouds.rs",
-      "line": 22
+      "phase": "setup_production",
+      "kind": "resource",
+      "file": "src/production/stall_detector.rs",
+      "line": 6
     },
     {
       "id": "simulation::on_step",
@@ -149,13 +230,22 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 63
+      "line": 46
+    },
+    {
+      "id": "game::track_the_leader",
+      "name": "track_the_leader",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "group",
+      "file": "src/game/mod.rs",
+      "line": 26
     },
     {
       "id": "game::finish::check_finish_crossing",
       "name": "check_finish_crossing",
       "level": 2,
-      "phase": "on_step",
+      "phase": "track_the_leader",
       "kind": "system",
       "file": "src/game/finish.rs",
       "line": 39
@@ -164,7 +254,7 @@
       "id": "game::leader::update_race_leader",
       "name": "update_race_leader",
       "level": 2,
-      "phase": "on_step",
+      "phase": "track_the_leader",
       "kind": "system",
       "file": "src/game/leader.rs",
       "line": 17
@@ -173,16 +263,25 @@
       "id": "production::voice_tracker::track_race_leader",
       "name": "track_race_leader",
       "level": 2,
-      "phase": "on_step",
+      "phase": "track_the_leader",
       "kind": "system",
       "file": "src/production/voice_tracker.rs",
       "line": 49
     },
     {
+      "id": "game::race_events::run_the_event_band",
+      "name": "run_the_event_band",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "group",
+      "file": "src/game/race_events.rs",
+      "line": 112
+    },
+    {
       "id": "game::race_events::emit_race_events_from_timeline",
       "name": "emit_race_events_from_timeline",
       "level": 2,
-      "phase": "on_step",
+      "phase": "run_the_event_band",
       "kind": "system",
       "file": "src/game/race_events.rs",
       "line": 101
@@ -191,7 +290,7 @@
       "id": "game::race_events::send_race_events_to_timeline",
       "name": "send_race_events_to_timeline",
       "level": 2,
-      "phase": "on_step",
+      "phase": "run_the_event_band",
       "kind": "system",
       "file": "src/game/race_events.rs",
       "line": 91
@@ -200,16 +299,25 @@
       "id": "game::staging::stage_race_events",
       "name": "stage_race_events",
       "level": 2,
-      "phase": "on_step",
+      "phase": "run_the_event_band",
       "kind": "system",
       "file": "src/game/staging.rs",
       "line": 19
     },
     {
+      "id": "game::sensors::tick_the_sensors",
+      "name": "tick_the_sensors",
+      "level": 2,
+      "phase": "on_step",
+      "kind": "group",
+      "file": "src/game/sensors/mod.rs",
+      "line": 12
+    },
+    {
       "id": "game::sensors::freeze::try_unfreeze",
       "name": "try_unfreeze",
       "level": 2,
-      "phase": "on_step",
+      "phase": "tick_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/freeze.rs",
       "line": 56
@@ -218,7 +326,7 @@
       "id": "game::sensors::shrink::try_unshrink",
       "name": "try_unshrink",
       "level": 2,
-      "phase": "on_step",
+      "phase": "tick_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/shrink.rs",
       "line": 53
@@ -227,7 +335,7 @@
       "id": "game::sensors::swap::fade_swap_rings",
       "name": "fade_swap_rings",
       "level": 2,
-      "phase": "on_step",
+      "phase": "tick_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/swap.rs",
       "line": 56
@@ -236,7 +344,7 @@
       "id": "game::sensors::icons::spin_icons",
       "name": "spin_icons",
       "level": 2,
-      "phase": "on_step",
+      "phase": "tick_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/icons.rs",
       "line": 9
@@ -245,7 +353,7 @@
       "id": "game::sensors::bouncy::animate_bounce_pulse",
       "name": "animate_bounce_pulse",
       "level": 2,
-      "phase": "on_step",
+      "phase": "tick_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/bouncy.rs",
       "line": 51
@@ -254,7 +362,7 @@
       "id": "game::sensors::bouncy::tick_bounce_cooldown",
       "name": "tick_bounce_cooldown",
       "level": 2,
-      "phase": "on_step",
+      "phase": "tick_the_sensors",
       "kind": "system",
       "file": "src/game/sensors/bouncy.rs",
       "line": 72
@@ -275,13 +383,22 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 103
+      "line": 60
+    },
+    {
+      "id": "game::background::animate_the_backdrop",
+      "name": "animate_the_backdrop",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "group",
+      "file": "src/game/background/mod.rs",
+      "line": 19
     },
     {
       "id": "game::background::sky::update_sky_with_camera",
       "name": "update_sky_with_camera",
       "level": 2,
-      "phase": "on_frame_update",
+      "phase": "animate_the_backdrop",
       "kind": "system",
       "file": "src/game/background/sky.rs",
       "line": 31
@@ -290,7 +407,7 @@
       "id": "game::background::stars::stars_follow_camera",
       "name": "stars_follow_camera",
       "level": 2,
-      "phase": "on_frame_update",
+      "phase": "animate_the_backdrop",
       "kind": "system",
       "file": "src/game/background/stars.rs",
       "line": 83
@@ -299,7 +416,7 @@
       "id": "game::background::stars::twinkle_stars",
       "name": "twinkle_stars",
       "level": 2,
-      "phase": "on_frame_update",
+      "phase": "animate_the_backdrop",
       "kind": "system",
       "file": "src/game/background/stars.rs",
       "line": 94
@@ -308,16 +425,25 @@
       "id": "game::background::clouds::update_clouds",
       "name": "update_clouds",
       "level": 2,
-      "phase": "on_frame_update",
+      "phase": "animate_the_backdrop",
       "kind": "system",
       "file": "src/game/background/clouds.rs",
       "line": 112
     },
     {
+      "id": "game::sensors::show_the_badges",
+      "name": "show_the_badges",
+      "level": 2,
+      "phase": "on_frame_update",
+      "kind": "group",
+      "file": "src/game/sensors/mod.rs",
+      "line": 28
+    },
+    {
       "id": "game::sensors::freeze::manage_freeze_badges",
       "name": "manage_freeze_badges",
       "level": 2,
-      "phase": "on_frame_update",
+      "phase": "show_the_badges",
       "kind": "system",
       "file": "src/game/sensors/freeze.rs",
       "line": 89
@@ -326,7 +452,7 @@
       "id": "game::sensors::shrink::manage_shrink_badges",
       "name": "manage_shrink_badges",
       "level": 2,
-      "phase": "on_frame_update",
+      "phase": "show_the_badges",
       "kind": "system",
       "file": "src/game/sensors/shrink.rs",
       "line": 66
@@ -347,7 +473,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 118
+      "line": 66
     },
     {
       "id": "game::labels::update_marble_labels",
@@ -383,7 +509,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 130
+      "line": 78
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -401,7 +527,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 150
+      "line": 98
     },
     {
       "id": "game::roster::build_roster",
@@ -428,7 +554,7 @@
       "phase": "on_start",
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 162
+      "line": 110
     },
     {
       "id": "simulation::react_to_real_collisions",
@@ -437,7 +563,7 @@
       "phase": "on_step",
       "kind": "branch",
       "file": "src/simulation.rs",
-      "line": 134
+      "line": 82
     },
     {
       "id": "game::world::level_generation::generate_level",
@@ -494,6 +620,15 @@
       "line": 20
     },
     {
+      "id": "game::finish::spawn_finish_line",
+      "name": "spawn_finish_line",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/finish.rs",
+      "line": 16
+    },
+    {
       "id": "game::world::level_generation::new",
       "name": "new",
       "level": 3,
@@ -537,15 +672,6 @@
       "kind": "helper",
       "file": "src/game/camera.rs",
       "line": 91
-    },
-    {
-      "id": "game::finish::spawn_finish_line",
-      "name": "spawn_finish_line",
-      "level": 3,
-      "phase": null,
-      "kind": "helper",
-      "file": "src/game/finish.rs",
-      "line": 16
     },
     {
       "id": "game::race_events::payload",

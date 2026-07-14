@@ -83,7 +83,9 @@ function resolvePath(rustPath) {
 /// Línea donde se define `fn name` dentro de un archivo del juego.
 function lineOf(file, name) {
   const source = readSource(path.join(GAME_REPO, file));
-  const match = source.match(new RegExp(`(?:pub )?fn ${name}\\s*(?:<[^>]*>)?\\s*\\(`));
+  const match =
+    source.match(new RegExp(`(?:pub )?fn ${name}\\s*(?:<[^>]*>)?\\s*\\(`)) ??
+    source.match(new RegExp(`(?:pub )?(?:struct|enum) ${name}\\b`));
   if (!match) return null;
   return source.slice(0, match.index).split('\n').length;
 }
@@ -101,6 +103,56 @@ function helpersOf(file, registeredNames) {
     helpers.push({ name, line: source.slice(0, match.index).split('\n').length });
   }
   return helpers;
+}
+
+/// ¿La función registra cosas en el App? Entonces es una gorda: un grupo.
+function registersInApp(body) {
+  return /\bapp\s*\.\s*(add_systems|insert_resource|add_event)/.test(body);
+}
+
+/// src/game/world/mod.rs → 'game::world'; src/game/race_events.rs → 'game::race_events'
+function moduleOfFile(file) {
+  return file.replace(/^src\//, '').replace(/\/mod\.rs$|\.rs$/, '').replaceAll('/', '::');
+}
+
+/// Las referencias dentro del cuerpo de una gorda, resueltas contra su módulo:
+/// crate::X → X · super::X → padre::X · mod::fn → host::mod::fn · fn local → host::fn
+function extractGroupReferences(body, hostModule, hostFunctionNames) {
+  const references = [];
+  const parentModule = hostModule.split('::').slice(0, -1).join('::');
+  const pathRegex = /(crate::|super::)?([a-z_]\w*(?:::[A-Za-z_]\w*)+)/g;
+  let match;
+  while ((match = pathRegex.exec(body)) !== null) {
+    const prefix = match[1] ?? '';
+    let full = match[2];
+    if (prefix === 'crate::') {
+      // absoluto tal cual
+    } else if (prefix === 'super::') {
+      full = parentModule ? `${parentModule}::${full}` : full;
+    } else if (!/^(game|production)::/.test(full)) {
+      full = `${hostModule}::${full}`;
+    }
+    // Tipo::default() / Tipo::new(): la referencia real es el Tipo
+    full = full.replace(/::(default|new)$/, '');
+    const lastSegment = full.split('::').pop();
+    const isType = /^[A-Z]/.test(lastSegment);
+    const before = body.slice(Math.max(0, match.index - 60), match.index);
+    const isResource = before.includes('insert_resource(');
+    if (isType && !isResource) continue;
+    references.push({ path: full, kind: isResource ? 'resource' : 'system', at: match.index });
+  }
+  // Funciones del mismo archivo llamadas por nombre pelón (la banda en race_events.rs)
+  for (const name of hostFunctionNames) {
+    if (references.some((reference) => reference.path.endsWith(`::${name}`))) continue;
+    if (/^[A-Z]/.test(name)) continue;
+    const at = body.search(new RegExp(`\\b${name}\\b`));
+    if (at !== -1) {
+      references.push({ path: `${hostModule}::${name}`, kind: 'system', at });
+    }
+  }
+  // El orden del cuerpo ES el orden del flujo
+  references.sort((a, b) => a.at - b.at);
+  return references;
 }
 
 // ── El flowchart de la capa viewer ────────────────────────────────────────────
@@ -174,17 +226,42 @@ function generate() {
     for (const reference of extractReferences(functions.get(phase).body)) {
       const resolved = resolvePath(reference.path);
       if (!resolved) continue;
+
+      const targetFunctions = extractFunctions(readSource(path.join(GAME_REPO, resolved.file)));
+      const target = targetFunctions.get(resolved.name);
+      const isGroup = reference.kind === 'system' && target && registersInApp(target.body);
+
       nodes.push({
         id: reference.path,
         name: resolved.name,
         level: 2,
         phase,
-        kind: reference.kind,
+        kind: isGroup ? 'group' : reference.kind,
         file: resolved.file,
         line: lineOf(resolved.file, resolved.name),
       });
       if (!filesInPlay.has(resolved.file)) filesInPlay.set(resolved.file, new Set());
       filesInPlay.get(resolved.file).add(resolved.name);
+
+      if (!isGroup) continue;
+      // Los hijos de la gorda: lo que registra, colgado bajo su nombre
+      const hostModule = moduleOfFile(resolved.file);
+      const siblingNames = [...targetFunctions.keys()].filter((name) => name !== resolved.name);
+      for (const child of extractGroupReferences(target.body, hostModule, siblingNames)) {
+        const childResolved = resolvePath(child.path);
+        if (!childResolved) continue;
+        nodes.push({
+          id: child.path,
+          name: childResolved.name,
+          level: 2,
+          phase: resolved.name,
+          kind: child.kind,
+          file: childResolved.file,
+          line: lineOf(childResolved.file, childResolved.name),
+        });
+        if (!filesInPlay.has(childResolved.file)) filesInPlay.set(childResolved.file, new Set());
+        filesInPlay.get(childResolved.file).add(childResolved.name);
+      }
     }
   }
 

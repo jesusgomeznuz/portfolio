@@ -11,7 +11,7 @@ interface FlowNode {
   name: string;
   level: number;
   phase: string | null;
-  kind: 'mode' | 'phase' | 'branch' | 'helper' | 'system' | 'resource';
+  kind: 'mode' | 'phase' | 'branch' | 'group' | 'helper' | 'system' | 'resource';
   file: string;
   line: number | null;
   target?: string;
@@ -34,10 +34,20 @@ const KIND_COLORS: Record<FlowNode['kind'], string> = {
   mode: '#e5e5e5',
   phase: '#4ade80',
   branch: '#fb923c',
+  group: '#c084fc',
   system: '#4fc3f7',
   resource: '#2dd4bf',
   helper: '#a1a1aa',
 };
+
+const KIND_LABELS: Array<[FlowNode['kind'], string]> = [
+  ['phase', 'fase'],
+  ['group', 'llamada gorda'],
+  ['system', 'system'],
+  ['resource', 'resource'],
+  ['branch', 'rama'],
+  ['helper', 'helper'],
+];
 
 function criterioOf(id: string): Criterio {
   return (overlay as Record<string, Criterio>)[id] ?? {};
@@ -110,6 +120,17 @@ export default function FlowViewer() {
         .fv-crumb.current { color: #b8e832; cursor: default; }
         .fv-crumb.current:hover { background: none; }
         .fv-sep { color: #4a4a52; }
+        .fv-legend {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px 12px;
+          padding: 0 4px 8px;
+          font-size: 9.5px;
+          color: #8a8a92;
+          flex-shrink: 0;
+        }
+        .fv-legend-item { display: inline-flex; align-items: center; gap: 5px; }
+        .fv-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
         .fv-canvas {
           flex: 1;
           min-height: 0;
@@ -190,6 +211,15 @@ export default function FlowViewer() {
         ))}
       </nav>
 
+      <div className="fv-legend">
+        {KIND_LABELS.map(([kind, label]) => (
+          <span key={kind} className="fv-legend-item">
+            <span className="fv-dot" style={{ background: KIND_COLORS[kind] }} />
+            {label}
+          </span>
+        ))}
+      </div>
+
       <div className="fv-canvas">
         {view.kind === 'main' && (
           <div className="fv-column">
@@ -255,9 +285,13 @@ export default function FlowViewer() {
                 <button
                   className="fv-node"
                   style={{ '--kind-color': KIND_COLORS[node.kind] } as React.CSSProperties}
-                  onClick={() => enter({ kind: 'file', file: node.file })}
+                  onClick={() =>
+                    node.kind === 'group'
+                      ? enter({ kind: 'phase', name: node.name })
+                      : enter({ kind: 'file', file: node.file })
+                  }
                 >
-                  {node.id.replace(/^(game|production)::/, '')}
+                  {node.kind === 'group' ? `${node.name}()` : node.id.replace(/^(game|production)::/, '')}
                   {criterioOf(node.id).devOnly && <span className="fv-badge">solo dev</span>}
                   <span className="fv-meta">{node.file.replace('src/', '')}:{node.line}</span>
                 </button>

@@ -173,9 +173,6 @@
   "game::race::prepare_the_race": {
     "nivel": 2
   },
-  "production::initialize_voice_tracker": {
-    "nivel": 2
-  },
   "engine::game_app": {
     "nivel": 1
   },
@@ -189,9 +186,6 @@
     "nivel": 2
   },
   "game::race::finish::FinishTarget": {
-    "nivel": 2
-  },
-  "game::scene::paint_the_backdrop": {
     "nivel": 2
   },
   "game::world::run_the_sensors": {
@@ -220,5 +214,11 @@
   },
   "game::race::labels::spawn_marble_label": {
     "nivel": 3
+  },
+  "game::scene::prepare_the_scene": {
+    "nivel": 2
+  },
+  "game::scene::background::BackdropSeed": {
+    "nivel": 2
   }
 }

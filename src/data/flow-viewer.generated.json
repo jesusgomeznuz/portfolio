@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-15",
-  "sourceCommit": "739658e",
+  "sourceCommit": "78b4369",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -82,7 +82,16 @@
       "phase": "on_start",
       "kind": "group",
       "file": "src/game/race/mod.rs",
-      "line": 15
+      "line": 17
+    },
+    {
+      "id": "production::voice_tracker::VoiceTracker",
+      "name": "VoiceTracker",
+      "level": 2,
+      "phase": "prepare_the_race",
+      "kind": "resource",
+      "file": "src/production/voice_tracker.rs",
+      "line": 16
     },
     {
       "id": "game::race::finish::RaceResult",
@@ -179,19 +188,28 @@
       "line": 37
     },
     {
-      "id": "game::scene::paint_the_backdrop",
-      "name": "paint_the_backdrop",
+      "id": "game::scene::prepare_the_scene",
+      "name": "prepare_the_scene",
       "level": 2,
       "phase": "on_start",
       "kind": "group",
+      "file": "src/game/scene/mod.rs",
+      "line": 11
+    },
+    {
+      "id": "game::scene::background::BackdropSeed",
+      "name": "BackdropSeed",
+      "level": 2,
+      "phase": "prepare_the_scene",
+      "kind": "resource",
       "file": "src/game/scene/background/mod.rs",
-      "line": 15
+      "line": 7
     },
     {
       "id": "game::scene::background::sky::spawn_sky",
       "name": "spawn_sky",
       "level": 2,
-      "phase": "paint_the_backdrop",
+      "phase": "prepare_the_scene",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/sky.rs",
@@ -201,7 +219,7 @@
       "id": "game::scene::background::stars::spawn_stars",
       "name": "spawn_stars",
       "level": 2,
-      "phase": "paint_the_backdrop",
+      "phase": "prepare_the_scene",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/stars.rs",
@@ -211,29 +229,11 @@
       "id": "game::scene::background::clouds::spawn_clouds",
       "name": "spawn_clouds",
       "level": 2,
-      "phase": "paint_the_backdrop",
+      "phase": "prepare_the_scene",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/clouds.rs",
       "line": 22
-    },
-    {
-      "id": "production::initialize_voice_tracker",
-      "name": "initialize_voice_tracker",
-      "level": 2,
-      "phase": "on_start",
-      "kind": "group",
-      "file": "src/production/mod.rs",
-      "line": 6
-    },
-    {
-      "id": "production::voice_tracker::VoiceTracker",
-      "name": "VoiceTracker",
-      "level": 2,
-      "phase": "initialize_voice_tracker",
-      "kind": "resource",
-      "file": "src/production/voice_tracker.rs",
-      "line": 16
     },
     {
       "id": "simulation::on_update",
@@ -242,7 +242,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 40
+      "line": 39
     },
     {
       "id": "game::world::generate_the_level",
@@ -428,7 +428,7 @@
       "phase": "on_update",
       "kind": "group",
       "file": "src/game/race/mod.rs",
-      "line": 27
+      "line": 30
     },
     {
       "id": "game::race::finish::check_finish_crossing",
@@ -506,7 +506,7 @@
       "phase": "on_update",
       "kind": "group",
       "file": "src/game/scene/background/mod.rs",
-      "line": 26
+      "line": 15
     },
     {
       "id": "game::scene::background::sky::update_sky_with_camera",
@@ -555,7 +555,7 @@
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 55
+      "line": 54
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -573,7 +573,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 59
+      "line": 58
     },
     {
       "id": "game::race::roster::build_roster",
@@ -600,7 +600,7 @@
       "phase": "on_start",
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 71
+      "line": 70
     },
     {
       "id": "game::race::finish::spawn_finish_line",

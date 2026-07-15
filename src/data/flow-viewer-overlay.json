@@ -233,9 +233,6 @@
   "game::race::follow_the_leader": {
     "nivel": 2
   },
-  "game::race::update_labels": {
-    "nivel": 2
-  },
   "game::scene::update_scene": {
     "nivel": 2
   }

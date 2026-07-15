@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-15",
-  "sourceCommit": "c85a79a",
+  "sourceCommit": "5120e47",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -91,7 +91,7 @@
       "phase": "on_start",
       "kind": "group",
       "file": "src/game/race/mod.rs",
-      "line": 17,
+      "line": 15,
       "pisos": 6
     },
     {
@@ -453,7 +453,7 @@
       "phase": "on_update",
       "kind": "group",
       "file": "src/game/race/mod.rs",
-      "line": 31,
+      "line": 29,
       "pisos": 5
     },
     {
@@ -507,34 +507,14 @@
       "line": 58
     },
     {
-      "id": "game::race::update_labels",
-      "name": "update_labels",
-      "level": 2,
-      "phase": "on_update",
-      "kind": "group",
-      "file": "src/game/race/labels.rs",
-      "line": 8,
-      "pisos": 1
-    },
-    {
-      "id": "game::race::labels::update_marble_labels",
-      "name": "update_marble_labels",
-      "level": 2,
-      "phase": "update_labels",
-      "kind": "system",
-      "ritmo": "PostUpdate",
-      "file": "src/game/race/labels.rs",
-      "line": 60
-    },
-    {
       "id": "game::scene::update_scene",
       "name": "update_scene",
       "level": 2,
       "phase": "on_update",
       "kind": "group",
       "file": "src/game/scene/mod.rs",
-      "line": 25,
-      "pisos": 4
+      "line": 27,
+      "pisos": 5
     },
     {
       "id": "game::scene::background::sky::update_sky_with_camera",
@@ -577,13 +557,23 @@
       "line": 112
     },
     {
+      "id": "game::race::labels::update_marble_labels",
+      "name": "update_marble_labels",
+      "level": 2,
+      "phase": "update_scene",
+      "kind": "system",
+      "ritmo": "PostUpdate",
+      "file": "src/game/race/labels.rs",
+      "line": 50
+    },
+    {
       "id": "simulation::on_exit",
       "name": "on_exit",
       "level": 1,
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 55
+      "line": 54
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -601,7 +591,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 59
+      "line": 58
     },
     {
       "id": "game::race::roster::build_roster",
@@ -628,7 +618,7 @@
       "phase": "on_start",
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 71
+      "line": 70
     },
     {
       "id": "game::race::finish::spawn_finish_line",
@@ -772,7 +762,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/race/labels.rs",
-      "line": 24
+      "line": 14
     }
   ]
 }

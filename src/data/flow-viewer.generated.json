@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-15",
-  "sourceCommit": "d085d8f",
+  "sourceCommit": "3f4db99",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -85,70 +85,6 @@
       "line": 34
     },
     {
-      "id": "game::race::prepare_the_race",
-      "name": "prepare_the_race",
-      "level": 2,
-      "phase": "on_start",
-      "kind": "group",
-      "file": "src/game/race/mod.rs",
-      "line": 15,
-      "pisos": 6
-    },
-    {
-      "id": "production::voice_tracker::VoiceTracker",
-      "name": "VoiceTracker",
-      "level": 2,
-      "phase": "prepare_the_race",
-      "kind": "resource",
-      "file": "src/production/voice_tracker.rs",
-      "line": 16
-    },
-    {
-      "id": "game::race::finish::RaceResult",
-      "name": "RaceResult",
-      "level": 2,
-      "phase": "prepare_the_race",
-      "kind": "resource",
-      "file": "src/game/race/finish.rs",
-      "line": 17
-    },
-    {
-      "id": "game::race::finish::FinishLineY",
-      "name": "FinishLineY",
-      "level": 2,
-      "phase": "prepare_the_race",
-      "kind": "resource",
-      "file": "src/game/race/finish.rs",
-      "line": 14
-    },
-    {
-      "id": "game::race::finish::FinishTarget",
-      "name": "FinishTarget",
-      "level": 2,
-      "phase": "prepare_the_race",
-      "kind": "resource",
-      "file": "src/game/race/finish.rs",
-      "line": 8
-    },
-    {
-      "id": "game::race::leader::RaceLeader",
-      "name": "RaceLeader",
-      "level": 2,
-      "phase": "prepare_the_race",
-      "kind": "resource",
-      "file": "src/game/race/leader.rs",
-      "line": 9
-    },
-    {
-      "id": "game::race::roster::Roster",
-      "name": "Roster",
-      "level": 2,
-      "phase": "prepare_the_race",
-      "kind": "resource",
-      "file": "src/game/race/roster.rs",
-      "line": 9
-    },
-    {
       "id": "game::world::build_world",
       "name": "build_world",
       "level": 2,
@@ -219,8 +155,8 @@
       "line": 37
     },
     {
-      "id": "game::scene::prepare_the_scene",
-      "name": "prepare_the_scene",
+      "id": "game::scene::build_scene",
+      "name": "build_scene",
       "level": 2,
       "phase": "on_start",
       "kind": "group",
@@ -232,7 +168,7 @@
       "id": "game::scene::background::BackdropSeed",
       "name": "BackdropSeed",
       "level": 2,
-      "phase": "prepare_the_scene",
+      "phase": "build_scene",
       "kind": "resource",
       "file": "src/game/scene/background/mod.rs",
       "line": 7
@@ -241,7 +177,7 @@
       "id": "game::scene::background::sky::spawn_sky",
       "name": "spawn_sky",
       "level": 2,
-      "phase": "prepare_the_scene",
+      "phase": "build_scene",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/sky.rs",
@@ -251,7 +187,7 @@
       "id": "game::scene::background::stars::spawn_stars",
       "name": "spawn_stars",
       "level": 2,
-      "phase": "prepare_the_scene",
+      "phase": "build_scene",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/stars.rs",
@@ -261,11 +197,75 @@
       "id": "game::scene::background::clouds::spawn_clouds",
       "name": "spawn_clouds",
       "level": 2,
-      "phase": "prepare_the_scene",
+      "phase": "build_scene",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/clouds.rs",
       "line": 22
+    },
+    {
+      "id": "game::race::build_race",
+      "name": "build_race",
+      "level": 2,
+      "phase": "on_start",
+      "kind": "group",
+      "file": "src/game/race/mod.rs",
+      "line": 15,
+      "pisos": 6
+    },
+    {
+      "id": "production::voice_tracker::VoiceTracker",
+      "name": "VoiceTracker",
+      "level": 2,
+      "phase": "build_race",
+      "kind": "resource",
+      "file": "src/production/voice_tracker.rs",
+      "line": 16
+    },
+    {
+      "id": "game::race::finish::RaceResult",
+      "name": "RaceResult",
+      "level": 2,
+      "phase": "build_race",
+      "kind": "resource",
+      "file": "src/game/race/finish.rs",
+      "line": 17
+    },
+    {
+      "id": "game::race::finish::FinishLineY",
+      "name": "FinishLineY",
+      "level": 2,
+      "phase": "build_race",
+      "kind": "resource",
+      "file": "src/game/race/finish.rs",
+      "line": 14
+    },
+    {
+      "id": "game::race::finish::FinishTarget",
+      "name": "FinishTarget",
+      "level": 2,
+      "phase": "build_race",
+      "kind": "resource",
+      "file": "src/game/race/finish.rs",
+      "line": 8
+    },
+    {
+      "id": "game::race::leader::RaceLeader",
+      "name": "RaceLeader",
+      "level": 2,
+      "phase": "build_race",
+      "kind": "resource",
+      "file": "src/game/race/leader.rs",
+      "line": 9
+    },
+    {
+      "id": "game::race::roster::Roster",
+      "name": "Roster",
+      "level": 2,
+      "phase": "build_race",
+      "kind": "resource",
+      "file": "src/game/race/roster.rs",
+      "line": 9
     },
     {
       "id": "simulation::on_update",
@@ -621,15 +621,6 @@
       "line": 67
     },
     {
-      "id": "game::race::finish::spawn_finish_line",
-      "name": "spawn_finish_line",
-      "level": 3,
-      "phase": null,
-      "kind": "helper",
-      "file": "src/game/race/finish.rs",
-      "line": 21
-    },
-    {
       "id": "game::world::structures::spawn_floor",
       "name": "spawn_floor",
       "level": 3,
@@ -709,6 +700,15 @@
       "kind": "helper",
       "file": "src/game/scene/camera.rs",
       "line": 91
+    },
+    {
+      "id": "game::race::finish::spawn_finish_line",
+      "name": "spawn_finish_line",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/race/finish.rs",
+      "line": 21
     },
     {
       "id": "game::world::sensors::freeze::spawn_frozen_visual",

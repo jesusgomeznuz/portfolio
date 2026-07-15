@@ -5,9 +5,6 @@
   "main::BuildModules": {
     "nivel": 0
   },
-  "main::PreprocessConcaveColliders": {
-    "nivel": 0
-  },
   "simulation::on_start": {
     "nivel": 1
   },

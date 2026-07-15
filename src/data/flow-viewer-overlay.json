@@ -214,5 +214,17 @@
   },
   "production::initialize_voice_tracker": {
     "nivel": 2
+  },
+  "engine::random_physics_game_app": {
+    "nivel": 1
+  },
+  "engine::write_timeline": {
+    "nivel": 2
+  },
+  "engine::play": {
+    "nivel": 2
+  },
+  "engine::native": {
+    "nivel": 2
   }
 }

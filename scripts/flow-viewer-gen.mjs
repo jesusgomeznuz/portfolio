@@ -166,6 +166,51 @@ function scheduleAt(body, index) {
 
 // ── El flowchart de la capa viewer ────────────────────────────────────────────
 
+/// La costura con el engine: random_physics_game_app y las 3 salidas de su
+/// match de modos (parseadas de engine.rs real — línea exacta, cero curación).
+/// El juego no las conoce; el visor las muestra para contar la historia.
+function engineNodes() {
+  const enginePath = path.join(GAME_REPO, '../rapier-bevy/src/engine.rs');
+  const source = readSource(enginePath);
+  const lineAt = (index) => source.slice(0, index).split('\n').length;
+
+  const fnIndex = source.indexOf('pub fn random_physics_game_app');
+  const matchIndex = source.indexOf('match (writing_timeline, timeline_path())');
+  if (fnIndex === -1 || matchIndex === -1) {
+    throw new Error('engine.rs cambió de forma — el parser de la costura no encontró la fn o el match de modos');
+  }
+
+  const salidas = [
+    { id: 'engine::write_timeline', name: '--write-timeline → física + Dice, y se escribe la partitura', pattern: '(Some(secs), _)' },
+    { id: 'engine::play', name: '--play → sin física ni Dice: la partitura dicta, los creadores duermen', pattern: '(None, Some(path))' },
+    { id: 'engine::native', name: 'cargo run → física viva y Dice en la mesa', pattern: '(None, None)' },
+  ];
+
+  const nodes = [{
+    id: 'engine::random_physics_game_app',
+    name: 'random_physics_game_app',
+    level: 1,
+    phase: null,
+    kind: 'engine',
+    file: 'rapier-bevy/src/engine.rs',
+    line: lineAt(fnIndex),
+  }];
+  for (const salida of salidas) {
+    const at = source.indexOf(salida.pattern, matchIndex);
+    if (at === -1) throw new Error(`engine.rs sin el brazo ${salida.pattern} — la costura cambió`);
+    nodes.push({
+      id: salida.id,
+      name: salida.name,
+      level: 2,
+      phase: 'random_physics_game_app',
+      kind: 'branch',
+      file: 'rapier-bevy/src/engine.rs',
+      line: lineAt(at),
+    });
+  }
+  return nodes;
+}
+
 /// N0: los brazos del match de main.rs — los modos del programa.
 function extractModes() {
   const source = readSource(path.join(GAME_REPO, 'src/main.rs'));
@@ -217,6 +262,8 @@ function generate() {
       line: mode.line,
     });
   }
+
+  nodes.push(...engineNodes());
 
   for (const { name: phase, parent } of phases) {
     // La clase se decide por CONTENIDO: fase (on_*/after_*), gorda local

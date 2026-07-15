@@ -11,7 +11,7 @@ interface FlowNode {
   name: string;
   level: number;
   phase: string | null;
-  kind: 'mode' | 'phase' | 'branch' | 'group' | 'helper' | 'system' | 'resource';
+  kind: 'mode' | 'phase' | 'branch' | 'group' | 'helper' | 'system' | 'resource' | 'engine';
   file: string;
   line: number | null;
   target?: string;
@@ -39,6 +39,7 @@ const KIND_COLORS: Record<FlowNode['kind'], string> = {
   system: '#4fc3f7',
   resource: '#2dd4bf',
   helper: '#a1a1aa',
+  engine: '#f472b6',
 };
 
 const KIND_LABELS: Array<[FlowNode['kind'], string]> = [
@@ -48,6 +49,7 @@ const KIND_LABELS: Array<[FlowNode['kind'], string]> = [
   ['resource', 'resource'],
   ['branch', 'rama'],
   ['helper', 'helper'],
+  ['engine', 'engine'],
 ];
 
 function criterioOf(id: string): Criterio {
@@ -253,6 +255,19 @@ export default function FlowViewer() {
 
         {view.kind === 'root' && (
           <div className="fv-column">
+            {nodes.filter((node) => node.kind === 'engine').map((engine) => (
+              <span key={engine.id} style={{ display: 'contents' }}>
+                <button
+                  className="fv-node"
+                  style={{ '--kind-color': KIND_COLORS.engine } as React.CSSProperties}
+                  onClick={() => enter({ kind: 'phase', name: engine.name })}
+                >
+                  rapier_bevy::{engine.name}()
+                  <span className="fv-meta">{engine.file}:{engine.line} — el engine arma la mesa</span>
+                </button>
+                <span className="fv-arrow" />
+              </span>
+            ))}
             {phases.map((phase, index) => (
               <span key={phase.id} style={{ display: 'contents' }}>
                 {index > 0 && <span className="fv-arrow" />}
@@ -286,15 +301,19 @@ export default function FlowViewer() {
               <span key={node.id} style={{ display: 'contents' }}>
                 {index > 0 && <span className="fv-arrow" />}
                 <button
-                  className="fv-node"
+                  className={`fv-node${node.kind === 'branch' ? ' static' : ''}`}
                   style={{ '--kind-color': KIND_COLORS[node.kind] } as React.CSSProperties}
-                  onClick={() =>
-                    node.kind === 'group'
-                      ? enter({ kind: 'phase', name: node.name })
-                      : enter({ kind: 'file', file: node.file })
-                  }
+                  onClick={() => {
+                    if (node.kind === 'branch') return;
+                    if (node.kind === 'group') enter({ kind: 'phase', name: node.name });
+                    else enter({ kind: 'file', file: node.file });
+                  }}
                 >
-                  {node.kind === 'group' ? `${node.name}()` : node.id.replace(/^(game|production)::/, '')}
+                  {node.kind === 'group'
+                    ? `${node.name}()`
+                    : node.kind === 'branch'
+                      ? node.name
+                      : node.id.replace(/^(game|production)::/, '')}
                   {node.ritmo && <span className="fv-badge">{node.ritmo}</span>}
                   {criterioOf(node.id).devOnly && <span className="fv-badge">solo dev</span>}
                   <span className="fv-meta">{node.file.replace('src/', '')}:{node.line}</span>

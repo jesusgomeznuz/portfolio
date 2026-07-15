@@ -276,6 +276,25 @@ function generate() {
 
   nodes.push(...engineNodes());
 
+  // La costura del juego con la banda: la banda se conecta en run() al armar
+  // la mesa, así que sus refs del juego (la escenografía) cuelgan de la vista
+  // del engine — junto a las 3 salidas del match.
+  for (const reference of extractReferences(run.body)) {
+    const resolved = resolvePath(reference.path);
+    if (!resolved) continue;
+    nodes.push({
+      id: reference.path,
+      name: resolved.name,
+      level: 2,
+      phase: 'game_app',
+      kind: reference.kind,
+      file: resolved.file,
+      line: lineOf(resolved.file, resolved.name),
+    });
+    if (!filesInPlay.has(resolved.file)) filesInPlay.set(resolved.file, new Set());
+    filesInPlay.get(resolved.file).add(resolved.name);
+  }
+
   for (const { name: phase, parent } of phases) {
     // La clase se decide por CONTENIDO: fase (on_*/after_*), gorda local
     // (registra en el App) o helper. Aquí no hay marcas de modos: el juego

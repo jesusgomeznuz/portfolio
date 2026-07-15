@@ -16,6 +16,7 @@ interface FlowNode {
   line: number | null;
   target?: string;
   ritmo?: string;
+  pisos?: number;
 }
 
 interface Criterio {

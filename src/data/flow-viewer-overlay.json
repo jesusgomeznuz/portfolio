@@ -41,9 +41,6 @@
   "production::voice_tracker::VoiceTracker": {
     "nivel": 2
   },
-  "game::race::track_the_leader": {
-    "nivel": 2
-  },
   "game::race::finish::check_finish_crossing": {
     "nivel": 2
   },
@@ -122,9 +119,6 @@
   "simulation::finish_target_secs": {
     "nivel": 1
   },
-  "game::world::generate_the_level": {
-    "nivel": 2
-  },
   "game::world::level_generation::generate_level": {
     "nivel": 2
   },
@@ -182,15 +176,6 @@
   "game::race::finish::FinishTarget": {
     "nivel": 2
   },
-  "game::world::run_the_sensors": {
-    "nivel": 2
-  },
-  "game::scene::animate_the_backdrop": {
-    "nivel": 2
-  },
-  "game::race::follow_the_marbles": {
-    "nivel": 2
-  },
   "game::world::sensors::freeze::spawn_frozen_visual": {
     "nivel": 3
   },
@@ -238,5 +223,20 @@
   },
   "game::world::level_generation::first_module_top": {
     "nivel": 3
+  },
+  "game::world::spawn_next_module": {
+    "nivel": 2
+  },
+  "game::world::update_sensors": {
+    "nivel": 2
+  },
+  "game::race::follow_the_leader": {
+    "nivel": 2
+  },
+  "game::race::update_labels": {
+    "nivel": 2
+  },
+  "game::scene::update_scene": {
+    "nivel": 2
   }
 }

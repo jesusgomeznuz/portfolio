@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-15",
-  "sourceCommit": "5120e47",
+  "sourceCommit": "d085d8f",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -149,8 +149,8 @@
       "line": 9
     },
     {
-      "id": "game::world::build_the_world",
-      "name": "build_the_world",
+      "id": "game::world::build_world",
+      "name": "build_world",
       "level": 2,
       "phase": "on_start",
       "kind": "group",
@@ -162,7 +162,7 @@
       "id": "game::world::structures::spawn_walls",
       "name": "spawn_walls",
       "level": 2,
-      "phase": "build_the_world",
+      "phase": "build_world",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/structures.rs",
@@ -172,7 +172,7 @@
       "id": "game::world::structures::set_gravity",
       "name": "set_gravity",
       "level": 2,
-      "phase": "build_the_world",
+      "phase": "build_world",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/structures.rs",
@@ -182,7 +182,7 @@
       "id": "game::world::level_generation::spawn_first_module",
       "name": "spawn_first_module",
       "level": 2,
-      "phase": "build_the_world",
+      "phase": "build_world",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/level_generation.rs",
@@ -192,7 +192,7 @@
       "id": "game::world::marbles::spawn_marbles",
       "name": "spawn_marbles",
       "level": 2,
-      "phase": "build_the_world",
+      "phase": "build_world",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/marbles.rs",
@@ -202,7 +202,7 @@
       "id": "game::scene::camera::spawn_camera_and_lights",
       "name": "spawn_camera_and_lights",
       "level": 2,
-      "phase": "build_the_world",
+      "phase": "build_world",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/camera.rs",
@@ -212,7 +212,7 @@
       "id": "game::race::leader::spawn_crown",
       "name": "spawn_crown",
       "level": 2,
-      "phase": "build_the_world",
+      "phase": "build_world",
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/race/leader.rs",
@@ -277,20 +277,20 @@
       "line": 44
     },
     {
-      "id": "game::world::spawn_next_module",
-      "name": "spawn_next_module",
+      "id": "game::world::update_world",
+      "name": "update_world",
       "level": 2,
       "phase": "on_update",
       "kind": "group",
       "file": "src/game/world/mod.rs",
-      "line": 38,
+      "line": 37,
       "pisos": 2
     },
     {
       "id": "game::world::level_generation::generate_level",
       "name": "generate_level",
       "level": 2,
-      "phase": "spawn_next_module",
+      "phase": "update_world",
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/level_generation.rs",
@@ -300,7 +300,7 @@
       "id": "game::world::level_generation::disable_modules_above_screen",
       "name": "disable_modules_above_screen",
       "level": 2,
-      "phase": "spawn_next_module",
+      "phase": "update_world",
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/level_generation.rs",
@@ -447,66 +447,6 @@
       "line": 73
     },
     {
-      "id": "game::race::follow_the_leader",
-      "name": "follow_the_leader",
-      "level": 2,
-      "phase": "on_update",
-      "kind": "group",
-      "file": "src/game/race/mod.rs",
-      "line": 29,
-      "pisos": 5
-    },
-    {
-      "id": "game::race::finish::check_finish_crossing",
-      "name": "check_finish_crossing",
-      "level": 2,
-      "phase": "follow_the_leader",
-      "kind": "system",
-      "ritmo": "FixedUpdate",
-      "file": "src/game/race/finish.rs",
-      "line": 44
-    },
-    {
-      "id": "game::race::leader::update_race_leader",
-      "name": "update_race_leader",
-      "level": 2,
-      "phase": "follow_the_leader",
-      "kind": "system",
-      "ritmo": "FixedUpdate",
-      "file": "src/game/race/leader.rs",
-      "line": 17
-    },
-    {
-      "id": "production::voice_tracker::track_race_leader",
-      "name": "track_race_leader",
-      "level": 2,
-      "phase": "follow_the_leader",
-      "kind": "system",
-      "ritmo": "FixedUpdate",
-      "file": "src/production/voice_tracker.rs",
-      "line": 49
-    },
-    {
-      "id": "game::scene::camera::camera_follows_lowest_marble",
-      "name": "camera_follows_lowest_marble",
-      "level": 2,
-      "phase": "follow_the_leader",
-      "kind": "system",
-      "ritmo": "FixedUpdate",
-      "file": "src/game/scene/camera.rs",
-      "line": 47
-    },
-    {
-      "id": "game::race::leader::crown_follows_leader",
-      "name": "crown_follows_leader",
-      "level": 2,
-      "phase": "follow_the_leader",
-      "kind": "system",
-      "ritmo": "PostUpdate",
-      "file": "src/game/race/leader.rs",
-      "line": 58
-    },
-    {
       "id": "game::scene::update_scene",
       "name": "update_scene",
       "level": 2,
@@ -567,13 +507,73 @@
       "line": 50
     },
     {
+      "id": "game::race::follow_the_leader",
+      "name": "follow_the_leader",
+      "level": 2,
+      "phase": "on_update",
+      "kind": "group",
+      "file": "src/game/race/mod.rs",
+      "line": 29,
+      "pisos": 5
+    },
+    {
+      "id": "game::race::finish::check_finish_crossing",
+      "name": "check_finish_crossing",
+      "level": 2,
+      "phase": "follow_the_leader",
+      "kind": "system",
+      "ritmo": "FixedUpdate",
+      "file": "src/game/race/finish.rs",
+      "line": 44
+    },
+    {
+      "id": "game::race::leader::update_race_leader",
+      "name": "update_race_leader",
+      "level": 2,
+      "phase": "follow_the_leader",
+      "kind": "system",
+      "ritmo": "FixedUpdate",
+      "file": "src/game/race/leader.rs",
+      "line": 17
+    },
+    {
+      "id": "production::voice_tracker::track_race_leader",
+      "name": "track_race_leader",
+      "level": 2,
+      "phase": "follow_the_leader",
+      "kind": "system",
+      "ritmo": "FixedUpdate",
+      "file": "src/production/voice_tracker.rs",
+      "line": 49
+    },
+    {
+      "id": "game::scene::camera::camera_follows_lowest_marble",
+      "name": "camera_follows_lowest_marble",
+      "level": 2,
+      "phase": "follow_the_leader",
+      "kind": "system",
+      "ritmo": "FixedUpdate",
+      "file": "src/game/scene/camera.rs",
+      "line": 47
+    },
+    {
+      "id": "game::race::leader::crown_follows_leader",
+      "name": "crown_follows_leader",
+      "level": 2,
+      "phase": "follow_the_leader",
+      "kind": "system",
+      "ritmo": "PostUpdate",
+      "file": "src/game/race/leader.rs",
+      "line": 58
+    },
+    {
       "id": "simulation::on_exit",
       "name": "on_exit",
       "level": 1,
       "phase": null,
       "kind": "phase",
       "file": "src/simulation.rs",
-      "line": 54
+      "line": 51
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -591,7 +591,7 @@
       "phase": null,
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 58
+      "line": 55
     },
     {
       "id": "game::race::roster::build_roster",
@@ -618,7 +618,7 @@
       "phase": "on_start",
       "kind": "helper",
       "file": "src/simulation.rs",
-      "line": 70
+      "line": 67
     },
     {
       "id": "game::race::finish::spawn_finish_line",

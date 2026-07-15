@@ -20,9 +20,6 @@
   "game::race::roster::Roster": {
     "nivel": 2
   },
-  "game::world::build_the_world": {
-    "nivel": 2
-  },
   "game::scene::background::sky::spawn_sky": {
     "nivel": 2
   },
@@ -224,9 +221,6 @@
   "game::world::level_generation::first_module_top": {
     "nivel": 3
   },
-  "game::world::spawn_next_module": {
-    "nivel": 2
-  },
   "game::world::update_sensors": {
     "nivel": 2
   },
@@ -234,6 +228,12 @@
     "nivel": 2
   },
   "game::scene::update_scene": {
+    "nivel": 2
+  },
+  "game::world::build_world": {
+    "nivel": 2
+  },
+  "game::world::update_world": {
     "nivel": 2
   }
 }

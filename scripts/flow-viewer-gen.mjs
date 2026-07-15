@@ -80,6 +80,17 @@ function resolvePath(rustPath) {
   return null;
 }
 
+/// Sigue un `pub use camino::nombre;` dentro del archivo resuelto: devuelve
+/// la resolución del módulo real donde vive la fn, o null si no hay re-export.
+function followReExport(resolved) {
+  const source = readSource(path.join(GAME_REPO, resolved.file));
+  const single = source.match(new RegExp(`pub use ([\\w:]+)::${resolved.name};`));
+  const braced = source.match(new RegExp(`pub use ([\\w:]+)::\\{[^}]*\\b${resolved.name}\\b[^}]*\\};`));
+  const via = single?.[1] ?? braced?.[1];
+  if (!via) return null;
+  return resolvePath(`${moduleOfFile(resolved.file)}::${via}::${resolved.name}`);
+}
+
 /// Línea donde se define `fn name` dentro de un archivo del juego.
 function lineOf(file, name) {
   const source = readSource(path.join(GAME_REPO, file));
@@ -285,11 +296,21 @@ function generate() {
     });
 
     for (const reference of extractReferences(functions.get(phase).body)) {
-      const resolved = resolvePath(reference.path);
+      let resolved = resolvePath(reference.path);
       if (!resolved) continue;
 
-      const targetFunctions = extractFunctions(readSource(path.join(GAME_REPO, resolved.file)));
-      const target = targetFunctions.get(resolved.name);
+      let targetFunctions = extractFunctions(readSource(path.join(GAME_REPO, resolved.file)));
+      let target = targetFunctions.get(resolved.name);
+      // Re-export (`pub use modulo::fn;` en un mod.rs): la fn real vive un
+      // módulo más adentro — el visor sigue al código, nunca al revés.
+      if (!target) {
+        const reExported = followReExport(resolved);
+        if (reExported) {
+          resolved = reExported;
+          targetFunctions = extractFunctions(readSource(path.join(GAME_REPO, resolved.file)));
+          target = targetFunctions.get(resolved.name);
+        }
+      }
       const isGroup = reference.kind === 'system' && target && registersInApp(target.body);
 
       nodes.push({

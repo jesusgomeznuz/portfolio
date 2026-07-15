@@ -8,25 +8,19 @@
   "simulation::on_start": {
     "nivel": 1
   },
-  "game::finish::RaceResult": {
+  "game::race::finish::RaceResult": {
     "nivel": 2
   },
-  "game::finish::FinishLineY": {
+  "game::race::finish::FinishLineY": {
     "nivel": 2
   },
-  "game::leader::RaceLeader": {
+  "game::race::leader::RaceLeader": {
     "nivel": 2
   },
-  "game::roster::Roster": {
+  "game::race::roster::Roster": {
     "nivel": 2
   },
   "game::world::build_the_world": {
-    "nivel": 2
-  },
-  "game::world::level_generation::LevelSeed": {
-    "nivel": 2
-  },
-  "game::world::level_generation::FinishTarget": {
     "nivel": 2
   },
   "game::world::setup::setup": {
@@ -35,94 +29,85 @@
   "game::world::setup::set_gravity": {
     "nivel": 2
   },
-  "game::background::paint_the_backdrop": {
+  "game::scene::background::sky::spawn_sky": {
     "nivel": 2
   },
-  "game::background::sky::spawn_sky": {
+  "game::scene::background::stars::spawn_stars": {
     "nivel": 2
   },
-  "game::background::stars::spawn_stars": {
+  "game::scene::background::clouds::spawn_clouds": {
     "nivel": 2
   },
-  "game::background::clouds::spawn_clouds": {
+  "game::scene::camera::spawn_camera_and_lights": {
     "nivel": 2
   },
-  "game::camera::spawn_camera_and_lights": {
-    "nivel": 2
-  },
-  "game::leader::spawn_crown": {
+  "game::race::leader::spawn_crown": {
     "nivel": 2
   },
   "production::voice_tracker::VoiceTracker": {
     "nivel": 2
   },
-  "game::track_the_leader": {
+  "game::race::track_the_leader": {
     "nivel": 2
   },
-  "game::finish::check_finish_crossing": {
+  "game::race::finish::check_finish_crossing": {
     "nivel": 2
   },
-  "game::leader::update_race_leader": {
+  "game::race::leader::update_race_leader": {
     "nivel": 2
   },
   "production::voice_tracker::track_race_leader": {
     "nivel": 2
   },
-  "game::staging::stage_race_events": {
+  "game::world::staging::stage_race_events": {
     "nivel": 2
   },
-  "game::sensors::run_the_sensors": {
+  "game::world::sensors::freeze::try_unfreeze": {
     "nivel": 2
   },
-  "game::sensors::freeze::try_unfreeze": {
+  "game::world::sensors::shrink::try_unshrink": {
     "nivel": 2
   },
-  "game::sensors::shrink::try_unshrink": {
+  "game::world::sensors::swap::fade_swap_rings": {
     "nivel": 2
   },
-  "game::sensors::swap::fade_swap_rings": {
+  "game::world::sensors::icons::spin_icons": {
     "nivel": 2
   },
-  "game::sensors::icons::spin_icons": {
+  "game::world::sensors::bouncy::animate_bounce_pulse": {
     "nivel": 2
   },
-  "game::sensors::bouncy::animate_bounce_pulse": {
+  "game::world::sensors::bouncy::tick_bounce_cooldown": {
     "nivel": 2
   },
-  "game::sensors::bouncy::tick_bounce_cooldown": {
+  "game::scene::camera::camera_follows_lowest_marble": {
     "nivel": 2
   },
-  "game::camera::camera_follows_lowest_marble": {
+  "game::scene::background::sky::update_sky_with_camera": {
     "nivel": 2
   },
-  "game::background::animate_the_backdrop": {
+  "game::scene::background::stars::stars_follow_camera": {
     "nivel": 2
   },
-  "game::background::sky::update_sky_with_camera": {
+  "game::scene::background::stars::twinkle_stars": {
     "nivel": 2
   },
-  "game::background::stars::stars_follow_camera": {
+  "game::scene::background::clouds::update_clouds": {
     "nivel": 2
   },
-  "game::background::stars::twinkle_stars": {
+  "game::world::sensors::freeze::manage_freeze_badges": {
     "nivel": 2
   },
-  "game::background::clouds::update_clouds": {
+  "game::world::sensors::shrink::manage_shrink_badges": {
     "nivel": 2
   },
-  "game::sensors::freeze::manage_freeze_badges": {
+  "game::race::labels::update_marble_labels": {
     "nivel": 2
   },
-  "game::sensors::shrink::manage_shrink_badges": {
+  "game::race::leader::crown_follows_leader": {
     "nivel": 2
   },
-  "game::labels::update_marble_labels": {
-    "nivel": 2
-  },
-  "game::leader::crown_follows_leader": {
-    "nivel": 2
-  },
-  "game::sensors::badges::update_badges": {
+  "game::world::sensors::badges::update_badges": {
     "nivel": 2
   },
   "simulation::on_exit": {
@@ -134,10 +119,10 @@
   "simulation::resolve_roster": {
     "nivel": 1
   },
-  "game::roster::build_roster": {
+  "game::race::roster::build_roster": {
     "nivel": 2
   },
-  "game::roster::slots_roster": {
+  "game::race::roster::slots_roster": {
     "nivel": 2
   },
   "simulation::finish_target_secs": {
@@ -152,19 +137,19 @@
   "game::world::level_generation::disable_modules_above_screen": {
     "nivel": 2
   },
-  "game::sensors::freeze::on_freeze_contact": {
+  "game::world::sensors::freeze::on_freeze_contact": {
     "nivel": 2
   },
-  "game::sensors::shrink::on_shrink_contact": {
+  "game::world::sensors::shrink::on_shrink_contact": {
     "nivel": 2
   },
-  "game::sensors::swap::on_swap_contact": {
+  "game::world::sensors::swap::on_swap_contact": {
     "nivel": 2
   },
-  "game::sensors::bouncy::trigger_bouncy_pulse": {
+  "game::world::sensors::bouncy::trigger_bouncy_pulse": {
     "nivel": 2
   },
-  "game::finish::spawn_finish_line": {
+  "game::race::finish::spawn_finish_line": {
     "nivel": 3
   },
   "game::world::level_generation::new": {
@@ -176,37 +161,16 @@
   "game::world::level_generation::close_level_with_finish": {
     "nivel": 3
   },
-  "game::camera::world_pos_on_screen": {
+  "game::scene::camera::world_pos_on_screen": {
     "nivel": 3
   },
-  "game::camera::world_y_above_screen": {
-    "nivel": 3
-  },
-  "game::sensors::freeze::spawn_frozen_visual": {
-    "nivel": 3
-  },
-  "game::sensors::freeze::marble_groups": {
-    "nivel": 3
-  },
-  "game::sensors::freeze::frozen_groups": {
-    "nivel": 3
-  },
-  "game::sensors::swap::spawn_swap_rings": {
-    "nivel": 3
-  },
-  "game::labels::spawn_marble_label": {
-    "nivel": 3
-  },
-  "game::sensors::badges::spawn_badge": {
+  "game::scene::camera::world_y_above_screen": {
     "nivel": 3
   },
   "simulation::on_update": {
     "nivel": 1
   },
-  "game::labels::follow_the_marbles": {
-    "nivel": 2
-  },
-  "game::prepare_the_race": {
+  "game::race::prepare_the_race": {
     "nivel": 2
   },
   "production::initialize_voice_tracker": {
@@ -223,5 +187,38 @@
   },
   "engine::native": {
     "nivel": 2
+  },
+  "game::race::finish::FinishTarget": {
+    "nivel": 2
+  },
+  "game::scene::paint_the_backdrop": {
+    "nivel": 2
+  },
+  "game::world::run_the_sensors": {
+    "nivel": 2
+  },
+  "game::scene::animate_the_backdrop": {
+    "nivel": 2
+  },
+  "game::race::follow_the_marbles": {
+    "nivel": 2
+  },
+  "game::world::sensors::freeze::spawn_frozen_visual": {
+    "nivel": 3
+  },
+  "game::world::sensors::freeze::marble_groups": {
+    "nivel": 3
+  },
+  "game::world::sensors::freeze::frozen_groups": {
+    "nivel": 3
+  },
+  "game::world::sensors::swap::spawn_swap_rings": {
+    "nivel": 3
+  },
+  "game::world::sensors::badges::spawn_badge": {
+    "nivel": 3
+  },
+  "game::race::labels::spawn_marble_label": {
+    "nivel": 3
   }
 }

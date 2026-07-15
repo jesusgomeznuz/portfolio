@@ -313,7 +313,9 @@ function generate() {
       }
       const isGroup = reference.kind === 'system' && target && registersInApp(target.body);
 
-      nodes.push({
+      // El peso visible desde afuera (la regla Pokémon): cuántos pisos tiene
+      // el edificio ANTES de entrar. Se cuenta abajo y se anota aquí.
+      const groupNode = {
         id: reference.path,
         name: resolved.name,
         level: 2,
@@ -321,11 +323,13 @@ function generate() {
         kind: isGroup ? 'group' : reference.kind,
         file: resolved.file,
         line: lineOf(resolved.file, resolved.name),
-      });
+      };
+      nodes.push(groupNode);
       if (!filesInPlay.has(resolved.file)) filesInPlay.set(resolved.file, new Set());
       filesInPlay.get(resolved.file).add(resolved.name);
 
       if (!isGroup) continue;
+      let pisos = 0;
       // Los hijos de la gorda: lo que registra, colgado bajo su nombre
       const hostModule = moduleOfFile(resolved.file);
       const siblingNames = [...targetFunctions.keys()].filter((name) => name !== resolved.name);
@@ -344,7 +348,9 @@ function generate() {
         });
         if (!filesInPlay.has(childResolved.file)) filesInPlay.set(childResolved.file, new Set());
         filesInPlay.get(childResolved.file).add(childResolved.name);
+        pisos += 1;
       }
+      groupNode.pisos = pisos;
     }
   }
 

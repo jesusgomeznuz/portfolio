@@ -23,12 +23,6 @@
   "game::world::build_the_world": {
     "nivel": 2
   },
-  "game::world::setup::setup": {
-    "nivel": 2
-  },
-  "game::world::setup::set_gravity": {
-    "nivel": 2
-  },
   "game::scene::background::sky::spawn_sky": {
     "nivel": 2
   },
@@ -220,5 +214,29 @@
   },
   "game::scene::background::BackdropSeed": {
     "nivel": 2
+  },
+  "game::world::structures::spawn_walls": {
+    "nivel": 2
+  },
+  "game::world::structures::set_gravity": {
+    "nivel": 2
+  },
+  "game::world::level_generation::spawn_first_module": {
+    "nivel": 2
+  },
+  "game::world::marbles::spawn_marbles": {
+    "nivel": 2
+  },
+  "game::world::structures::spawn_floor": {
+    "nivel": 3
+  },
+  "game::world::structures::spawn_wall_segment": {
+    "nivel": 3
+  },
+  "game::world::structures::tinted_white": {
+    "nivel": 3
+  },
+  "game::world::level_generation::first_module_top": {
+    "nivel": 3
   }
 }

@@ -166,7 +166,7 @@ function scheduleAt(body, index) {
 
 // ── El flowchart de la capa viewer ────────────────────────────────────────────
 
-/// La costura con el engine: random_physics_game_app y las 3 salidas de su
+/// La costura con el engine: game_app y las 3 salidas de su
 /// match de modos (parseadas de engine.rs real — línea exacta, cero curación).
 /// El juego no las conoce; el visor las muestra para contar la historia.
 function engineNodes() {
@@ -174,7 +174,7 @@ function engineNodes() {
   const source = readSource(enginePath);
   const lineAt = (index) => source.slice(0, index).split('\n').length;
 
-  const fnIndex = source.indexOf('pub fn random_physics_game_app');
+  const fnIndex = source.indexOf('pub fn game_app');
   const matchIndex = source.indexOf('match (writing_timeline, timeline_path())');
   if (fnIndex === -1 || matchIndex === -1) {
     throw new Error('engine.rs cambió de forma — el parser de la costura no encontró la fn o el match de modos');
@@ -187,8 +187,8 @@ function engineNodes() {
   ];
 
   const nodes = [{
-    id: 'engine::random_physics_game_app',
-    name: 'random_physics_game_app',
+    id: 'engine::game_app',
+    name: 'game_app',
     level: 1,
     phase: null,
     kind: 'engine',
@@ -202,7 +202,7 @@ function engineNodes() {
       id: salida.id,
       name: salida.name,
       level: 2,
-      phase: 'random_physics_game_app',
+      phase: 'game_app',
       kind: 'branch',
       file: 'rapier-bevy/src/engine.rs',
       line: lineAt(at),

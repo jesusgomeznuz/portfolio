@@ -1,4 +1,11 @@
 ---
+import ProjectWorkbench from '../components/ProjectWorkbench';
+import { canicasbrawlFlow } from '../data/flow-tree';
+import { canicasbrawlDiagrams } from '../data/flow-diagrams';
+
+const DEMO_URL = import.meta.env.DEV
+  ? 'http://localhost:5173'
+  : 'https://react-rapier.vercel.app'   // reemplazar con URL real al deployar
 ---
 
 <html lang="en">
@@ -9,304 +16,164 @@
     <title>Juan Jesús Gómez — Physics / Gameplay Programmer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Permanent+Marker&display=swap" rel="stylesheet" />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      :root {
-        --bg: #0c0c0e;
-        --surface: #131316;
-        --surface-hover: #1a1a1f;
-        --border: #232328;
-        --border-hover: #333340;
-        --text: #ececec;
-        --muted: #777780;
-        --muted-bright: #9999a8;
-        --accent: #b8e832;
-        --font: 'Inter', system-ui, -apple-system, sans-serif;
-      }
-
-      html { background: var(--bg); }
+      html, body { height: 100%; background: #0c0c0e; }
 
       body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: var(--font);
+        color: #ececec;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
         font-size: 15px;
         line-height: 1.6;
         -webkit-font-smoothing: antialiased;
+        overflow: hidden;
       }
 
-      .container {
+      a { color: #b8e832; text-decoration: none; }
+      a:hover { color: #cff05a; }
+
+      /* FULL-BLEED SHELL */
+      .shell {
+        width: 100vw;
+        height: 100vh;
+        background: #0c0c0e;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* TOP EDGE */
+      .top-edge {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 14px 26px;
+        border-bottom: 1px solid #1a1a1e;
+        flex-wrap: wrap;
+        flex-shrink: 0;
+      }
+      .top-edge .who { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+      .top-edge .who .name { font: 800 18px Inter; color: #f4f4f6; letter-spacing: -.02em; }
+      .top-edge .who .role { font: 600 12px Inter; color: #b8e832; }
+      .top-edge .who .location { font: 400 10px 'JetBrains Mono', monospace; color: #78787f; }
+      .top-edge .actions { display: flex; align-items: center; gap: 9px; }
+      .top-edge .actions .stack { font: 400 10px 'JetBrains Mono', monospace; color: #78787f; }
+      .btn { font: 600 12px Inter; padding: 7px 13px; border-radius: 7px; }
+      .btn-primary { background: #b8e832; color: #0c0c0e; }
+      .btn-secondary { border: 1px solid #2b2b31; color: #ededf0; }
+
+      /* MAIN: left edge rail + huge viewer */
+      .main-grid {
+        flex: 1;
+        min-height: 0;
         display: grid;
-        grid-template-columns: 1fr min(692px, calc(100% - 48px)) 1fr;
+        grid-template-columns: 212px 1fr;
       }
-      .container > * { grid-column: 2; }
 
-      /* NAV */
-      .nav-wrapper { border-bottom: 1px solid var(--border); }
-      nav {
+      /* LEFT EDGE — identity + trajectory */
+      .identity {
+        border-right: 1px solid #1a1a1e;
+        padding: 20px;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 0;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
       }
-      nav .name { font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
-      nav .links { display: flex; gap: 20px; }
-      nav .links a {
-        color: var(--muted);
-        text-decoration: none;
-        font-size: 14px;
-        transition: color 0.15s;
+      .identity .positioning { font: 400 12.5px/1.5 Inter; color: #cfcfd5; margin: 0; }
+      .identity .chips { display: flex; gap: 7px; margin-top: 14px; flex-wrap: wrap; }
+      .chip { padding: 4px 9px; border: 1px solid #2b2b31; border-radius: 999px; font: 600 9.5px 'JetBrains Mono', monospace; }
+      .chip.accent { color: #b8e832; }
+      .chip.muted { color: #b7b7bf; }
+      .section-title {
+        font: 600 10px/1 'JetBrains Mono', monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: #6f6f78;
+        margin: 24px 0 14px;
       }
-      nav .links a:hover { color: var(--text); }
-
-      /* HERO */
-      .hero { padding: 80px 0 64px; }
-      .hero h1 {
-        font-size: clamp(36px, 6vw, 52px);
-        font-weight: 700;
-        line-height: 1.1;
-        letter-spacing: -0.03em;
-        margin-bottom: 20px;
-      }
-      .hero h1 .line2 { color: var(--accent); display: block; }
-      .hero p {
-        color: var(--muted-bright);
-        font-size: 17px;
-        line-height: 1.65;
-        max-width: 480px;
-      }
-      .hero .badges {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 28px;
-      }
-      .badge {
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--muted);
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 100px;
-        padding: 4px 12px;
-        letter-spacing: 0.01em;
+      .acts { display: flex; flex-direction: column; }
+      .act { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 13px 0; border-bottom: 1px solid #17171b; }
+      .act:first-child { padding-top: 0; }
+      .act:last-child { border-bottom: none; padding-bottom: 0; }
+      .act .num { font: 800 15px/1 'JetBrains Mono', monospace; color: #b8e832; }
+      .act .title { font: 700 12.5px Inter; color: #ededf0; }
+      .act .body { font: 400 11px/1.45 Inter; color: #9c9ca4; margin: 4px 0 0; }
+      .act .body .mono { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #cdd3c0; }
+      .act .body .cta { color: #b8e832; }
+      .identity-footer {
+        margin-top: auto;
+        padding-top: 16px;
+        font: 400 9.5px/1.5 'JetBrains Mono', monospace;
+        color: #5f5f66;
       }
 
-      /* STORY */
-      .story {
-        padding: 48px 0 40px;
-      }
-      .story p {
-        color: var(--muted-bright);
-        font-size: 16px;
-        line-height: 1.75;
-        max-width: 560px;
-        margin-bottom: 16px;
-      }
-      .story p:last-child { margin-bottom: 0; }
-      .story p strong {
-        color: var(--text);
-        font-weight: 500;
-      }
-
-      /* PROJECT CARD */
-      .project {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 24px 28px;
-        margin-bottom: 48px;
-        transition: border-color 0.2s, background 0.2s;
-      }
-      .project:hover {
-        border-color: var(--border-hover);
-        background: var(--surface-hover);
-      }
-      .project-header {
-        margin-bottom: 8px;
-      }
-      .project h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
-      .project p {
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.6;
-        margin-bottom: 0;
-      }
-      .project-link {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        margin-top: 20px;
-        padding: 12px 16px;
-        background: var(--bg);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        text-decoration: none;
-        transition: border-color 0.2s, background 0.2s;
-      }
-      .project-link:hover {
-        border-color: var(--accent);
-        background: rgba(184, 232, 50, 0.04);
-      }
-      .project-link .link-label {
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--muted-bright);
-        transition: color 0.2s;
-      }
-      .project-link:hover .link-label { color: var(--accent); }
-      .project-link .link-arrow {
-        font-size: 16px;
-        color: var(--muted);
-        transition: color 0.2s, transform 0.2s;
-      }
-      .project-link:hover .link-arrow { color: var(--accent); transform: translateX(3px); }
-
-      /* TAGS */
-      .tags {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        margin-top: 14px;
-      }
-      .tag {
-        font-size: 11px;
-        font-weight: 500;
-        color: var(--muted);
-        background: var(--bg);
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        padding: 2px 8px;
-        letter-spacing: 0.02em;
-      }
-
-      /* FOOTER */
-      footer {
-        border-top: 1px solid var(--border);
-        padding: 28px 0 48px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--muted);
-        font-size: 13px;
-        gap: 16px;
-      }
-      footer a { color: var(--muted); text-decoration: none; transition: color 0.15s; }
-      footer a:hover { color: var(--muted-bright); }
-
-      @media (max-width: 520px) {
-        .hero h1 { font-size: 34px; }
-        .project { padding: 20px; }
-        footer { flex-direction: column; align-items: flex-start; gap: 6px; }
+      @media (max-width: 860px) {
+        body { overflow: auto; }
+        .shell { height: auto; min-height: 100vh; }
+        .main-grid { grid-template-columns: 1fr; }
+        .identity { border-right: none; border-bottom: 1px solid #1a1a1e; }
       }
     </style>
   </head>
   <body>
 
-    <div class="nav-wrapper">
-      <div class="container">
-        <nav>
-          <span class="name">Juan Jesús Gómez</span>
-          <div class="links">
-            <a href="https://github.com/jesusgomeznz" target="_blank">GitHub</a>
-            <a href="https://linkedin.com/in/jesus-gomeznz" target="_blank">LinkedIn</a>
-            <a href="mailto:jesus.gomeznuz@gmail.com">Email</a>
+    <div class="shell">
+      <div class="top-edge">
+        <div class="who">
+          <span class="name">Juan Jesús Gómez Núñez</span>
+          <span class="role">Physics &amp; gameplay programmer</span>
+          <span class="location">México · remoto UK / EU</span>
+        </div>
+        <div class="actions">
+          <span class="stack">Rust · Bevy · Rapier · C#/Unity</span>
+          <a class="btn btn-primary" href="mailto:jesus.gomeznuz@gmail.com">Email</a>
+          <a class="btn btn-secondary" href="https://github.com/jesusgomeznuz" target="_blank">GitHub</a>
+          <a class="btn btn-secondary" href="/cv.pdf" target="_blank">CV</a>
+        </div>
+      </div>
+
+      <div class="main-grid">
+        <div class="identity">
+          <p class="positioning">No soy otro dev pidiendo trabajo. Lo que construí se volvió viral por mi cuenta — y Londres me contrató para llevarlo a producción.</p>
+
+          <div class="chips">
+            <span class="chip accent">Ex-Jammable · Londres</span>
+            <span class="chip muted">videos virales</span>
           </div>
-        </nav>
-      </div>
-    </div>
 
-    <div class="container">
+          <h2 class="section-title">La trayectoria</h2>
+          <div class="acts">
+            <div class="act">
+              <div class="num">01</div>
+              <div>
+                <div class="title">Canicas virales</div>
+                <p class="body">Descubrí solo el método viral con simulaciones en Rust.</p>
+              </div>
+            </div>
+            <div class="act">
+              <div class="num">02</div>
+              <div>
+                <div class="title">Jammable — Londres</div>
+                <p class="body">Engine con Rapier + Rust: física local, renders on-device. Viral a escala en un producto real.</p>
+              </div>
+            </div>
+            <div class="act">
+              <div class="num">03</div>
+              <div>
+                <div class="title">Engine propio</div>
+                <p class="body"><span class="mono">rapier-bevy</span> + dos juegos. <span class="cta">Explóralos →</span></p>
+              </div>
+            </div>
+          </div>
 
-      <div class="hero">
-        <h1>
-          Physics &amp; Gameplay
-          <span class="line2">Programmer</span>
-        </h1>
-        <p>I build systems that simulate physics and generate content automatically. Rust, C#, Unity. Based in Mexico.</p>
-        <div class="badges">
-          <span class="badge">Rust</span>
-          <span class="badge">C# / Unity</span>
-          <span class="badge">Physics Simulation</span>
-          <span class="badge">Rapier</span>
-          <span class="badge">Open to work</span>
+          <div class="identity-footer">Elegí un proyecto arriba →<br>demo y flujo de código en el mismo lugar.</div>
         </div>
+
+        <ProjectWorkbench client:load demoUrl={DEMO_URL} canicasFlow={canicasbrawlFlow} canicasDiagrams={canicasbrawlDiagrams} />
       </div>
-
-      <div class="story">
-        <p>
-          In 2024 I set out to answer a question: <strong>could a video write itself?</strong>
-          A music track goes in. A physics simulation runs. A finished video comes out.
-          No manual editing, no intervention.
-        </p>
-        <p>
-          I built the pipeline in Unity and C#. The first video I published reached tens of thousands of views organically.
-        </p>
-      </div>
-
-      <div class="project">
-        <div class="project-header">
-          <h2>Canicas Brawl</h2>
-        </div>
-        <p>Automated pipeline: music in, physics-based marble race video out. Unity simulation, programmatic render, zero manual editing.</p>
-        <div class="tags">
-          <span class="tag">Unity C#</span>
-          <span class="tag">Physics Simulation</span>
-          <span class="tag">Video Pipeline</span>
-          <span class="tag">Automation</span>
-        </div>
-        <a class="project-link" href="https://github.com/jesusgomeznz/canicas-brawl" target="_blank">
-          <span class="link-label">Ver código en GitHub</span>
-          <span class="link-arrow">→</span>
-        </a>
-      </div>
-
-      <div class="story">
-        <p>
-          <strong>Jammable</strong>, a London AI music startup, found the project.
-          They reached out and hired me as a contract Software Engineer to rebuild the pipeline for their platform.
-        </p>
-        <p>
-          I rebuilt it at production scale. Creators using it went viral.
-          The system that started as a personal experiment worked again — this time for a real product, with real users.
-        </p>
-      </div>
-
-      <div class="story" style="padding-top: 0;">
-        <p>
-          After shipping, I wanted to go deeper — not just use a physics engine but understand it at the source level.
-          I rebuilt the same simulation in <strong>Rust</strong> using Bevy and Rapier, then compiled it to WASM to run in the browser.
-        </p>
-      </div>
-
-      <div class="project">
-        <div class="project-header">
-          <h2>Rapier Physics Demo</h2>
-        </div>
-        <p>Rigid body simulation in Rust (Bevy + Rapier). Includes a live web version via react-three-rapier — same simulation, compiled to WASM.</p>
-        <div class="tags">
-          <span class="tag">Rust</span>
-          <span class="tag">Bevy</span>
-          <span class="tag">Rapier</span>
-          <span class="tag">Physics Engine</span>
-          <span class="tag">WASM</span>
-        </div>
-        <a class="project-link" href="https://github.com/jesusgomeznz/rapier-bevy" target="_blank">
-          <span class="link-label">Ver código en GitHub</span>
-          <span class="link-arrow">→</span>
-        </a>
-      </div>
-
-    </div>
-
-    <div class="container">
-      <footer>
-        <span>Juan Jesús Gómez Núñez</span>
-        <a href="mailto:jesus.gomeznuz@gmail.com">jesus.gomeznuz@gmail.com</a>
-      </footer>
     </div>
 
   </body>

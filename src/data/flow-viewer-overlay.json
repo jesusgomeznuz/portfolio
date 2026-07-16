@@ -235,5 +235,17 @@
   },
   "game::scene::build_scene": {
     "nivel": 2
+  },
+  "figma_to_modules::split_frame_name": {
+    "nivel": 2
+  },
+  "figma_to_modules::to_snake_case": {
+    "nivel": 2
+  },
+  "figma_to_modules::transform": {
+    "nivel": 2
+  },
+  "figma_to_modules::mod::run": {
+    "nivel": 3
   }
 }

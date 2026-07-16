@@ -3,8 +3,6 @@
 // del overlay (niveles, devOnly, hidden). Los nombres del código son el
 // contenido — aquí no se redacta nada.
 import { useMemo, useState } from 'react';
-import generated from '../data/flow-viewer.generated.json';
-import overlay from '../data/flow-viewer-overlay.json';
 
 interface FlowNode {
   id: string;
@@ -53,18 +51,19 @@ const KIND_LABELS: Array<[FlowNode['kind'], string]> = [
   ['engine', 'engine'],
 ];
 
-function criterioOf(id: string): Criterio {
-  return (overlay as Record<string, Criterio>)[id] ?? {};
+interface FlowData {
+  nodes: FlowNode[];
 }
 
-function visibleNodes(): FlowNode[] {
-  return (generated.nodes as FlowNode[])
-    .filter((node) => !criterioOf(node.id).hidden)
-    .map((node) => ({ ...node, level: criterioOf(node.id).nivel ?? node.level }));
-}
-
-export default function FlowViewer() {
-  const nodes = useMemo(visibleNodes, []);
+export default function FlowViewer({ generated, overlay }: { generated: FlowData; overlay: Record<string, Criterio> }) {
+  const criterioOf = (id: string): Criterio => overlay[id] ?? {};
+  const nodes = useMemo(
+    () =>
+      (generated.nodes as FlowNode[])
+        .filter((node) => !criterioOf(node.id).hidden)
+        .map((node) => ({ ...node, level: criterioOf(node.id).nivel ?? node.level })),
+    [],
+  );
   const [stack, setStack] = useState<View[]>([{ kind: 'main' }]);
   const view = stack[stack.length - 1];
 
@@ -92,6 +91,7 @@ export default function FlowViewer() {
 
   const enterMode = (mode: FlowNode) => {
     if (mode.target?.startsWith('game')) enter({ kind: 'root' });
+    else if (mode.target) enter({ kind: 'phase', name: mode.target.split('::')[0] });
   };
 
   return (

@@ -9,10 +9,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 
-const GAME_REPO = path.resolve(process.cwd(), '../canicasbrawl-rapier');
-const PORTADA = path.join(GAME_REPO, 'src/game/game.rs');
-const OUTPUT = path.resolve(process.cwd(), 'src/data/flow-viewer.generated.json');
-const OVERLAY = path.resolve(process.cwd(), 'src/data/flow-viewer-overlay.json');
+// Los juegos que el visor parsea — misma anatomía (portada game/game.rs),
+// cada uno con su salida y su sidecar curado.
+const GAMES = [
+  { repoName: 'canicasbrawl-rapier', repo: '../canicasbrawl-rapier',
+    out: 'src/data/flow-viewer.generated.json', overlay: 'src/data/flow-viewer-overlay.json' },
+  { repoName: 'musical-path-rapier', repo: '../musical-path-rapier',
+    out: 'src/data/flow-musical.generated.json', overlay: 'src/data/flow-musical-overlay.json' },
+];
+let GAME_REPO;
+let PORTADA;
+let OUTPUT;
+let OVERLAY;
+let REPO_NAME;
 
 // ── N1: las fases — los cuerpos de fn dentro de simulation.rs ────────────────
 
@@ -276,6 +285,35 @@ function generate() {
 
   nodes.push(...engineNodes());
 
+  // Drill-down de los CONVERSORES (figma_to_modules, song_to_timeline): el
+  // modo que no entra al juego se abre a su propio flujo — el run() del
+  // módulo conversor, leído en orden de cuerpo. Así --write-timeline DICE
+  // de dónde nace la partitura (load_song → generate_* → write_timeline).
+  for (const mode of extractModes()) {
+    if (mode.target.startsWith('game')) continue;
+    const converterModule = mode.target.split('::')[0];
+    const converterFile = `src/${converterModule}/mod.rs`;
+    if (!fs.existsSync(path.join(GAME_REPO, converterFile))) continue;
+    const converterFns = extractFunctions(readSource(path.join(GAME_REPO, converterFile)));
+    const converterRun = converterFns.get('run');
+    if (!converterRun) continue;
+    for (const child of extractGroupReferences(converterRun.body, converterModule, [...converterFns.keys()].filter((n) => n !== 'run'))) {
+      const childResolved = resolvePath(child.path);
+      if (!childResolved) continue;
+      nodes.push({
+        id: child.path,
+        name: childResolved.name,
+        level: 2,
+        phase: converterModule,
+        kind: child.kind,
+        file: childResolved.file,
+        line: lineOf(childResolved.file, childResolved.name),
+      });
+      if (!filesInPlay.has(childResolved.file)) filesInPlay.set(childResolved.file, new Set());
+      filesInPlay.get(childResolved.file).add(childResolved.name);
+    }
+  }
+
   // La costura del juego con la banda: la banda se conecta en run() al armar
   // la mesa, así que sus refs del juego (la escenografía) cuelgan de la vista
   // del engine — junto a las 3 salidas del match.
@@ -401,7 +439,7 @@ function generate() {
   return {
     generatedAt: new Date().toISOString().slice(0, 10),
     sourceCommit: commit,
-    repo: 'canicasbrawl-rapier',
+    repo: REPO_NAME,
     phases: phases.map((phase) => phase.name),
     nodes: unique,
   };
@@ -456,13 +494,21 @@ function enforceGameHasNoModeFlags() {
   }
 }
 
-enforceGameHasNoModeFlags();
-const generated = generate();
-fs.writeFileSync(OUTPUT, JSON.stringify(generated, null, 2) + '\n');
-const curated = syncOverlay(generated);
+for (const gameConfig of GAMES) {
+  GAME_REPO = path.resolve(process.cwd(), gameConfig.repo);
+  PORTADA = path.join(GAME_REPO, 'src/game/game.rs');
+  OUTPUT = path.resolve(process.cwd(), gameConfig.out);
+  OVERLAY = path.resolve(process.cwd(), gameConfig.overlay);
+  REPO_NAME = gameConfig.repoName;
 
-const byLevel = [1, 2, 3].map(
-  (level) => `N${level}: ${generated.nodes.filter((node) => node.level === level).length}`,
-);
-console.log(`✓ flow-viewer.generated.json — ${generated.nodes.length} nodos (${byLevel.join(', ')}) @ ${generated.sourceCommit}`);
-console.log(`✓ flow-viewer-overlay.json — ${curated} nodos bajo tu criterio`);
+  enforceGameHasNoModeFlags();
+  const generated = generate();
+  fs.writeFileSync(OUTPUT, JSON.stringify(generated, null, 2) + '\n');
+  const curated = syncOverlay(generated);
+
+  const byLevel = [1, 2, 3].map(
+    (level) => `N${level}: ${generated.nodes.filter((node) => node.level === level).length}`,
+  );
+  console.log(`✓ ${path.basename(gameConfig.out)} — ${generated.nodes.length} nodos (${byLevel.join(', ')}) @ ${generated.sourceCommit}`);
+  console.log(`✓ ${path.basename(gameConfig.overlay)} — ${curated} nodos bajo tu criterio`);
+}

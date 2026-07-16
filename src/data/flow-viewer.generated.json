@@ -67,6 +67,33 @@
       "line": 65
     },
     {
+      "id": "figma_to_modules::split_frame_name",
+      "name": "split_frame_name",
+      "level": 2,
+      "phase": "figma_to_modules",
+      "kind": "system",
+      "file": "src/figma_to_modules/mod.rs",
+      "line": 164
+    },
+    {
+      "id": "figma_to_modules::to_snake_case",
+      "name": "to_snake_case",
+      "level": 2,
+      "phase": "figma_to_modules",
+      "kind": "system",
+      "file": "src/figma_to_modules/mod.rs",
+      "line": 153
+    },
+    {
+      "id": "figma_to_modules::transform",
+      "name": "transform",
+      "level": 2,
+      "phase": "figma_to_modules",
+      "kind": "system",
+      "file": "src/figma_to_modules/mod.rs",
+      "line": 43
+    },
+    {
       "id": "game::world::staging::stage_race_events",
       "name": "stage_race_events",
       "level": 2,
@@ -619,6 +646,15 @@
       "kind": "helper",
       "file": "src/game/game.rs",
       "line": 71
+    },
+    {
+      "id": "figma_to_modules::mod::run",
+      "name": "run",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/figma_to_modules/mod.rs",
+      "line": 6
     },
     {
       "id": "game::world::structures::spawn_floor",

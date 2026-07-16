@@ -1,0 +1,230 @@
+{
+  "main::WriteTimeline": {
+    "nivel": 0
+  },
+  "main::Play": {
+    "nivel": 0
+  },
+  "engine::game_app": {
+    "nivel": 1
+  },
+  "engine::write_timeline": {
+    "nivel": 2
+  },
+  "engine::play": {
+    "nivel": 2
+  },
+  "engine::native": {
+    "nivel": 2
+  },
+  "song_to_timeline::load_song": {
+    "nivel": 2
+  },
+  "song_to_timeline::generate_ball_path": {
+    "nivel": 2
+  },
+  "song_to_timeline::generate_world": {
+    "nivel": 2
+  },
+  "song_to_timeline::anchor_to_frames": {
+    "nivel": 2
+  },
+  "song_to_timeline::write_timeline": {
+    "nivel": 2
+  },
+  "game::world::staging::stage_music_events": {
+    "nivel": 2
+  },
+  "game::debug::overlay::spawn_debug_meshes": {
+    "nivel": 2
+  },
+  "game::debug::overlay::draw_debug_path": {
+    "nivel": 2
+  },
+  "game::on_start": {
+    "nivel": 1
+  },
+  "game::world::build_world": {
+    "nivel": 2
+  },
+  "game::world::ball::BallRadius": {
+    "nivel": 2
+  },
+  "game::world::sensors::bomb::FuseState": {
+    "nivel": 2
+  },
+  "game::world::sensors::wavy::WavyState": {
+    "nivel": 2
+  },
+  "game::world::ball::spawn_naked_ball": {
+    "nivel": 2
+  },
+  "game::scene::build_scene": {
+    "nivel": 2
+  },
+  "game::scene::background::wave::WaveState": {
+    "nivel": 2
+  },
+  "game::scene::background::palette_transition::PaletteTransitionState": {
+    "nivel": 2
+  },
+  "game::scene::overlay::edge_pulse::EdgePulseState": {
+    "nivel": 2
+  },
+  "game::scene::trail::TrailHistory": {
+    "nivel": 2
+  },
+  "game::scene::camera::spawn_camera_and_lights": {
+    "nivel": 2
+  },
+  "game::scene::trail::spawn_trail_segs": {
+    "nivel": 2
+  },
+  "game::scene::overlay::edge_pulse::spawn_edge_pulse": {
+    "nivel": 2
+  },
+  "game::scene::overlay::fuse_ring::spawn_fuse_ring": {
+    "nivel": 2
+  },
+  "game::scene::overlay::voice_roster::spawn_voice_roster": {
+    "nivel": 2
+  },
+  "game::scene::overlay::voice_roster::update_voice_roster": {
+    "nivel": 2
+  },
+  "game::song::build_song": {
+    "nivel": 2
+  },
+  "game::song::song_clock::SongClock": {
+    "nivel": 2
+  },
+  "game::world::ball::CurrentSinger": {
+    "nivel": 2
+  },
+  "game::scene::overlay::voice_roster::Singers": {
+    "nivel": 2
+  },
+  "game::scene::overlay::voice_roster::BounceCount": {
+    "nivel": 2
+  },
+  "game::song::characters::load_character_colors": {
+    "nivel": 2
+  },
+  "game::on_update": {
+    "nivel": 1
+  },
+  "game::song::update_song": {
+    "nivel": 2
+  },
+  "game::song::song_clock::tick_song_clock": {
+    "nivel": 2
+  },
+  "game::world::update_world": {
+    "nivel": 2
+  },
+  "game::world::sensors::cookies::update_cookies": {
+    "nivel": 2
+  },
+  "game::world::sensors::bomb::update_bomb_sensors": {
+    "nivel": 2
+  },
+  "game::world::sensors::bomb::blink_ball_during_fuse": {
+    "nivel": 2
+  },
+  "game::world::sensors::wavy::update_wavy_sensors": {
+    "nivel": 2
+  },
+  "game::world::sensors::palette::update_palette_sensors": {
+    "nivel": 2
+  },
+  "game::world::voice_burst::update_voice_bursts": {
+    "nivel": 2
+  },
+  "game::world::voice_burst::burst_destroys_decoys": {
+    "nivel": 2
+  },
+  "game::world::bomb_burst::update_bomb_burst": {
+    "nivel": 2
+  },
+  "game::scene::update_scene": {
+    "nivel": 2
+  },
+  "game::scene::trail::update_trail": {
+    "nivel": 2
+  },
+  "game::scene::trail::update_ripples": {
+    "nivel": 2
+  },
+  "game::scene::background::wave::update_ext_wave": {
+    "nivel": 2
+  },
+  "game::scene::background::palette_transition::update_palette_transition": {
+    "nivel": 2
+  },
+  "game::scene::overlay::edge_pulse::update_edge_pulse": {
+    "nivel": 2
+  },
+  "game::scene::overlay::fuse_ring::update_fuse_ring": {
+    "nivel": 2
+  },
+  "game::scene::follow_the_ball": {
+    "nivel": 2
+  },
+  "game::scene::trail::sample_trail": {
+    "nivel": 2
+  },
+  "game::scene::camera::camera_follows_ball": {
+    "nivel": 2
+  },
+  "song_to_timeline::mod::run": {
+    "nivel": 3
+  },
+  "game::debug::overlay::load_debug_areas": {
+    "nivel": 3
+  },
+  "game::world::ball::dress_ball": {
+    "nivel": 3
+  },
+  "game::world::ball::swap_ball_character": {
+    "nivel": 3
+  },
+  "game::world::sensors::bomb::active": {
+    "nivel": 3
+  },
+  "game::world::sensors::bomb::fuse_pulse_phase": {
+    "nivel": 3
+  },
+  "game::world::sensors::bomb::fuse_pulse_scale": {
+    "nivel": 3
+  },
+  "game::world::sensors::bomb::spawn_bomb_sensor": {
+    "nivel": 3
+  },
+  "game::world::sensors::wavy::active": {
+    "nivel": 3
+  },
+  "game::world::sensors::wavy::spawn_wavy_sensor": {
+    "nivel": 3
+  },
+  "game::scene::background::wave::push_wave_pulse": {
+    "nivel": 3
+  },
+  "game::scene::trail::spawn_bounce_ripple": {
+    "nivel": 3
+  },
+  "game::song::characters::dominant_color_from_png": {
+    "nivel": 3
+  },
+  "game::world::sensors::cookies::spawn_cookie": {
+    "nivel": 3
+  },
+  "game::world::sensors::palette::spawn_palette_sensor": {
+    "nivel": 3
+  },
+  "game::world::voice_burst::spawn_voice_burst": {
+    "nivel": 3
+  },
+  "game::world::bomb_burst::spawn_bomb_burst": {
+    "nivel": 3
+  }
+}

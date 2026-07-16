@@ -62,7 +62,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
       (generated.nodes as FlowNode[])
         .filter((node) => !criterioOf(node.id).hidden)
         .map((node) => ({ ...node, level: criterioOf(node.id).nivel ?? node.level })),
-    [],
+    [generated, overlay],
   );
   const [stack, setStack] = useState<View[]>([{ kind: 'main' }]);
   const view = stack[stack.length - 1];

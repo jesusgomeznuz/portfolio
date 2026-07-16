@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-07-16",
-  "sourceCommit": "85b1a6d",
+  "sourceCommit": "b2e79db",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -81,8 +81,8 @@
       "level": 1,
       "phase": null,
       "kind": "phase",
-      "file": "src/game/mod.rs",
-      "line": 44
+      "file": "src/game/game.rs",
+      "line": 38
     },
     {
       "id": "game::world::build_world",
@@ -273,8 +273,8 @@
       "level": 1,
       "phase": null,
       "kind": "phase",
-      "file": "src/game/mod.rs",
-      "line": 54
+      "file": "src/game/game.rs",
+      "line": 48
     },
     {
       "id": "game::world::update_world",
@@ -572,8 +572,8 @@
       "level": 1,
       "phase": null,
       "kind": "phase",
-      "file": "src/game/mod.rs",
-      "line": 61
+      "file": "src/game/game.rs",
+      "line": 55
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -590,8 +590,8 @@
       "level": 1,
       "phase": null,
       "kind": "helper",
-      "file": "src/game/mod.rs",
-      "line": 65
+      "file": "src/game/game.rs",
+      "line": 59
     },
     {
       "id": "game::race::roster::build_roster",
@@ -617,8 +617,8 @@
       "level": 1,
       "phase": "on_start",
       "kind": "helper",
-      "file": "src/game/mod.rs",
-      "line": 77
+      "file": "src/game/game.rs",
+      "line": 71
     },
     {
       "id": "game::world::structures::spawn_floor",

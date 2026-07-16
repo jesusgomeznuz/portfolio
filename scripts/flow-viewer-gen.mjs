@@ -1,6 +1,6 @@
 // El generador de la capa viewer: parsea la ESTRUCTURA del código de
 // canicasbrawl-rapier — la convención de Peter es el metalenguaje:
-//   N1 = las fases dentro de run() (game/mod.rs, la portada)
+//   N1 = las fases dentro de run() (game/game.rs, la vida)
 //   N2 = los systems/resources registrados dentro de cada fase
 //   N3 = los pub fn de cada archivo que no aparecen en simulation.rs (helpers)
 // Emite src/data/flow-viewer.generated.json y valida el sidecar curado:
@@ -10,7 +10,7 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 
 const GAME_REPO = path.resolve(process.cwd(), '../canicasbrawl-rapier');
-const PORTADA = path.join(GAME_REPO, 'src/game/mod.rs');
+const PORTADA = path.join(GAME_REPO, 'src/game/game.rs');
 const OUTPUT = path.resolve(process.cwd(), 'src/data/flow-viewer.generated.json');
 const OVERLAY = path.resolve(process.cwd(), 'src/data/flow-viewer-overlay.json');
 
@@ -239,7 +239,7 @@ function generate() {
   const source = readSource(PORTADA);
   const functions = extractFunctions(source);
   const run = functions.get('run');
-  if (!run) throw new Error('game/mod.rs sin fn run() — el contrato del parser se rompió');
+  if (!run) throw new Error('game/game.rs sin fn run() — el contrato del parser se rompió');
 
   // N1: las llamadas de run() a funciones locales de simulation.rs — y las
   // fns locales llamadas desde una fase (helpers como finish_target_secs).
@@ -310,7 +310,7 @@ function generate() {
       level: 1,
       phase: parent,
       kind,
-      file: 'src/game/mod.rs',
+      file: 'src/game/game.rs',
       line: functions.get(phase).line,
     });
 

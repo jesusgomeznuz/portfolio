@@ -85,7 +85,7 @@ export default function FlowViewer() {
 
   const crumbLabel = (item: View): string => {
     if (item.kind === 'main') return 'main.rs';
-    if (item.kind === 'root') return 'game/mod.rs';
+    if (item.kind === 'root') return 'game/game.rs';
     if (item.kind === 'phase') return `${item.name}()`;
     return item.file.replace('src/', '');
   };

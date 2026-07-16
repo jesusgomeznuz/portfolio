@@ -1,6 +1,6 @@
 // El generador de la capa viewer: parsea la ESTRUCTURA del código de
 // canicasbrawl-rapier — la convención de Peter es el metalenguaje:
-//   N1 = las fases dentro de run() (simulation.rs)
+//   N1 = las fases dentro de run() (game/mod.rs, la portada)
 //   N2 = los systems/resources registrados dentro de cada fase
 //   N3 = los pub fn de cada archivo que no aparecen en simulation.rs (helpers)
 // Emite src/data/flow-viewer.generated.json y valida el sidecar curado:
@@ -10,7 +10,7 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 
 const GAME_REPO = path.resolve(process.cwd(), '../canicasbrawl-rapier');
-const SIMULATION = path.join(GAME_REPO, 'src/simulation.rs');
+const PORTADA = path.join(GAME_REPO, 'src/game/mod.rs');
 const OUTPUT = path.resolve(process.cwd(), 'src/data/flow-viewer.generated.json');
 const OVERLAY = path.resolve(process.cwd(), 'src/data/flow-viewer-overlay.json');
 
@@ -236,10 +236,10 @@ function extractModes() {
 }
 
 function generate() {
-  const source = readSource(SIMULATION);
+  const source = readSource(PORTADA);
   const functions = extractFunctions(source);
   const run = functions.get('run');
-  if (!run) throw new Error('simulation.rs sin fn run() — el contrato del parser se rompió');
+  if (!run) throw new Error('game/mod.rs sin fn run() — el contrato del parser se rompió');
 
   // N1: las llamadas de run() a funciones locales de simulation.rs — y las
   // fns locales llamadas desde una fase (helpers como finish_target_secs).
@@ -279,7 +279,7 @@ function generate() {
   // La costura del juego con la banda: la banda se conecta en run() al armar
   // la mesa, así que sus refs del juego (la escenografía) cuelgan de la vista
   // del engine — junto a las 3 salidas del match.
-  for (const reference of extractReferences(run.body)) {
+  for (const reference of extractGroupReferences(run.body, 'game', [])) {
     const resolved = resolvePath(reference.path);
     if (!resolved) continue;
     nodes.push({
@@ -305,16 +305,16 @@ function generate() {
       ? 'phase'
       : registersInApp(body) ? 'group' : 'helper';
     nodes.push({
-      id: `simulation::${phase}`,
+      id: `game::${phase}`,
       name: phase,
       level: 1,
       phase: parent,
       kind,
-      file: 'src/simulation.rs',
+      file: 'src/game/mod.rs',
       line: functions.get(phase).line,
     });
 
-    for (const reference of extractReferences(functions.get(phase).body)) {
+    for (const reference of extractGroupReferences(functions.get(phase).body, 'game', [])) {
       let resolved = resolvePath(reference.path);
       if (!resolved) continue;
 
@@ -435,10 +435,10 @@ function syncOverlay(generated) {
 
 /// LA LEY: el código del juego es exclusivamente juego — los flags de modo
 /// solo existen en la puerta (args.rs/main.rs) y en el engine. Si alguien mete
-/// una pregunta de modo a game/ o simulation.rs, esto truena con la lista.
+/// una pregunta de modo a game/ (portada incluida), esto truena con la lista.
 function enforceGameHasNoModeFlags() {
   const forbidden = /\b(timeline_path|record_duration|write_timeline_duration|session_duration_secs)\s*\(/;
-  const zone = [path.join(GAME_REPO, 'src/simulation.rs')];
+  const zone = [];
   const walk = (dir) => {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
       const full = path.join(dir, entry.name);

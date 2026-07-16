@@ -1,11 +1,11 @@
 {
-  "main::Simulation": {
+  "main::Play": {
     "nivel": 0
   },
   "main::BuildModules": {
     "nivel": 0
   },
-  "simulation::on_start": {
+  "game::on_start": {
     "nivel": 1
   },
   "game::race::finish::RaceResult": {
@@ -98,13 +98,13 @@
   "game::world::sensors::badges::update_badges": {
     "nivel": 2
   },
-  "simulation::on_exit": {
+  "game::on_exit": {
     "nivel": 1
   },
   "production::voice_tracker::save_voice_tracker_on_exit": {
     "nivel": 2
   },
-  "simulation::resolve_roster": {
+  "game::resolve_roster": {
     "nivel": 1
   },
   "game::race::roster::build_roster": {
@@ -113,7 +113,7 @@
   "game::race::roster::slots_roster": {
     "nivel": 2
   },
-  "simulation::finish_target_secs": {
+  "game::finish_target_secs": {
     "nivel": 1
   },
   "game::world::level_generation::generate_level": {
@@ -152,7 +152,7 @@
   "game::scene::camera::world_y_above_screen": {
     "nivel": 3
   },
-  "simulation::on_update": {
+  "game::on_update": {
     "nivel": 1
   },
   "engine::game_app": {

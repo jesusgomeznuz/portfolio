@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-15",
-  "sourceCommit": "3f4db99",
+  "generatedAt": "2026-07-16",
+  "sourceCommit": "85b1a6d",
   "repo": "canicasbrawl-rapier",
   "phases": [
     "on_start",
@@ -11,24 +11,24 @@
   ],
   "nodes": [
     {
-      "id": "main::Simulation",
-      "name": "Simulation",
-      "target": "simulation::run",
+      "id": "main::Play",
+      "name": "Play",
+      "target": "game::run",
       "level": 0,
       "phase": null,
       "kind": "mode",
       "file": "src/main.rs",
-      "line": 14
+      "line": 13
     },
     {
       "id": "main::BuildModules",
       "name": "BuildModules",
-      "target": "process_modules::run",
+      "target": "figma_to_modules::run",
       "level": 0,
       "phase": null,
       "kind": "mode",
       "file": "src/main.rs",
-      "line": 17
+      "line": 16
     },
     {
       "id": "engine::game_app",
@@ -76,13 +76,13 @@
       "line": 18
     },
     {
-      "id": "simulation::on_start",
+      "id": "game::on_start",
       "name": "on_start",
       "level": 1,
       "phase": null,
       "kind": "phase",
-      "file": "src/simulation.rs",
-      "line": 34
+      "file": "src/game/mod.rs",
+      "line": 44
     },
     {
       "id": "game::world::build_world",
@@ -268,13 +268,13 @@
       "line": 9
     },
     {
-      "id": "simulation::on_update",
+      "id": "game::on_update",
       "name": "on_update",
       "level": 1,
       "phase": null,
       "kind": "phase",
-      "file": "src/simulation.rs",
-      "line": 44
+      "file": "src/game/mod.rs",
+      "line": 54
     },
     {
       "id": "game::world::update_world",
@@ -567,13 +567,13 @@
       "line": 58
     },
     {
-      "id": "simulation::on_exit",
+      "id": "game::on_exit",
       "name": "on_exit",
       "level": 1,
       "phase": null,
       "kind": "phase",
-      "file": "src/simulation.rs",
-      "line": 51
+      "file": "src/game/mod.rs",
+      "line": 61
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -585,13 +585,13 @@
       "line": 71
     },
     {
-      "id": "simulation::resolve_roster",
+      "id": "game::resolve_roster",
       "name": "resolve_roster",
       "level": 1,
       "phase": null,
       "kind": "helper",
-      "file": "src/simulation.rs",
-      "line": 55
+      "file": "src/game/mod.rs",
+      "line": 65
     },
     {
       "id": "game::race::roster::build_roster",
@@ -612,13 +612,13 @@
       "line": 24
     },
     {
-      "id": "simulation::finish_target_secs",
+      "id": "game::finish_target_secs",
       "name": "finish_target_secs",
       "level": 1,
       "phase": "on_start",
       "kind": "helper",
-      "file": "src/simulation.rs",
-      "line": 67
+      "file": "src/game/mod.rs",
+      "line": 77
     },
     {
       "id": "game::world::structures::spawn_floor",

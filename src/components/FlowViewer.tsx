@@ -85,13 +85,13 @@ export default function FlowViewer() {
 
   const crumbLabel = (item: View): string => {
     if (item.kind === 'main') return 'main.rs';
-    if (item.kind === 'root') return 'simulation.rs';
+    if (item.kind === 'root') return 'game/mod.rs';
     if (item.kind === 'phase') return `${item.name}()`;
     return item.file.replace('src/', '');
   };
 
   const enterMode = (mode: FlowNode) => {
-    if (mode.target?.startsWith('simulation')) enter({ kind: 'root' });
+    if (mode.target?.startsWith('game')) enter({ kind: 'root' });
   };
 
   return (
@@ -240,9 +240,9 @@ export default function FlowViewer() {
             {modes.map((mode) => (
               <button
                 key={mode.id}
-                className={`fv-node${mode.target?.startsWith('simulation') ? '' : ' static'}`}
+                className={`fv-node${mode.target?.startsWith('game') ? '' : ' static'}`}
                 style={{
-                  '--kind-color': mode.target?.startsWith('simulation') ? '#4fc3f7' : KIND_COLORS.mode,
+                  '--kind-color': mode.target?.startsWith('game') ? '#4fc3f7' : KIND_COLORS.mode,
                   marginBottom: 10,
                 } as React.CSSProperties}
                 onClick={() => enterMode(mode)}

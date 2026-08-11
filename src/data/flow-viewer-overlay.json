@@ -1,6 +1,7 @@
 {
   "main::Play": {
-    "nivel": 0
+    "nivel": 0,
+    "media": "/flow-media/canicasbrawl-play.webm"
   },
   "main::BuildModules": {
     "nivel": 0

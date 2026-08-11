@@ -247,5 +247,47 @@
   },
   "figma_to_modules::mod::run": {
     "nivel": 3
+  },
+  "figma_to_modules::shapes::world_object_from_raw": {
+    "nivel": 3
+  },
+  "game::world::modules::load_module": {
+    "nivel": 3
+  },
+  "game::world::modules::spawn_module": {
+    "nivel": 3
+  },
+  "game::world::modules::module_height": {
+    "nivel": 3
+  },
+  "game::world::modules::y_bounds": {
+    "nivel": 3
+  },
+  "game::race::faces::attach_marble_face": {
+    "nivel": 3
+  },
+  "game::race::faces::dominant_color_from_png": {
+    "nivel": 3
+  },
+  "figma_to_modules::torus_assets::ensure_torus_assets": {
+    "nivel": 3
+  },
+  "game::world::pickups::resolve_slot_variant": {
+    "nivel": 3
+  },
+  "game::world::pickups::spawn_invisible_sensor": {
+    "nivel": 3
+  },
+  "game::world::pickups::attach_effect_marker": {
+    "nivel": 3
+  },
+  "game::world::pickups::spawn_spinning_icon": {
+    "nivel": 3
+  },
+  "game::world::pickups::should_skip_effect": {
+    "nivel": 3
+  },
+  "args::parse_command": {
+    "nivel": 0
   }
 }

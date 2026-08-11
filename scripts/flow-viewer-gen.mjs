@@ -135,6 +135,70 @@ function moduleOfFile(file) {
   return file.replace(/^src\//, '').replace(/\/mod\.rs$|\.rs$/, '').replaceAll('/', '::');
 }
 
+/// El departamento de un nodo: la CARPETA es la responsabilidad. Sale del path,
+/// no de una lista curada — cada juego tiene los suyos (canicasbrawl: world,
+/// race, scene; musical-path: world, scene, song) y una carpeta nueva mañana
+/// aparece sola. null = la espina: main.rs, args.rs y la portada game/game.rs,
+/// que no pertenecen a un departamento porque su oficio es repartir entre ellos.
+function deptOf(file) {
+  if (!file.startsWith('src/')) return 'engine';
+  const parts = file.slice('src/'.length).split('/');
+  if (parts.length === 1) return null;
+  if (parts[0] === 'game') return parts.length === 2 ? null : parts[1];
+  return parts[0];
+}
+
+/// Los `use` de un archivo → mapa nombre → ruta absoluta del módulo donde vive.
+/// Sin esto, una llamada por nombre pelón a algo importado de OTRO archivo
+/// (`spawn_module(...)` tras `use super::modules::{spawn_module}`) no resuelve
+/// y la cadena se corta ahí: el archivo destino nunca entra al grafo.
+function importMap(source, hostModule) {
+  const map = new Map();
+  const parentModule = hostModule.split('::').slice(0, -1).join('::');
+  const absolute = (raw) => {
+    if (raw.startsWith('crate::')) return raw.slice('crate::'.length);
+    if (raw.startsWith('super::')) {
+      const rest = raw.slice('super::'.length);
+      return parentModule ? `${parentModule}::${rest}` : rest;
+    }
+    return `${hostModule}::${raw}`;
+  };
+  // use ruta::{a, b as c};
+  for (const match of source.matchAll(/^\s*use\s+([\w:]+)::\{([^}]*)\}\s*;/gm)) {
+    const base = absolute(match[1]);
+    for (const raw of match[2].split(',')) {
+      const name = raw.trim().split(/\s+as\s+/).pop().trim();
+      if (name) map.set(name, `${base}::${name}`);
+    }
+  }
+  // use ruta::nombre;
+  for (const match of source.matchAll(/^\s*use\s+([\w:]+)\s*;/gm)) {
+    const name = match[1].split('::').pop();
+    if (name !== match[1]) map.set(name, absolute(match[1]));
+  }
+  return map;
+}
+
+/// Expansión transitiva: si un archivo en juego LLAMA a una fn importada de
+/// otro archivo, ese archivo también es parte del flujo. Se repite hasta punto
+/// fijo, así `level_generation → modules → pickups` entra completa en vez de
+/// cortarse en el primer salto.
+function expandFilesInPlay(filesInPlay) {
+  const queue = [...filesInPlay.keys()];
+  while (queue.length > 0) {
+    const file = queue.shift();
+    const source = readSource(path.join(GAME_REPO, file));
+    for (const [name, fullPath] of importMap(source, moduleOfFile(file))) {
+      if (/^[A-Z]/.test(name)) continue; // tipos, no funciones
+      if (!new RegExp(`\\b${name}\\s*\\(`).test(source)) continue; // importado sin usarse
+      const resolved = resolvePath(fullPath);
+      if (!resolved || filesInPlay.has(resolved.file)) continue;
+      filesInPlay.set(resolved.file, new Set());
+      queue.push(resolved.file);
+    }
+  }
+}
+
 /// Las referencias dentro del cuerpo de una gorda, resueltas contra su módulo:
 /// crate::X → X · super::X → padre::X · mod::fn → host::mod::fn · fn local → host::fn
 function extractGroupReferences(body, hostModule, hostFunctionNames) {
@@ -269,6 +333,23 @@ function generate() {
 
   const nodes = [];
   const filesInPlay = new Map(); // file → Set(nombres registrados)
+
+  // N0: la puerta — de aquí nacen los modos. Sin este nodo el match de main.rs
+  // se abriría desde la nada; antes estaba escrito a mano en el componente.
+  const gateLine = fs.existsSync(path.join(GAME_REPO, 'src/args.rs'))
+    ? lineOf('src/args.rs', 'parse_command')
+    : null;
+  if (gateLine) {
+    nodes.push({
+      id: 'args::parse_command',
+      name: 'parse_command',
+      level: 0,
+      phase: null,
+      kind: 'helper',
+      file: 'src/args.rs',
+      line: gateLine,
+    });
+  }
 
   for (const mode of extractModes()) {
     nodes.push({
@@ -411,6 +492,8 @@ function generate() {
     }
   }
 
+  expandFilesInPlay(filesInPlay);
+
   // N3: helpers por archivo — un nivel más profundo que los systems
   for (const [file, registered] of filesInPlay) {
     for (const helper of helpersOf(file, registered)) {
@@ -429,11 +512,13 @@ function generate() {
 
   // Dedup (un system puede registrarse en dos fases — gana la primera aparición)
   const seen = new Set();
-  const unique = nodes.filter((node) => {
-    if (seen.has(node.id)) return false;
-    seen.add(node.id);
-    return true;
-  });
+  const unique = nodes
+    .filter((node) => {
+      if (seen.has(node.id)) return false;
+      seen.add(node.id);
+      return true;
+    })
+    .map((node) => ({ ...node, dept: deptOf(node.file) }));
 
   const commit = execSync('git rev-parse --short HEAD', { cwd: GAME_REPO }).toString().trim();
   return {

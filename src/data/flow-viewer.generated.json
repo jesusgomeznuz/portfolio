@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-16",
+  "generatedAt": "2026-08-11",
   "sourceCommit": "b2e79db",
   "repo": "canicasbrawl-rapier",
   "phases": [
@@ -11,6 +11,16 @@
   ],
   "nodes": [
     {
+      "id": "args::parse_command",
+      "name": "parse_command",
+      "level": 0,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/args.rs",
+      "line": 16,
+      "dept": null
+    },
+    {
       "id": "main::Play",
       "name": "Play",
       "target": "game::run",
@@ -18,7 +28,8 @@
       "phase": null,
       "kind": "mode",
       "file": "src/main.rs",
-      "line": 13
+      "line": 13,
+      "dept": null
     },
     {
       "id": "main::BuildModules",
@@ -28,7 +39,8 @@
       "phase": null,
       "kind": "mode",
       "file": "src/main.rs",
-      "line": 16
+      "line": 16,
+      "dept": null
     },
     {
       "id": "engine::game_app",
@@ -37,7 +49,8 @@
       "phase": null,
       "kind": "engine",
       "file": "rapier-bevy/src/engine.rs",
-      "line": 30
+      "line": 30,
+      "dept": "engine"
     },
     {
       "id": "engine::write_timeline",
@@ -46,7 +59,8 @@
       "phase": "game_app",
       "kind": "branch",
       "file": "rapier-bevy/src/engine.rs",
-      "line": 53
+      "line": 53,
+      "dept": "engine"
     },
     {
       "id": "engine::play",
@@ -55,7 +69,8 @@
       "phase": "game_app",
       "kind": "branch",
       "file": "rapier-bevy/src/engine.rs",
-      "line": 62
+      "line": 62,
+      "dept": "engine"
     },
     {
       "id": "engine::native",
@@ -64,7 +79,8 @@
       "phase": "game_app",
       "kind": "branch",
       "file": "rapier-bevy/src/engine.rs",
-      "line": 65
+      "line": 65,
+      "dept": "engine"
     },
     {
       "id": "figma_to_modules::split_frame_name",
@@ -73,7 +89,8 @@
       "phase": "figma_to_modules",
       "kind": "system",
       "file": "src/figma_to_modules/mod.rs",
-      "line": 164
+      "line": 164,
+      "dept": "figma_to_modules"
     },
     {
       "id": "figma_to_modules::to_snake_case",
@@ -82,7 +99,8 @@
       "phase": "figma_to_modules",
       "kind": "system",
       "file": "src/figma_to_modules/mod.rs",
-      "line": 153
+      "line": 153,
+      "dept": "figma_to_modules"
     },
     {
       "id": "figma_to_modules::transform",
@@ -91,7 +109,8 @@
       "phase": "figma_to_modules",
       "kind": "system",
       "file": "src/figma_to_modules/mod.rs",
-      "line": 43
+      "line": 43,
+      "dept": "figma_to_modules"
     },
     {
       "id": "game::world::staging::stage_race_events",
@@ -100,7 +119,8 @@
       "phase": "game_app",
       "kind": "system",
       "file": "src/game/world/staging.rs",
-      "line": 18
+      "line": 18,
+      "dept": "world"
     },
     {
       "id": "game::on_start",
@@ -109,7 +129,8 @@
       "phase": null,
       "kind": "phase",
       "file": "src/game/game.rs",
-      "line": 38
+      "line": 38,
+      "dept": null
     },
     {
       "id": "game::world::build_world",
@@ -119,7 +140,8 @@
       "kind": "group",
       "file": "src/game/world/mod.rs",
       "line": 19,
-      "pisos": 6
+      "pisos": 6,
+      "dept": "world"
     },
     {
       "id": "game::world::structures::spawn_walls",
@@ -129,7 +151,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/structures.rs",
-      "line": 12
+      "line": 12,
+      "dept": "world"
     },
     {
       "id": "game::world::structures::set_gravity",
@@ -139,7 +162,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/structures.rs",
-      "line": 32
+      "line": 32,
+      "dept": "world"
     },
     {
       "id": "game::world::level_generation::spawn_first_module",
@@ -149,7 +173,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/level_generation.rs",
-      "line": 42
+      "line": 42,
+      "dept": "world"
     },
     {
       "id": "game::world::marbles::spawn_marbles",
@@ -159,7 +184,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/marbles.rs",
-      "line": 21
+      "line": 21,
+      "dept": "world"
     },
     {
       "id": "game::scene::camera::spawn_camera_and_lights",
@@ -169,7 +195,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/camera.rs",
-      "line": 7
+      "line": 7,
+      "dept": "scene"
     },
     {
       "id": "game::race::leader::spawn_crown",
@@ -179,7 +206,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/race/leader.rs",
-      "line": 37
+      "line": 37,
+      "dept": "race"
     },
     {
       "id": "game::scene::build_scene",
@@ -189,7 +217,8 @@
       "kind": "group",
       "file": "src/game/scene/mod.rs",
       "line": 9,
-      "pisos": 4
+      "pisos": 4,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::BackdropSeed",
@@ -198,7 +227,8 @@
       "phase": "build_scene",
       "kind": "resource",
       "file": "src/game/scene/background/mod.rs",
-      "line": 7
+      "line": 7,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::sky::spawn_sky",
@@ -208,7 +238,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/sky.rs",
-      "line": 10
+      "line": 10,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::stars::spawn_stars",
@@ -218,7 +249,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/stars.rs",
-      "line": 23
+      "line": 23,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::clouds::spawn_clouds",
@@ -228,7 +260,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/background/clouds.rs",
-      "line": 22
+      "line": 22,
+      "dept": "scene"
     },
     {
       "id": "game::race::build_race",
@@ -238,7 +271,8 @@
       "kind": "group",
       "file": "src/game/race/mod.rs",
       "line": 15,
-      "pisos": 6
+      "pisos": 6,
+      "dept": "race"
     },
     {
       "id": "production::voice_tracker::VoiceTracker",
@@ -247,7 +281,8 @@
       "phase": "build_race",
       "kind": "resource",
       "file": "src/production/voice_tracker.rs",
-      "line": 16
+      "line": 16,
+      "dept": "production"
     },
     {
       "id": "game::race::finish::RaceResult",
@@ -256,7 +291,8 @@
       "phase": "build_race",
       "kind": "resource",
       "file": "src/game/race/finish.rs",
-      "line": 17
+      "line": 17,
+      "dept": "race"
     },
     {
       "id": "game::race::finish::FinishLineY",
@@ -265,7 +301,8 @@
       "phase": "build_race",
       "kind": "resource",
       "file": "src/game/race/finish.rs",
-      "line": 14
+      "line": 14,
+      "dept": "race"
     },
     {
       "id": "game::race::finish::FinishTarget",
@@ -274,7 +311,8 @@
       "phase": "build_race",
       "kind": "resource",
       "file": "src/game/race/finish.rs",
-      "line": 8
+      "line": 8,
+      "dept": "race"
     },
     {
       "id": "game::race::leader::RaceLeader",
@@ -283,7 +321,8 @@
       "phase": "build_race",
       "kind": "resource",
       "file": "src/game/race/leader.rs",
-      "line": 9
+      "line": 9,
+      "dept": "race"
     },
     {
       "id": "game::race::roster::Roster",
@@ -292,7 +331,8 @@
       "phase": "build_race",
       "kind": "resource",
       "file": "src/game/race/roster.rs",
-      "line": 9
+      "line": 9,
+      "dept": "race"
     },
     {
       "id": "game::on_update",
@@ -301,7 +341,8 @@
       "phase": null,
       "kind": "phase",
       "file": "src/game/game.rs",
-      "line": 48
+      "line": 48,
+      "dept": null
     },
     {
       "id": "game::world::update_world",
@@ -311,7 +352,8 @@
       "kind": "group",
       "file": "src/game/world/mod.rs",
       "line": 37,
-      "pisos": 2
+      "pisos": 2,
+      "dept": "world"
     },
     {
       "id": "game::world::level_generation::generate_level",
@@ -321,7 +363,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/level_generation.rs",
-      "line": 53
+      "line": 53,
+      "dept": "world"
     },
     {
       "id": "game::world::level_generation::disable_modules_above_screen",
@@ -331,7 +374,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/level_generation.rs",
-      "line": 159
+      "line": 159,
+      "dept": "world"
     },
     {
       "id": "game::world::update_sensors",
@@ -341,7 +385,8 @@
       "kind": "group",
       "file": "src/game/world/sensors/mod.rs",
       "line": 18,
-      "pisos": 13
+      "pisos": 13,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::freeze::on_freeze_contact",
@@ -351,7 +396,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/freeze.rs",
-      "line": 22
+      "line": 22,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::shrink::on_shrink_contact",
@@ -361,7 +407,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/shrink.rs",
-      "line": 21
+      "line": 21,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::swap::on_swap_contact",
@@ -371,7 +418,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/swap.rs",
-      "line": 18
+      "line": 18,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bouncy::trigger_bouncy_pulse",
@@ -381,7 +429,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/bouncy.rs",
-      "line": 20
+      "line": 20,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::freeze::try_unfreeze",
@@ -391,7 +440,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/freeze.rs",
-      "line": 56
+      "line": 56,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::shrink::try_unshrink",
@@ -401,7 +451,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/shrink.rs",
-      "line": 53
+      "line": 53,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::swap::fade_swap_rings",
@@ -411,7 +462,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/swap.rs",
-      "line": 56
+      "line": 56,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::icons::spin_icons",
@@ -421,7 +473,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/icons.rs",
-      "line": 9
+      "line": 9,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bouncy::animate_bounce_pulse",
@@ -431,7 +484,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/bouncy.rs",
-      "line": 51
+      "line": 51,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bouncy::tick_bounce_cooldown",
@@ -441,7 +495,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/world/sensors/bouncy.rs",
-      "line": 72
+      "line": 72,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::freeze::manage_freeze_badges",
@@ -451,7 +506,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/sensors/freeze.rs",
-      "line": 89
+      "line": 89,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::shrink::manage_shrink_badges",
@@ -461,7 +517,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/sensors/shrink.rs",
-      "line": 66
+      "line": 66,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::badges::update_badges",
@@ -471,7 +528,8 @@
       "kind": "system",
       "ritmo": "PostUpdate",
       "file": "src/game/world/sensors/badges.rs",
-      "line": 73
+      "line": 73,
+      "dept": "world"
     },
     {
       "id": "game::scene::update_scene",
@@ -481,7 +539,8 @@
       "kind": "group",
       "file": "src/game/scene/mod.rs",
       "line": 27,
-      "pisos": 5
+      "pisos": 5,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::sky::update_sky_with_camera",
@@ -491,7 +550,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/background/sky.rs",
-      "line": 31
+      "line": 31,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::stars::stars_follow_camera",
@@ -501,7 +561,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/background/stars.rs",
-      "line": 83
+      "line": 83,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::stars::twinkle_stars",
@@ -511,7 +572,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/background/stars.rs",
-      "line": 94
+      "line": 94,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::clouds::update_clouds",
@@ -521,7 +583,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/background/clouds.rs",
-      "line": 112
+      "line": 112,
+      "dept": "scene"
     },
     {
       "id": "game::race::labels::update_marble_labels",
@@ -531,7 +594,8 @@
       "kind": "system",
       "ritmo": "PostUpdate",
       "file": "src/game/race/labels.rs",
-      "line": 50
+      "line": 50,
+      "dept": "race"
     },
     {
       "id": "game::race::follow_the_leader",
@@ -541,7 +605,8 @@
       "kind": "group",
       "file": "src/game/race/mod.rs",
       "line": 29,
-      "pisos": 5
+      "pisos": 5,
+      "dept": "race"
     },
     {
       "id": "game::race::finish::check_finish_crossing",
@@ -551,7 +616,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/race/finish.rs",
-      "line": 44
+      "line": 44,
+      "dept": "race"
     },
     {
       "id": "game::race::leader::update_race_leader",
@@ -561,7 +627,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/race/leader.rs",
-      "line": 17
+      "line": 17,
+      "dept": "race"
     },
     {
       "id": "production::voice_tracker::track_race_leader",
@@ -571,7 +638,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/production/voice_tracker.rs",
-      "line": 49
+      "line": 49,
+      "dept": "production"
     },
     {
       "id": "game::scene::camera::camera_follows_lowest_marble",
@@ -581,7 +649,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/scene/camera.rs",
-      "line": 47
+      "line": 47,
+      "dept": "scene"
     },
     {
       "id": "game::race::leader::crown_follows_leader",
@@ -591,7 +660,8 @@
       "kind": "system",
       "ritmo": "PostUpdate",
       "file": "src/game/race/leader.rs",
-      "line": 58
+      "line": 58,
+      "dept": "race"
     },
     {
       "id": "game::on_exit",
@@ -600,7 +670,8 @@
       "phase": null,
       "kind": "phase",
       "file": "src/game/game.rs",
-      "line": 55
+      "line": 55,
+      "dept": null
     },
     {
       "id": "production::voice_tracker::save_voice_tracker_on_exit",
@@ -609,7 +680,8 @@
       "phase": "on_exit",
       "kind": "system",
       "file": "src/production/voice_tracker.rs",
-      "line": 71
+      "line": 71,
+      "dept": "production"
     },
     {
       "id": "game::resolve_roster",
@@ -618,7 +690,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/game.rs",
-      "line": 59
+      "line": 59,
+      "dept": null
     },
     {
       "id": "game::race::roster::build_roster",
@@ -627,7 +700,8 @@
       "phase": "resolve_roster",
       "kind": "system",
       "file": "src/game/race/roster.rs",
-      "line": 11
+      "line": 11,
+      "dept": "race"
     },
     {
       "id": "game::race::roster::slots_roster",
@@ -636,7 +710,8 @@
       "phase": "resolve_roster",
       "kind": "system",
       "file": "src/game/race/roster.rs",
-      "line": 24
+      "line": 24,
+      "dept": "race"
     },
     {
       "id": "game::finish_target_secs",
@@ -645,7 +720,8 @@
       "phase": "on_start",
       "kind": "helper",
       "file": "src/game/game.rs",
-      "line": 71
+      "line": 71,
+      "dept": null
     },
     {
       "id": "figma_to_modules::mod::run",
@@ -654,7 +730,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/figma_to_modules/mod.rs",
-      "line": 6
+      "line": 6,
+      "dept": "figma_to_modules"
     },
     {
       "id": "game::world::structures::spawn_floor",
@@ -663,7 +740,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/structures.rs",
-      "line": 38
+      "line": 38,
+      "dept": "world"
     },
     {
       "id": "game::world::structures::spawn_wall_segment",
@@ -672,7 +750,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/structures.rs",
-      "line": 70
+      "line": 70,
+      "dept": "world"
     },
     {
       "id": "game::world::structures::tinted_white",
@@ -681,7 +760,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/structures.rs",
-      "line": 105
+      "line": 105,
+      "dept": "world"
     },
     {
       "id": "game::world::level_generation::new",
@@ -690,7 +770,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/level_generation.rs",
-      "line": 20
+      "line": 20,
+      "dept": "world"
     },
     {
       "id": "game::world::level_generation::first_module_top",
@@ -699,7 +780,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/level_generation.rs",
-      "line": 33
+      "line": 33,
+      "dept": "world"
     },
     {
       "id": "game::world::level_generation::spawn_level_module",
@@ -708,7 +790,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/level_generation.rs",
-      "line": 94
+      "line": 94,
+      "dept": "world"
     },
     {
       "id": "game::world::level_generation::close_level_with_finish",
@@ -717,7 +800,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/level_generation.rs",
-      "line": 127
+      "line": 127,
+      "dept": "world"
     },
     {
       "id": "game::scene::camera::world_pos_on_screen",
@@ -726,7 +810,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/scene/camera.rs",
-      "line": 76
+      "line": 76,
+      "dept": "scene"
     },
     {
       "id": "game::scene::camera::world_y_above_screen",
@@ -735,7 +820,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/scene/camera.rs",
-      "line": 91
+      "line": 91,
+      "dept": "scene"
     },
     {
       "id": "game::race::finish::spawn_finish_line",
@@ -744,7 +830,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/race/finish.rs",
-      "line": 21
+      "line": 21,
+      "dept": "race"
     },
     {
       "id": "game::world::sensors::freeze::spawn_frozen_visual",
@@ -753,7 +840,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/freeze.rs",
-      "line": 112
+      "line": 112,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::freeze::marble_groups",
@@ -762,7 +850,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/freeze.rs",
-      "line": 133
+      "line": 133,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::freeze::frozen_groups",
@@ -771,7 +860,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/freeze.rs",
-      "line": 138
+      "line": 138,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::swap::spawn_swap_rings",
@@ -780,7 +870,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/swap.rs",
-      "line": 77
+      "line": 77,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::badges::spawn_badge",
@@ -789,7 +880,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/badges.rs",
-      "line": 24
+      "line": 24,
+      "dept": "world"
     },
     {
       "id": "game::race::labels::spawn_marble_label",
@@ -798,7 +890,138 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/race/labels.rs",
-      "line": 14
+      "line": 14,
+      "dept": "race"
+    },
+    {
+      "id": "figma_to_modules::shapes::world_object_from_raw",
+      "name": "world_object_from_raw",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/figma_to_modules/shapes.rs",
+      "line": 4,
+      "dept": "figma_to_modules"
+    },
+    {
+      "id": "game::world::modules::load_module",
+      "name": "load_module",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/modules.rs",
+      "line": 72,
+      "dept": "world"
+    },
+    {
+      "id": "game::world::modules::spawn_module",
+      "name": "spawn_module",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/modules.rs",
+      "line": 79,
+      "dept": "world"
+    },
+    {
+      "id": "game::world::modules::module_height",
+      "name": "module_height",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/modules.rs",
+      "line": 304,
+      "dept": "world"
+    },
+    {
+      "id": "game::world::modules::y_bounds",
+      "name": "y_bounds",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/modules.rs",
+      "line": 317,
+      "dept": "world"
+    },
+    {
+      "id": "game::race::faces::attach_marble_face",
+      "name": "attach_marble_face",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/race/faces.rs",
+      "line": 4,
+      "dept": "race"
+    },
+    {
+      "id": "game::race::faces::dominant_color_from_png",
+      "name": "dominant_color_from_png",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/race/faces.rs",
+      "line": 47,
+      "dept": "race"
+    },
+    {
+      "id": "figma_to_modules::torus_assets::ensure_torus_assets",
+      "name": "ensure_torus_assets",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/figma_to_modules/torus_assets.rs",
+      "line": 1,
+      "dept": "figma_to_modules"
+    },
+    {
+      "id": "game::world::pickups::resolve_slot_variant",
+      "name": "resolve_slot_variant",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/pickups.rs",
+      "line": 7,
+      "dept": "world"
+    },
+    {
+      "id": "game::world::pickups::spawn_invisible_sensor",
+      "name": "spawn_invisible_sensor",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/pickups.rs",
+      "line": 33,
+      "dept": "world"
+    },
+    {
+      "id": "game::world::pickups::attach_effect_marker",
+      "name": "attach_effect_marker",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/pickups.rs",
+      "line": 64,
+      "dept": "world"
+    },
+    {
+      "id": "game::world::pickups::spawn_spinning_icon",
+      "name": "spawn_spinning_icon",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/pickups.rs",
+      "line": 79,
+      "dept": "world"
+    },
+    {
+      "id": "game::world::pickups::should_skip_effect",
+      "name": "should_skip_effect",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/pickups.rs",
+      "line": 97,
+      "dept": "world"
     }
   ]
 }

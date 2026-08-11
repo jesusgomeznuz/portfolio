@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-16",
+  "generatedAt": "2026-08-11",
   "sourceCommit": "e3f9d43",
   "repo": "musical-path-rapier",
   "phases": [
@@ -8,6 +8,16 @@
   ],
   "nodes": [
     {
+      "id": "args::parse_command",
+      "name": "parse_command",
+      "level": 0,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/args.rs",
+      "line": 34,
+      "dept": null
+    },
+    {
       "id": "main::WriteTimeline",
       "name": "WriteTimeline",
       "target": "song_to_timeline::run",
@@ -15,7 +25,8 @@
       "phase": null,
       "kind": "mode",
       "file": "src/main.rs",
-      "line": 10
+      "line": 10,
+      "dept": null
     },
     {
       "id": "main::Play",
@@ -25,7 +36,8 @@
       "phase": null,
       "kind": "mode",
       "file": "src/main.rs",
-      "line": 11
+      "line": 11,
+      "dept": null
     },
     {
       "id": "engine::game_app",
@@ -34,7 +46,8 @@
       "phase": null,
       "kind": "engine",
       "file": "rapier-bevy/src/engine.rs",
-      "line": 30
+      "line": 30,
+      "dept": "engine"
     },
     {
       "id": "engine::write_timeline",
@@ -43,7 +56,8 @@
       "phase": "game_app",
       "kind": "branch",
       "file": "rapier-bevy/src/engine.rs",
-      "line": 53
+      "line": 53,
+      "dept": "engine"
     },
     {
       "id": "engine::play",
@@ -52,7 +66,8 @@
       "phase": "game_app",
       "kind": "branch",
       "file": "rapier-bevy/src/engine.rs",
-      "line": 62
+      "line": 62,
+      "dept": "engine"
     },
     {
       "id": "engine::native",
@@ -61,7 +76,8 @@
       "phase": "game_app",
       "kind": "branch",
       "file": "rapier-bevy/src/engine.rs",
-      "line": 65
+      "line": 65,
+      "dept": "engine"
     },
     {
       "id": "song_to_timeline::load_song",
@@ -70,7 +86,8 @@
       "phase": "song_to_timeline",
       "kind": "system",
       "file": "src/song_to_timeline/mod.rs",
-      "line": 61
+      "line": 63,
+      "dept": "song_to_timeline"
     },
     {
       "id": "song_to_timeline::generate_ball_path",
@@ -79,7 +96,8 @@
       "phase": "song_to_timeline",
       "kind": "system",
       "file": "src/song_to_timeline/mod.rs",
-      "line": 77
+      "line": 79,
+      "dept": "song_to_timeline"
     },
     {
       "id": "song_to_timeline::generate_world",
@@ -88,7 +106,8 @@
       "phase": "song_to_timeline",
       "kind": "system",
       "file": "src/song_to_timeline/mod.rs",
-      "line": 134
+      "line": 136,
+      "dept": "song_to_timeline"
     },
     {
       "id": "song_to_timeline::anchor_to_frames",
@@ -97,7 +116,8 @@
       "phase": "song_to_timeline",
       "kind": "system",
       "file": "src/song_to_timeline/mod.rs",
-      "line": 182
+      "line": 183,
+      "dept": "song_to_timeline"
     },
     {
       "id": "song_to_timeline::write_timeline",
@@ -106,7 +126,8 @@
       "phase": "song_to_timeline",
       "kind": "system",
       "file": "src/song_to_timeline/mod.rs",
-      "line": 385
+      "line": 386,
+      "dept": "song_to_timeline"
     },
     {
       "id": "game::world::staging::stage_music_events",
@@ -115,7 +136,8 @@
       "phase": "game_app",
       "kind": "system",
       "file": "src/game/world/staging.rs",
-      "line": 73
+      "line": 73,
+      "dept": "world"
     },
     {
       "id": "game::debug::overlay::spawn_debug_meshes",
@@ -124,7 +146,8 @@
       "phase": "game_app",
       "kind": "system",
       "file": "src/game/debug/overlay.rs",
-      "line": 42
+      "line": 42,
+      "dept": "debug"
     },
     {
       "id": "game::debug::overlay::draw_debug_path",
@@ -133,7 +156,8 @@
       "phase": "game_app",
       "kind": "system",
       "file": "src/game/debug/overlay.rs",
-      "line": 79
+      "line": 79,
+      "dept": "debug"
     },
     {
       "id": "game::on_start",
@@ -142,7 +166,8 @@
       "phase": null,
       "kind": "phase",
       "file": "src/game/game.rs",
-      "line": 43
+      "line": 43,
+      "dept": null
     },
     {
       "id": "game::world::build_world",
@@ -152,7 +177,8 @@
       "kind": "group",
       "file": "src/game/world/mod.rs",
       "line": 15,
-      "pisos": 4
+      "pisos": 4,
+      "dept": "world"
     },
     {
       "id": "game::world::ball::BallRadius",
@@ -161,7 +187,8 @@
       "phase": "build_world",
       "kind": "resource",
       "file": "src/game/world/ball.rs",
-      "line": 28
+      "line": 28,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bomb::FuseState",
@@ -170,7 +197,8 @@
       "phase": "build_world",
       "kind": "resource",
       "file": "src/game/world/sensors/bomb.rs",
-      "line": 30
+      "line": 30,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::wavy::WavyState",
@@ -179,7 +207,8 @@
       "phase": "build_world",
       "kind": "resource",
       "file": "src/game/world/sensors/wavy.rs",
-      "line": 18
+      "line": 18,
+      "dept": "world"
     },
     {
       "id": "game::world::ball::spawn_naked_ball",
@@ -189,7 +218,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/world/ball.rs",
-      "line": 40
+      "line": 40,
+      "dept": "world"
     },
     {
       "id": "game::scene::build_scene",
@@ -199,7 +229,8 @@
       "kind": "group",
       "file": "src/game/scene/mod.rs",
       "line": 13,
-      "pisos": 10
+      "pisos": 10,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::wave::WaveState",
@@ -208,7 +239,8 @@
       "phase": "build_scene",
       "kind": "resource",
       "file": "src/game/scene/background/wave.rs",
-      "line": 79
+      "line": 79,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::palette_transition::PaletteTransitionState",
@@ -217,7 +249,8 @@
       "phase": "build_scene",
       "kind": "resource",
       "file": "src/game/scene/background/palette_transition.rs",
-      "line": 23
+      "line": 23,
+      "dept": "scene"
     },
     {
       "id": "game::scene::overlay::edge_pulse::EdgePulseState",
@@ -226,7 +259,8 @@
       "phase": "build_scene",
       "kind": "resource",
       "file": "src/game/scene/overlay/edge_pulse.rs",
-      "line": 34
+      "line": 34,
+      "dept": "scene"
     },
     {
       "id": "game::scene::trail::TrailHistory",
@@ -235,7 +269,8 @@
       "phase": "build_scene",
       "kind": "resource",
       "file": "src/game/scene/trail.rs",
-      "line": 17
+      "line": 17,
+      "dept": "scene"
     },
     {
       "id": "game::scene::camera::spawn_camera_and_lights",
@@ -245,7 +280,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/camera.rs",
-      "line": 20
+      "line": 20,
+      "dept": "scene"
     },
     {
       "id": "game::scene::trail::spawn_trail_segs",
@@ -255,7 +291,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/trail.rs",
-      "line": 33
+      "line": 33,
+      "dept": "scene"
     },
     {
       "id": "game::scene::overlay::edge_pulse::spawn_edge_pulse",
@@ -265,7 +302,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/overlay/edge_pulse.rs",
-      "line": 47
+      "line": 47,
+      "dept": "scene"
     },
     {
       "id": "game::scene::overlay::fuse_ring::spawn_fuse_ring",
@@ -275,7 +313,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/scene/overlay/fuse_ring.rs",
-      "line": 50
+      "line": 50,
+      "dept": "scene"
     },
     {
       "id": "game::scene::overlay::voice_roster::spawn_voice_roster",
@@ -285,7 +324,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/overlay/voice_roster.rs",
-      "line": 41
+      "line": 41,
+      "dept": "scene"
     },
     {
       "id": "game::scene::overlay::voice_roster::update_voice_roster",
@@ -295,7 +335,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/overlay/voice_roster.rs",
-      "line": 162
+      "line": 162,
+      "dept": "scene"
     },
     {
       "id": "game::song::build_song",
@@ -305,7 +346,8 @@
       "kind": "group",
       "file": "src/game/song/mod.rs",
       "line": 10,
-      "pisos": 5
+      "pisos": 5,
+      "dept": "song"
     },
     {
       "id": "game::song::song_clock::SongClock",
@@ -314,7 +356,8 @@
       "phase": "build_song",
       "kind": "resource",
       "file": "src/game/song/song_clock.rs",
-      "line": 8
+      "line": 8,
+      "dept": "song"
     },
     {
       "id": "game::world::ball::CurrentSinger",
@@ -323,7 +366,8 @@
       "phase": "build_song",
       "kind": "resource",
       "file": "src/game/world/ball.rs",
-      "line": 38
+      "line": 38,
+      "dept": "world"
     },
     {
       "id": "game::scene::overlay::voice_roster::Singers",
@@ -332,7 +376,8 @@
       "phase": "build_song",
       "kind": "resource",
       "file": "src/game/scene/overlay/voice_roster.rs",
-      "line": 23
+      "line": 23,
+      "dept": "scene"
     },
     {
       "id": "game::scene::overlay::voice_roster::BounceCount",
@@ -341,7 +386,8 @@
       "phase": "build_song",
       "kind": "resource",
       "file": "src/game/scene/overlay/voice_roster.rs",
-      "line": 27
+      "line": 27,
+      "dept": "scene"
     },
     {
       "id": "game::song::characters::load_character_colors",
@@ -351,7 +397,8 @@
       "kind": "system",
       "ritmo": "Startup",
       "file": "src/game/song/characters.rs",
-      "line": 12
+      "line": 12,
+      "dept": "song"
     },
     {
       "id": "game::on_update",
@@ -360,7 +407,8 @@
       "phase": null,
       "kind": "phase",
       "file": "src/game/game.rs",
-      "line": 50
+      "line": 50,
+      "dept": null
     },
     {
       "id": "game::song::update_song",
@@ -370,7 +418,8 @@
       "kind": "group",
       "file": "src/game/song/mod.rs",
       "line": 20,
-      "pisos": 1
+      "pisos": 1,
+      "dept": "song"
     },
     {
       "id": "game::song::song_clock::tick_song_clock",
@@ -380,7 +429,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/song/song_clock.rs",
-      "line": 12
+      "line": 12,
+      "dept": "song"
     },
     {
       "id": "game::world::update_world",
@@ -390,7 +440,8 @@
       "kind": "group",
       "file": "src/game/world/mod.rs",
       "line": 24,
-      "pisos": 8
+      "pisos": 8,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::cookies::update_cookies",
@@ -400,7 +451,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/sensors/cookies.rs",
-      "line": 131
+      "line": 131,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bomb::update_bomb_sensors",
@@ -410,7 +462,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/sensors/bomb.rs",
-      "line": 138
+      "line": 138,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bomb::blink_ball_during_fuse",
@@ -420,7 +473,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/sensors/bomb.rs",
-      "line": 214
+      "line": 214,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::wavy::update_wavy_sensors",
@@ -430,7 +484,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/sensors/wavy.rs",
-      "line": 116
+      "line": 116,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::palette::update_palette_sensors",
@@ -440,7 +495,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/sensors/palette.rs",
-      "line": 93
+      "line": 93,
+      "dept": "world"
     },
     {
       "id": "game::world::voice_burst::update_voice_bursts",
@@ -450,7 +506,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/voice_burst.rs",
-      "line": 107
+      "line": 107,
+      "dept": "world"
     },
     {
       "id": "game::world::voice_burst::burst_destroys_decoys",
@@ -460,7 +517,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/voice_burst.rs",
-      "line": 84
+      "line": 84,
+      "dept": "world"
     },
     {
       "id": "game::world::bomb_burst::update_bomb_burst",
@@ -470,7 +528,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/world/bomb_burst.rs",
-      "line": 91
+      "line": 91,
+      "dept": "world"
     },
     {
       "id": "game::scene::update_scene",
@@ -480,7 +539,8 @@
       "kind": "group",
       "file": "src/game/scene/mod.rs",
       "line": 43,
-      "pisos": 6
+      "pisos": 6,
+      "dept": "scene"
     },
     {
       "id": "game::scene::trail::update_trail",
@@ -490,7 +550,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/trail.rs",
-      "line": 70
+      "line": 70,
+      "dept": "scene"
     },
     {
       "id": "game::scene::trail::update_ripples",
@@ -500,7 +561,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/trail.rs",
-      "line": 146
+      "line": 146,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::wave::update_ext_wave",
@@ -510,7 +572,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/background/wave.rs",
-      "line": 92
+      "line": 92,
+      "dept": "scene"
     },
     {
       "id": "game::scene::background::palette_transition::update_palette_transition",
@@ -520,7 +583,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/background/palette_transition.rs",
-      "line": 25
+      "line": 25,
+      "dept": "scene"
     },
     {
       "id": "game::scene::overlay::edge_pulse::update_edge_pulse",
@@ -530,7 +594,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/overlay/edge_pulse.rs",
-      "line": 67
+      "line": 67,
+      "dept": "scene"
     },
     {
       "id": "game::scene::overlay::fuse_ring::update_fuse_ring",
@@ -540,7 +605,8 @@
       "kind": "system",
       "ritmo": "Update",
       "file": "src/game/scene/overlay/fuse_ring.rs",
-      "line": 73
+      "line": 73,
+      "dept": "scene"
     },
     {
       "id": "game::scene::follow_the_ball",
@@ -550,7 +616,8 @@
       "kind": "group",
       "file": "src/game/scene/mod.rs",
       "line": 60,
-      "pisos": 2
+      "pisos": 2,
+      "dept": "scene"
     },
     {
       "id": "game::scene::trail::sample_trail",
@@ -560,7 +627,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/scene/trail.rs",
-      "line": 59
+      "line": 59,
+      "dept": "scene"
     },
     {
       "id": "game::scene::camera::camera_follows_ball",
@@ -570,7 +638,8 @@
       "kind": "system",
       "ritmo": "FixedUpdate",
       "file": "src/game/scene/camera.rs",
-      "line": 63
+      "line": 63,
+      "dept": "scene"
     },
     {
       "id": "song_to_timeline::mod::run",
@@ -579,7 +648,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/song_to_timeline/mod.rs",
-      "line": 48
+      "line": 48,
+      "dept": "song_to_timeline"
     },
     {
       "id": "game::debug::overlay::load_debug_areas",
@@ -588,7 +658,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/debug/overlay.rs",
-      "line": 15
+      "line": 15,
+      "dept": "debug"
     },
     {
       "id": "game::world::ball::dress_ball",
@@ -597,7 +668,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/ball.rs",
-      "line": 45
+      "line": 45,
+      "dept": "world"
     },
     {
       "id": "game::world::ball::swap_ball_character",
@@ -606,7 +678,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/ball.rs",
-      "line": 108
+      "line": 108,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bomb::active",
@@ -615,7 +688,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/bomb.rs",
-      "line": 40
+      "line": 40,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bomb::fuse_pulse_phase",
@@ -624,7 +698,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/bomb.rs",
-      "line": 48
+      "line": 48,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bomb::fuse_pulse_scale",
@@ -633,7 +708,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/bomb.rs",
-      "line": 56
+      "line": 56,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::bomb::spawn_bomb_sensor",
@@ -642,7 +718,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/bomb.rs",
-      "line": 80
+      "line": 80,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::wavy::active",
@@ -651,7 +728,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/wavy.rs",
-      "line": 28
+      "line": 28,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::wavy::spawn_wavy_sensor",
@@ -660,7 +738,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/wavy.rs",
-      "line": 54
+      "line": 54,
+      "dept": "world"
     },
     {
       "id": "game::scene::background::wave::push_wave_pulse",
@@ -669,7 +748,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/scene/background/wave.rs",
-      "line": 88
+      "line": 88,
+      "dept": "scene"
     },
     {
       "id": "game::scene::trail::spawn_bounce_ripple",
@@ -678,7 +758,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/scene/trail.rs",
-      "line": 119
+      "line": 119,
+      "dept": "scene"
     },
     {
       "id": "game::song::characters::dominant_color_from_png",
@@ -687,7 +768,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/song/characters.rs",
-      "line": 36
+      "line": 36,
+      "dept": "song"
     },
     {
       "id": "game::world::sensors::cookies::spawn_cookie",
@@ -696,7 +778,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/cookies.rs",
-      "line": 48
+      "line": 48,
+      "dept": "world"
     },
     {
       "id": "game::world::sensors::palette::spawn_palette_sensor",
@@ -705,7 +788,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/sensors/palette.rs",
-      "line": 31
+      "line": 31,
+      "dept": "world"
     },
     {
       "id": "game::world::voice_burst::spawn_voice_burst",
@@ -714,7 +798,8 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/voice_burst.rs",
-      "line": 22
+      "line": 22,
+      "dept": "world"
     },
     {
       "id": "game::world::bomb_burst::spawn_bomb_burst",
@@ -723,7 +808,68 @@
       "phase": null,
       "kind": "helper",
       "file": "src/game/world/bomb_burst.rs",
-      "line": 31
+      "line": 31,
+      "dept": "world"
+    },
+    {
+      "id": "content::mod::load_explosions",
+      "name": "load_explosions",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/content/mod.rs",
+      "line": 20,
+      "dept": "content"
+    },
+    {
+      "id": "content::mod::load_decoy_positions",
+      "name": "load_decoy_positions",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/content/mod.rs",
+      "line": 65,
+      "dept": "content"
+    },
+    {
+      "id": "content::mod::load_wavy_segments",
+      "name": "load_wavy_segments",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/content/mod.rs",
+      "line": 87,
+      "dept": "content"
+    },
+    {
+      "id": "content::mod::load_palette_switches",
+      "name": "load_palette_switches",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/content/mod.rs",
+      "line": 122,
+      "dept": "content"
+    },
+    {
+      "id": "game::world::corridor::spawn_corridor",
+      "name": "spawn_corridor",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/corridor.rs",
+      "line": 34,
+      "dept": "world"
+    },
+    {
+      "id": "game::world::corridor::apply_explosion_state",
+      "name": "apply_explosion_state",
+      "level": 3,
+      "phase": null,
+      "kind": "helper",
+      "file": "src/game/world/corridor.rs",
+      "line": 108,
+      "dept": "world"
     }
   ]
 }

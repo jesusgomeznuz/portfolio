@@ -226,5 +226,26 @@
   },
   "game::world::bomb_burst::spawn_bomb_burst": {
     "nivel": 3
+  },
+  "content::mod::load_explosions": {
+    "nivel": 3
+  },
+  "content::mod::load_decoy_positions": {
+    "nivel": 3
+  },
+  "content::mod::load_wavy_segments": {
+    "nivel": 3
+  },
+  "content::mod::load_palette_switches": {
+    "nivel": 3
+  },
+  "game::world::corridor::spawn_corridor": {
+    "nivel": 3
+  },
+  "game::world::corridor::apply_explosion_state": {
+    "nivel": 3
+  },
+  "args::parse_command": {
+    "nivel": 0
   }
 }

@@ -1,7 +1,9 @@
 import { Component, lazy, Suspense, useState, type ReactNode } from 'react';
-import FlowDiagramExplorer from './FlowDiagramExplorer';
-import type { RepoFlow } from '../data/flow-tree';
-import type { DiagramLevel } from '../data/flow-diagrams';
+import FlowViewer from './FlowViewer';
+import canicasGenerated from '../data/flow-viewer.generated.json';
+import canicasOverlay from '../data/flow-viewer-overlay.json';
+import musicalGenerated from '../data/flow-musical.generated.json';
+import musicalOverlay from '../data/flow-musical-overlay.json';
 
 const CanicasDemo = lazy(() => import('./canicas-demo/CanicasDemo'));
 const MusicalDemo = lazy(() => import('./musical-demo/MusicalDemo'));
@@ -23,136 +25,173 @@ type ProjectId = 'canicas' | 'musical' | 'rapier';
 
 interface Props {
   demoUrl: string;
-  canicasFlow: RepoFlow;
-  canicasDiagrams: DiagramLevel[];
 }
 
-const PROJECTS: { id: ProjectId; name: string; subtitle: string; githubUrl: string }[] = [
-  { id: 'canicas', name: 'canicasbrawl', subtitle: 'demo · arquitectura', githubUrl: 'https://github.com/jesusgomeznuz/canicasbrawl-rapier' },
-  { id: 'musical', name: 'musical-path', subtitle: 'demo · arquitectura', githubUrl: 'https://github.com/jesusgomeznuz/musical-path-rapier' },
-  { id: 'rapier', name: 'rapier-bevy', subtitle: 'demo · engine', githubUrl: 'https://github.com/jesusgomeznuz/rapier-bevy' },
+const PROJECTS: { id: ProjectId; name: string; demoLabel: string; githubUrl: string }[] = [
+  {
+    id: 'canicas',
+    name: 'canicasbrawl-rapier',
+    demoLabel: 'Portrait WASM build — the direct successor to the original marble idea.',
+    githubUrl: 'https://github.com/jesusgomeznuz/canicasbrawl-rapier',
+  },
+  {
+    id: 'musical',
+    name: 'musical-path-rapier',
+    demoLabel: 'Portrait WASM build — kinematic physics, the path plays the song.',
+    githubUrl: 'https://github.com/jesusgomeznuz/musical-path-rapier',
+  },
+  {
+    id: 'rapier',
+    name: 'rapier-bevy',
+    demoLabel: 'No game here — a small scene that proves the plugin wiring.',
+    githubUrl: 'https://github.com/jesusgomeznuz/rapier-bevy',
+  },
 ];
 
-export default function ProjectWorkbench({ demoUrl, canicasFlow, canicasDiagrams }: Props) {
+export default function ProjectWorkbench({ demoUrl }: Props) {
   const [selected, setSelected] = useState<ProjectId>('canicas');
   const active = PROJECTS.find((p) => p.id === selected)!;
 
   return (
     <div className="pw-root">
       <style>{`
-        .pw-root { display: flex; flex-direction: column; min-height: 0; height: 100%; font-family: Inter, system-ui, sans-serif; }
+        .pw-root { font-family: Futura, Jost, 'Century Gothic', sans-serif; }
 
-        .pw-tabs { display: flex; align-items: stretch; border-bottom: 1px solid #1a1a1e; flex-shrink: 0; }
+        .pw-tabs { display: flex; gap: 4px; border-bottom: 1.2px solid var(--line); align-items: flex-end; }
         .pw-tab {
+          position: relative;
+          padding: 13px 18px;
+          background: transparent;
+          border: none;
           cursor: pointer;
-          padding: 12px 22px;
-          border-right: 1px solid #1a1a1e;
-          border-top: 2px solid transparent;
+          font: 500 13px/1 ui-monospace, Menlo, monospace;
+          color: var(--muted);
+        }
+        .pw-tab span { position: relative; z-index: 1; }
+        .pw-tab.active { color: var(--fg); }
+        .pw-tab.active::before {
+          content: '';
+          position: absolute;
+          inset: 0 0 -1.2px 0;
+          border: 1.2px solid var(--line);
+          border-bottom: none;
+          border-radius: 10px 10px 0 0;
+          background: var(--band);
+        }
+
+        .pw-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; padding: 26px 0 0; align-items: stretch; }
+        @media (max-width: 900px) { .pw-grid { grid-template-columns: 1fr; } }
+
+        .pw-panel {
+          border: 1.2px solid var(--line);
+          border-radius: 12px;
+          background: var(--card);
           display: flex;
           flex-direction: column;
-          gap: 2px;
-          transition: background 0.15s;
+          gap: 14px;
+          height: min(680px, 76vh);
         }
-        .pw-tab:hover { background: #0e0e11; }
-        .pw-tab.active { border-top-color: #b8e832; }
-        .pw-tab .repo { font: 600 13px 'JetBrains Mono', monospace; color: #ededf0; }
-        .pw-tab .subtitle { font: 400 10px 'JetBrains Mono', monospace; color: #78787f; }
-        .pw-tabs-trail { flex: 1; display: flex; align-items: center; justify-content: flex-end; padding: 0 22px; gap: 14px; }
-        .pw-tabs-trail .note { font: 400 11px Inter; color: #6f6f78; }
-        .pw-tabs-trail a { font: 500 12px 'JetBrains Mono', monospace; }
+        .pw-panel-who { padding: 24px; gap: 18px; }
 
-        .pw-split { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; }
+        /* El explorador no vive en una cajita: igual que el demo, respira sobre
+           la página y su único marco es el espacio. */
+        .pw-panel-arch {
+          display: flex; flex-direction: column; gap: 14px;
+          height: min(680px, 76vh); padding: 8px 4px;
+        }
 
-        .pw-pane-arch { position: relative; border-right: 1px solid #1a1a1e; background: #0a0a0c; display: flex; flex-direction: column; overflow: hidden; }
-        .pw-pane-label { position: absolute; top: 16px; left: 20px; font: 600 10px/1 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: #6f6f78; z-index: 1; }
-        .pw-arch-inner { flex: 1; min-height: 0; padding: 46px 20px 20px; display: flex; }
+        .pw-panel-label { font: 500 9.5px/1 Futura, Jost, sans-serif; letter-spacing: .16em; color: var(--muted); }
+
+        /* WHO */
+        .pw-who-head { display: flex; gap: 16px; align-items: flex-start; }
+        .pw-photo {
+          width: 66px; height: 66px; flex: none; border-radius: 10px;
+          border: 1.2px dashed var(--line2); display: grid; place-items: center;
+          font: 400 9px/1 Jost, sans-serif; color: var(--muted);
+        }
+        .pw-who-name { display: flex; flex-direction: column; gap: 4px; padding-top: 4px; }
+        .pw-who-name .name { font: 700 20px/1.1 Futura, Jost, sans-serif; color: var(--fg); }
+        .pw-who-name .loc { font: 400 11.5px/1.4 Jost, sans-serif; color: var(--muted); }
+        .pw-bio { margin: 0; font: 400 13px/1.65 Jost, sans-serif; color: var(--muted); }
+        .pw-bio .mono { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--fg); }
+        .pw-hr { height: 1px; background: var(--ghost); }
+        .pw-links { display: flex; flex-direction: column; gap: 2px; }
+        .pw-links a {
+          display: flex; justify-content: space-between; align-items: center;
+          padding: 9px 0; font: 400 13px/1 Jost, sans-serif; color: var(--fg);
+        }
+        .pw-links a .arrow { color: var(--line); }
+        .pw-cv {
+          margin-top: auto; padding: 12px; border-radius: 8px; border: 1.2px solid var(--line);
+          background: var(--band); text-align: center; font: 700 12.5px/1 Futura, Jost, sans-serif; color: var(--fg);
+        }
+
+        /* PLAY IT — el player desnudo, sin chrome alrededor */
+        .pw-panel-play {
+          display: flex; align-items: center; justify-content: center;
+          height: min(680px, 76vh); padding: 8px;
+        }
+        .pw-panel-play .msg { font: 400 12px/1.6 Jost, sans-serif; color: var(--muted); text-align: center; padding: 16px; }
+        .pw-panel-play iframe {
+          width: 100%; height: 100%; border: none; display: block;
+          border-radius: 14px; box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+        }
+        .pw-demo-embed { display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; }
+        .pw-demo-embed .canicas-demo, .pw-demo-embed .musical-demo { height: 100%; max-height: 100%; width: auto; }
+
+        /* ARCHITECTURE */
+        .pw-arch-body { flex: 1; min-height: 0; display: flex; }
         .pw-arch-placeholder { margin: auto; display: flex; flex-direction: column; align-items: center; gap: 18px; }
-        .pw-node { border: 1.5px solid; border-radius: 9px; padding: 9px 18px; font: 600 12px 'JetBrains Mono', monospace; }
-        .pw-node-root { border-color: #d8d8d8; color: #eaeaea; font-size: 13px; padding: 9px 20px; }
-        .pw-node-active { border-color: #b8e832; color: #b8e832; }
-        .pw-node-secondary { border-color: #6a6a72; color: #a9a9b1; }
-        .pw-connector { width: 1px; height: 20px; background: #3a3a40; }
+        .pw-node { border: 1.5px solid; border-radius: 9px; padding: 9px 18px; font: 600 12px ui-monospace, Menlo, monospace; }
+        .pw-node-root { border-color: var(--line); color: var(--fg); font-size: 13px; padding: 9px 20px; }
+        .pw-node-active { border-color: var(--line); color: var(--line); }
+        .pw-node-secondary { border-color: var(--line2); color: var(--muted); }
+        .pw-connector { width: 1px; height: 20px; background: var(--dash); }
         .pw-row { display: flex; gap: 20px; }
-        .pw-arch-footer { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); font: 400 10px 'JetBrains Mono', monospace; color: #5f5f66; white-space: nowrap; }
-
-        .pw-pane-demo {
-          position: relative;
-          background: #0e0e11;
-          background-image: repeating-linear-gradient(45deg, #131317 0 11px, #0e0e11 11px 22px);
-          display: flex;
-          align-items: flex-end;
-          padding: 22px;
-        }
-        .pw-pane-demo .msg { font: 500 12px/1.5 'JetBrains Mono', monospace; color: #6c6c74; }
-        .pw-pane-demo iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: block; }
-        .pw-demo-embed { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 18px; }
-        .pw-demo-embed .canicas-demo,
-        .pw-demo-embed .musical-demo { height: 100%; max-height: 100%; width: auto; }
+        .pw-arch-footer { padding-top: 12px; border-top: 1px solid var(--ghost); font: 400 11px/1.5 Jost, sans-serif; color: var(--muted); }
+        .pw-arch-footer a { color: var(--line); }
       `}</style>
 
       <div className="pw-tabs">
         {PROJECTS.map((p) => (
-          <div
+          <button
             key={p.id}
             className={`pw-tab${selected === p.id ? ' active' : ''}`}
             onClick={() => setSelected(p.id)}
           >
-            <span className="repo">{p.name}</span>
-            <span className="subtitle">{p.subtitle}</span>
-          </div>
+            <span>{p.name}</span>
+          </button>
         ))}
-        <div className="pw-tabs-trail">
-          <span className="note">Mismo formato siempre — cambiá sin reaprender.</span>
-          <a href={active.githubUrl} target="_blank" rel="noreferrer">GitHub ↗</a>
-        </div>
       </div>
 
-      <div className="pw-split">
-        <div className="pw-pane-arch">
-          <span className="pw-pane-label">Explorador de arquitectura</span>
-          {selected === 'canicas' ? (
-            <div className="pw-arch-inner">
-              <FlowDiagramExplorer levels={canicasDiagrams} flow={canicasFlow} compact />
+      <div className="pw-grid">
+        <section className="pw-panel pw-panel-who">
+          <div className="pw-panel-label">WHO</div>
+          <div className="pw-who-head">
+            <div className="pw-photo">photo</div>
+            <div className="pw-who-name">
+              <div className="name">Jesus</div>
+              <div className="loc">Mexico · remote or relocating</div>
             </div>
-          ) : (
-            <>
-              <div className="pw-arch-inner">
-                <div className="pw-arch-placeholder">
-                  {selected === 'rapier' ? (
-                    <>
-                      <div className="pw-node pw-node-root">lib.rs — engine root</div>
-                      <div className="pw-connector" />
-                      <div className="pw-row">
-                        <div className="pw-node pw-node-active">physics_step ↳</div>
-                        <div className="pw-node pw-node-secondary">colliders</div>
-                        <div className="pw-node pw-node-secondary">bevy_plugin</div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="pw-node pw-node-root">main.rs</div>
-                      <div className="pw-connector" />
-                      <div className="pw-row">
-                        <div className="pw-node pw-node-active">setup ↳</div>
-                        <div className="pw-node pw-node-secondary">systems</div>
-                        <div className="pw-node pw-node-secondary">assets</div>
-                      </div>
-                      <div className="pw-connector" />
-                      <div className="pw-row">
-                        <div className="pw-node pw-node-secondary">physics_update</div>
-                        <div className="pw-node pw-node-secondary">render</div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-              <span className="pw-arch-footer">clic en un nodo para navegar el flujo del código →</span>
-            </>
-          )}
-        </div>
+          </div>
+          <p className="pw-bio">
+            I build simulations in Rust and C#. At Jammable I wrote a Rapier engine that renders marble
+            videos in milliseconds, locally, no cloud — and let other people make their own go viral with
+            it. Since then I've been building <span className="mono">rapier-bevy</span> and two games on
+            top of it.
+          </p>
+          <div className="pw-hr" />
+          <div className="pw-links">
+            <a href="https://github.com/jesusgomeznuz" target="_blank" rel="noreferrer">GitHub <span className="arrow">↗</span></a>
+            <a href="https://www.instagram.com/canicasbrawl/" target="_blank" rel="noreferrer">Instagram — the marble videos <span className="arrow">↗</span></a>
+            <a href="https://www.tiktok.com/@canicasbrawl" target="_blank" rel="noreferrer">TikTok — the marble videos <span className="arrow">↗</span></a>
+            <a href="#" target="_blank" rel="noreferrer">X <span className="arrow">↗</span></a>
+            <a href="mailto:jesus.gomeznuz@gmail.com">jesus.gomeznuz@gmail.com <span className="arrow">↗</span></a>
+          </div>
+          <a className="pw-cv" href="/cv.pdf" target="_blank" rel="noreferrer">Download CV</a>
+        </section>
 
-        <div className="pw-pane-demo">
-          <span className="pw-pane-label">Demo físico</span>
+        <section className="pw-panel-play">
           {selected === 'rapier' ? (
             <iframe src={demoUrl} title="Rapier Physics Demo" allow="accelerometer" />
           ) : selected === 'canicas' ? (
@@ -172,7 +211,39 @@ export default function ProjectWorkbench({ demoUrl, canicasFlow, canicasDiagrams
               </DemoBoundary>
             </div>
           )}
-        </div>
+        </section>
+
+        <section className="pw-panel-arch">
+          {selected === 'canicas' ? (
+            <div className="pw-arch-body">
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <FlowViewer key="canicas" generated={canicasGenerated} overlay={canicasOverlay} />
+              </div>
+            </div>
+          ) : selected === 'musical' ? (
+            <div className="pw-arch-body">
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <FlowViewer key="musical" generated={musicalGenerated} overlay={musicalOverlay} />
+              </div>
+            </div>
+          ) : (
+            <div className="pw-arch-body">
+              <div className="pw-arch-placeholder">
+                <div className="pw-node pw-node-root">lib.rs — engine root</div>
+                <div className="pw-connector" />
+                <div className="pw-row">
+                  <div className="pw-node pw-node-active">physics_step ↳</div>
+                  <div className="pw-node pw-node-secondary">colliders</div>
+                  <div className="pw-node pw-node-secondary">bevy_plugin</div>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="pw-arch-footer">
+            Generated from the source, not drawn.{' '}
+            <a href={active.githubUrl} target="_blank" rel="noreferrer">Repo ↗</a>
+          </div>
+        </section>
       </div>
     </div>
   );

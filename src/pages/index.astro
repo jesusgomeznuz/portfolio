@@ -1,7 +1,6 @@
 ---
 import ProjectWorkbench from '../components/ProjectWorkbench';
-import { canicasbrawlFlow } from '../data/flow-tree';
-import { canicasbrawlDiagrams } from '../data/flow-diagrams';
+import '../styles/tokens.css';
 
 const DEMO_URL = import.meta.env.DEV
   ? 'http://localhost:5173'
@@ -13,168 +12,452 @@ const DEMO_URL = import.meta.env.DEV
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>Juan Jesús Gómez — Physics / Gameplay Programmer</title>
+    <title>Jesus — Physics &amp; Gameplay Programmer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Permanent+Marker&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script is:inline>
+      (function () {
+        var saved = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', saved);
+      })();
+    </script>
     <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      .wrap { max-width: 1320px; margin: 0 auto; padding: 0 44px; }
 
-      html, body { height: 100%; background: #0c0c0e; }
-
-      body {
-        color: #ececec;
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        font-size: 15px;
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        overflow: hidden;
+      @media (max-width: 900px) {
+        .wrap { padding: 0 20px; }
       }
 
-      a { color: #b8e832; text-decoration: none; }
-      a:hover { color: #cff05a; }
-
-      /* FULL-BLEED SHELL */
-      .shell {
-        width: 100vw;
-        height: 100vh;
-        background: #0c0c0e;
-        overflow: hidden;
+      /* HEADER */
+      header.site-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 56px;
+        padding: 52px 0 38px;
+        flex-wrap: wrap;
+      }
+      .head-left { flex: 1; min-width: 260px; }
+      .eyebrow {
+        font: 500 10px/1 Futura, Jost, sans-serif;
+        letter-spacing: .18em;
+        color: var(--muted);
+        margin-bottom: 22px;
+      }
+      h1 {
+        margin: 0;
+        max-width: 15ch;
+        font: 700 clamp(32px, 4.6vw, 62px)/1.06 Futura, Jost, sans-serif;
+        letter-spacing: -.02em;
+        color: var(--fg);
+        text-wrap: balance;
+      }
+      .head-right {
+        width: 330px;
+        max-width: 100%;
+        flex: none;
         display: flex;
         flex-direction: column;
+        align-items: flex-end;
+        gap: 18px;
       }
-
-      /* TOP EDGE */
-      .top-edge {
+      .theme-toggle {
         display: flex;
         align-items: center;
+        gap: 10px;
+        padding: 9px 16px;
+        border: 1.4px solid var(--line);
+        border-radius: 999px;
+        background: var(--band);
+        color: var(--fg);
+        font: 600 11px/1 Futura, Jost, sans-serif;
+        letter-spacing: .1em;
+        cursor: pointer;
+        font-family: inherit;
+        transition: background .15s, color .15s;
+      }
+      .theme-toggle:hover { background: var(--line); color: var(--card); }
+      .theme-toggle .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display: block; }
+      .theme-toggle:hover .dot { background: var(--card); }
+      .positioning {
+        margin: 0;
+        text-align: right;
+        font: 400 13.5px/1.7 Jost, sans-serif;
+        color: var(--muted);
+      }
+
+      @media (max-width: 900px) {
+        .head-right { align-items: flex-start; width: 100%; }
+        .positioning { text-align: left; }
+      }
+
+      /* PRODUCTION-FLOW SECTION */
+      .production-wrap { padding-top: 64px; }
+      .production-block { border-top: 1.2px solid var(--line); padding-top: 38px; padding-bottom: 64px; }
+      .production-heading {
+        display: flex;
         justify-content: space-between;
-        gap: 24px;
-        padding: 14px 26px;
-        border-bottom: 1px solid #1a1a1e;
+        align-items: baseline;
+        gap: 32px;
         flex-wrap: wrap;
-        flex-shrink: 0;
+        margin-bottom: 10px;
       }
-      .top-edge .who { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-      .top-edge .who .name { font: 800 18px Inter; color: #f4f4f6; letter-spacing: -.02em; }
-      .top-edge .who .role { font: 600 12px Inter; color: #b8e832; }
-      .top-edge .who .location { font: 400 10px 'JetBrains Mono', monospace; color: #78787f; }
-      .top-edge .actions { display: flex; align-items: center; gap: 9px; }
-      .top-edge .actions .stack { font: 400 10px 'JetBrains Mono', monospace; color: #78787f; }
-      .btn { font: 600 12px Inter; padding: 7px 13px; border-radius: 7px; }
-      .btn-primary { background: #b8e832; color: #0c0c0e; }
-      .btn-secondary { border: 1px solid #2b2b31; color: #ededf0; }
+      .production-heading h2 {
+        margin: 0;
+        font: 700 30px/1.15 Futura, Jost, sans-serif;
+        color: var(--fg);
+        letter-spacing: -.01em;
+      }
+      .production-heading .repo-tag {
+        font: 400 12.5px/1 ui-monospace, Menlo, monospace;
+        color: var(--claude);
+      }
+      .production-intro {
+        margin: 0 0 30px;
+        max-width: 74ch;
+        font: 400 13.5px/1.7 Jost, sans-serif;
+        color: var(--muted);
+      }
+      .production-card {
+        border: 1.2px solid var(--line2);
+        border-radius: 14px;
+        background: var(--card);
+        padding: 30px 28px;
+      }
+      .production-svg { width: 100%; height: auto; display: block; }
 
-      /* MAIN: left edge rail + huge viewer */
-      .main-grid {
-        flex: 1;
-        min-height: 0;
-        display: grid;
-        grid-template-columns: 212px 1fr;
+      @media (max-width: 900px) {
+        .production-card { overflow-x: auto; }
+        .production-svg { width: 900px; max-width: none; }
       }
 
-      /* LEFT EDGE — identity + trajectory */
-      .identity {
-        border-right: 1px solid #1a1a1e;
-        padding: 20px;
+      .production-footnote {
+        margin: 34px 0 0;
+        font: 400 12.5px/1.6 Jost, sans-serif;
+        color: var(--muted);
+      }
+
+      /* GAME TYPES SECTION */
+      .gametypes-wrap { padding-top: 64px; }
+      .gametypes-block { border-top: 1.2px solid var(--line); padding-top: 38px; padding-bottom: 64px; }
+      .gametypes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 26px; }
+      @media (max-width: 900px) { .gametypes-grid { grid-template-columns: 1fr; } }
+      .gametype-card { border: 1.2px solid var(--line2); border-radius: 14px; background: var(--card); padding: 26px; }
+      .gametype-card .repo-tag { font: 400 11px/1 ui-monospace, Menlo, monospace; color: var(--claude); }
+      .gametype-card h3 { margin: 10px 0 8px; font: 700 22px/1.2 Futura, Jost, sans-serif; color: var(--fg); }
+      .gametype-card p { margin: 0 0 18px; font: 400 13px/1.6 Jost, sans-serif; color: var(--muted); max-width: 46ch; }
+      .hotspot-row { display: flex; flex-wrap: wrap; gap: 8px; }
+      .hotspot {
+        position: relative;
+        font: 500 11px/1 ui-monospace, Menlo, monospace;
+        color: var(--fg);
+        background: var(--band);
+        border: 1.2px solid var(--line2);
+        border-radius: 999px;
+        padding: 7px 13px;
+        cursor: default;
+      }
+      .hotspot::after {
+        content: attr(data-preview);
+        position: absolute;
+        bottom: calc(100% + 9px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+        max-width: 220px;
+        background: var(--page);
+        color: var(--muted);
+        border: 1.2px dashed var(--line2);
+        border-radius: 8px;
+        padding: 9px 11px;
+        font: 400 10.5px/1.4 Jost, sans-serif;
+        text-align: left;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .15s;
+        z-index: 2;
+      }
+      .hotspot:hover::after, .hotspot:focus-visible::after { opacity: 1; }
+
+      /* OTHER GAMES SECTION */
+      .othergames-wrap { padding-top: 64px; }
+      .othergames-block { border-top: 1.2px solid var(--line); padding-top: 38px; padding-bottom: 80px; }
+      .othergames-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; margin-top: 26px; }
+      .othergame-card {
+        border: 1.2px dashed var(--line2);
+        border-radius: 12px;
+        background: var(--card);
+        padding: 18px;
         display: flex;
         flex-direction: column;
-        min-height: 0;
-        overflow: hidden;
+        gap: 10px;
       }
-      .identity .positioning { font: 400 12.5px/1.5 Inter; color: #cfcfd5; margin: 0; }
-      .identity .chips { display: flex; gap: 7px; margin-top: 14px; flex-wrap: wrap; }
-      .chip { padding: 4px 9px; border: 1px solid #2b2b31; border-radius: 999px; font: 600 9.5px 'JetBrains Mono', monospace; }
-      .chip.accent { color: #b8e832; }
-      .chip.muted { color: #b7b7bf; }
-      .section-title {
-        font: 600 10px/1 'JetBrains Mono', monospace;
-        letter-spacing: .14em;
-        text-transform: uppercase;
-        color: #6f6f78;
-        margin: 24px 0 14px;
+      .othergame-card .thumb {
+        height: 84px;
+        border-radius: 8px;
+        border: 1.2px dashed var(--line2);
+        display: grid;
+        place-items: center;
+        font: 400 10px/1.4 Jost, sans-serif;
+        color: var(--muted);
+        text-align: center;
       }
-      .acts { display: flex; flex-direction: column; }
-      .act { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 13px 0; border-bottom: 1px solid #17171b; }
-      .act:first-child { padding-top: 0; }
-      .act:last-child { border-bottom: none; padding-bottom: 0; }
-      .act .num { font: 800 15px/1 'JetBrains Mono', monospace; color: #b8e832; }
-      .act .title { font: 700 12.5px Inter; color: #ededf0; }
-      .act .body { font: 400 11px/1.45 Inter; color: #9c9ca4; margin: 4px 0 0; }
-      .act .body .mono { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #cdd3c0; }
-      .act .body .cta { color: #b8e832; }
-      .identity-footer {
-        margin-top: auto;
-        padding-top: 16px;
-        font: 400 9.5px/1.5 'JetBrains Mono', monospace;
-        color: #5f5f66;
-      }
-
-      @media (max-width: 860px) {
-        body { overflow: auto; }
-        .shell { height: auto; min-height: 100vh; }
-        .main-grid { grid-template-columns: 1fr; }
-        .identity { border-right: none; border-bottom: 1px solid #1a1a1e; }
-      }
+      .othergame-card .name { font: 700 14px/1.2 Futura, Jost, sans-serif; color: var(--fg); }
+      .othergame-card .note { font: 400 11px/1.5 Jost, sans-serif; color: var(--muted); }
     </style>
   </head>
   <body>
-
-    <div class="shell">
-      <div class="top-edge">
-        <div class="who">
-          <span class="name">Juan Jesús Gómez Núñez</span>
-          <span class="role">Physics &amp; gameplay programmer</span>
-          <span class="location">México · remoto UK / EU</span>
+    <div class="wrap">
+      <header class="site-header">
+        <div class="head-left">
+          <div class="eyebrow">JESUS — PHYSICS &amp; GAMEPLAY PROGRAMMER</div>
+          <h1>I make things worth watching.</h1>
         </div>
-        <div class="actions">
-          <span class="stack">Rust · Bevy · Rapier · C#/Unity</span>
-          <a class="btn btn-primary" href="mailto:jesus.gomeznuz@gmail.com">Email</a>
-          <a class="btn btn-secondary" href="https://github.com/jesusgomeznuz" target="_blank">GitHub</a>
-          <a class="btn btn-secondary" href="/cv.pdf" target="_blank">CV</a>
+        <div class="head-right">
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Switch between light and dark theme" title="Switch theme">
+            <span class="dot"></span><span id="theme-label">LIGHT</span>
+          </button>
+          <p class="positioning">Rust, Bevy, Rapier. I found out on my own that marble simulations made viral video, then Jammable hired me to turn that into a product. Looking for gameplay, physics or engine work in the UK or Europe.</p>
         </div>
-      </div>
+      </header>
 
-      <div class="main-grid">
-        <div class="identity">
-          <p class="positioning">No soy otro dev pidiendo trabajo. Lo que construí se volvió viral por mi cuenta — y Londres me contrató para llevarlo a producción.</p>
+      <ProjectWorkbench client:load demoUrl={DEMO_URL} />
+    </div>
 
-          <div class="chips">
-            <span class="chip accent">Ex-Jammable · Londres</span>
-            <span class="chip muted">videos virales</span>
-          </div>
+    <div class="wrap production-wrap">
+      <div class="production-block">
+        <div class="production-heading">
+          <h2>How the videos actually get made</h2>
+          <span class="repo-tag">canicasbrawl-production</span>
+        </div>
+        <p class="production-intro">A different skill from the engines. One long thread with Claude, subagents that leave the context window to work alone and report back, and the steps that need no model at all. The judgement is deciding which is which.</p>
 
-          <h2 class="section-title">La trayectoria</h2>
-          <div class="acts">
-            <div class="act">
-              <div class="num">01</div>
-              <div>
-                <div class="title">Canicas virales</div>
-                <p class="body">Descubrí solo el método viral con simulaciones en Rust.</p>
-              </div>
-            </div>
-            <div class="act">
-              <div class="num">02</div>
-              <div>
-                <div class="title">Jammable — Londres</div>
-                <p class="body">Engine con Rapier + Rust: física local, renders on-device. Viral a escala en un producto real.</p>
-              </div>
-            </div>
-            <div class="act">
-              <div class="num">03</div>
-              <div>
-                <div class="title">Engine propio</div>
-                <p class="body"><span class="mono">rapier-bevy</span> + dos juegos. <span class="cta">Explóralos →</span></p>
-              </div>
-            </div>
-          </div>
+        <div class="production-card">
+          <svg class="production-svg" viewBox="0 60 1370 580" xmlns="http://www.w3.org/2000/svg" font-family="Futura, Jost, 'Century Gothic', sans-serif">
+            <defs>
+              <marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 Z" fill="var(--line)"/>
+              </marker>
+              <marker id="tipDashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 Z" fill="var(--dash)"/>
+              </marker>
 
-          <div class="identity-footer">Elegí un proyecto arriba →<br>demo y flujo de código en el mismo lugar.</div>
+              <symbol id="ic-claude" viewBox="0 0 24 24">
+                <path clip-rule="evenodd" d="M20.998 10.949H24v3.102h-3v3.028h-1.487V20H18v-2.921h-1.487V20H15v-2.921H9V20H7.488v-2.921H6V20H4.487v-2.921H3V14.05H0V10.95h3V5h17.998v5.949zM6 10.949h1.488V8.102H6v2.847zm10.51 0H18V8.102h-1.49v2.847z" fill="var(--claude)" fill-rule="evenodd"/>
+              </symbol>
+              <symbol id="ic-jesus" viewBox="0 0 24 24">
+                <g transform="translate(-1.8,-1.86) scale(1.15)">
+                  <circle cx="12" cy="7.4" r="3.6" fill="none" stroke="var(--muted)" stroke-width="1.6"/>
+                  <path d="M4.2 21c0-4.8 3.1-7.9 7.8-7.9s7.8 3.1 7.8 7.9" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round"/>
+                </g>
+              </symbol>
+              <symbol id="ic-pair" viewBox="0 0 52 24">
+                <g transform="translate(-1.8,-1.86) scale(1.15)">
+                  <circle cx="12" cy="7.4" r="3.6" fill="none" stroke="var(--muted)" stroke-width="1.6"/>
+                  <path d="M4.2 21c0-4.8 3.1-7.9 7.8-7.9s7.8 3.1 7.8 7.9" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round"/>
+                </g>
+                <g transform="translate(28,0)">
+                  <path clip-rule="evenodd" d="M20.998 10.949H24v3.102h-3v3.028h-1.487V20H18v-2.921h-1.487V20H15v-2.921H9V20H7.488v-2.921H6V20H4.487v-2.921H3V14.05H0V10.95h3V5h17.998v5.949zM6 10.949h1.488V8.102H6v2.847zm10.51 0H18V8.102h-1.49v2.847z" fill="var(--claude)" fill-rule="evenodd"/>
+                </g>
+              </symbol>
+            </defs>
+
+            <!-- banda del contexto activo -->
+            <rect x="28" y="280" width="1314" height="156" rx="12" fill="var(--band)" opacity="0.6"/>
+
+            <!-- flechas principales -->
+            <g stroke="var(--line)" stroke-width="2.2" fill="none">
+              <path d="M162,360 L200,360" marker-end="url(#tip)"/>
+              <path d="M382,360 L420,360" marker-end="url(#tip)"/>
+              <path d="M602,360 L730,360" marker-end="url(#tip)"/>
+              <path d="M892,360 L930,360" marker-end="url(#tip)"/>
+              <path d="M1132,360 L1170,360" marker-end="url(#tip)"/>
+            </g>
+
+            <!-- loop de feedback -->
+            <path d="M1012,316 L1012,270 L852,270 L852,316" fill="none" stroke="var(--dash)" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#tipDashed)"/>
+            <text x="932" y="260" fill="var(--muted)" font-size="11" font-style="italic" text-anchor="middle">feedback</text>
+
+            <!-- 1. Agent -->
+            <g transform="translate(44,316)">
+              <rect width="118" height="88" rx="8" fill="var(--cfill)" stroke="var(--claude)" stroke-width="2"/>
+              <use href="#ic-claude" x="44" y="10" width="30" height="30"/>
+              <text x="59" y="56" fill="var(--fg)" font-size="13" font-weight="700" text-anchor="middle">Agent</text>
+              <text x="59" y="70" fill="var(--cfg2)" font-size="9.5" text-anchor="middle">CLAUDE.md</text>
+            </g>
+
+            <!-- 2. Performance Review -->
+            <g transform="translate(202,316)">
+              <rect width="180" height="88" rx="8" fill="none" stroke="var(--line2)" stroke-width="1.6"/>
+              <use href="#ic-pair" x="57.5" y="10" width="65" height="30"/>
+              <text x="90" y="56" fill="var(--fg)" font-size="13" font-weight="700" text-anchor="middle">Performance Review</text>
+              <text x="90" y="70" fill="var(--muted)" font-size="9.5" text-anchor="middle">reviewed together</text>
+            </g>
+
+            <!-- 3. Song Selection -->
+            <g transform="translate(422,316)">
+              <rect width="180" height="88" rx="8" fill="none" stroke="var(--line2)" stroke-width="1.6"/>
+              <use href="#ic-jesus" x="75" y="10" width="30" height="30"/>
+              <text x="90" y="56" fill="var(--fg)" font-size="13" font-weight="700" text-anchor="middle">Song Selection</text>
+              <text x="90" y="70" fill="var(--muted)" font-size="9.5" text-anchor="middle">Jesus decides</text>
+            </g>
+
+            <!-- 4. Production Batch -->
+            <g transform="translate(732,316)">
+              <rect width="160" height="88" rx="8" fill="var(--cfill)" stroke="var(--claude)" stroke-width="2"/>
+              <use href="#ic-claude" x="65" y="10" width="30" height="30"/>
+              <text x="80" y="56" fill="var(--fg)" font-size="13" font-weight="700" text-anchor="middle">Production Batch</text>
+              <text x="80" y="70" fill="var(--cfg2)" font-size="9.5" text-anchor="middle">voice + render</text>
+            </g>
+            <text x="812" y="306" fill="var(--claude)" font-size="9.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">/production-skill</text>
+            <text x="812" y="422" fill="var(--fg)" font-size="10.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">Production CLI</text>
+
+            <!-- 5. Quality Review -->
+            <g transform="translate(932,316)">
+              <rect width="200" height="88" rx="8" fill="none" stroke="var(--line2)" stroke-width="1.6"/>
+              <use href="#ic-jesus" x="85" y="10" width="30" height="30"/>
+              <text x="100" y="56" fill="var(--fg)" font-size="13" font-weight="700" text-anchor="middle">Quality Review</text>
+              <text x="100" y="70" fill="var(--muted)" font-size="9.5" text-anchor="middle">Jesus reviews each video</text>
+            </g>
+
+            <!-- 6. Scheduling -->
+            <g transform="translate(1172,316)">
+              <rect width="150" height="88" rx="8" fill="var(--cfill)" stroke="var(--claude)" stroke-width="2"/>
+              <use href="#ic-claude" x="60" y="10" width="30" height="30"/>
+              <text x="75" y="56" fill="var(--fg)" font-size="13" font-weight="700" text-anchor="middle">Scheduling</text>
+              <text x="75" y="70" fill="var(--cfg2)" font-size="9.5" text-anchor="middle">schedule + Fly</text>
+            </g>
+            <text x="1247" y="306" fill="var(--claude)" font-size="9.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">/schedule-skill</text>
+            <text x="1247" y="422" fill="var(--fg)" font-size="10.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">Publisher CLI</text>
+
+            <!-- subagents -->
+            <text x="44" y="112" fill="var(--fg)" font-size="12" letter-spacing="1.4">SUBAGENTS LEAVE THE CONTEXT WINDOW, REPORT BACK</text>
+
+            <!-- radar: Agent → Performance Scan → Performance Review -->
+            <g stroke="var(--line)" stroke-width="2.2" fill="none">
+              <path d="M103,316 L103,185 L136,185" marker-end="url(#tip)"/>
+              <path d="M292,185 L322,185 L322,316" marker-end="url(#tip)"/>
+            </g>
+            <text x="214" y="136" fill="var(--claude)" font-size="10.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">radar.md</text>
+            <g transform="translate(136,148)">
+              <rect width="156" height="74" rx="8" fill="none" stroke="var(--line2)" stroke-width="1.6"/>
+              <use href="#ic-claude" x="65" y="8" width="26" height="26"/>
+              <text x="78" y="48" fill="var(--fg)" font-size="12.5" font-weight="700" text-anchor="middle">Performance Scan</text>
+              <text x="78" y="61" fill="var(--muted)" font-size="9" text-anchor="middle">metrics · comments</text>
+            </g>
+            <text x="214" y="238" fill="var(--fg)" font-size="9.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">Catalog CLI · Casting CLI · Publisher CLI</text>
+
+            <!-- discovery: Agent → Song Discovery → Song Selection -->
+            <g stroke="var(--line)" stroke-width="2.2" fill="none">
+              <path d="M103,404 L103,525 L202,525" marker-end="url(#tip)"/>
+              <path d="M358,525 L400,525 L400,380 L422,380" marker-end="url(#tip)"/>
+            </g>
+            <text x="280" y="476" fill="var(--claude)" font-size="10.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">discovery.md</text>
+            <g transform="translate(202,488)">
+              <rect width="156" height="74" rx="8" fill="none" stroke="var(--line2)" stroke-width="1.6"/>
+              <use href="#ic-claude" x="65" y="8" width="26" height="26"/>
+              <text x="78" y="48" fill="var(--fg)" font-size="12.5" font-weight="700" text-anchor="middle">Song Discovery</text>
+              <text x="78" y="61" fill="var(--muted)" font-size="9" text-anchor="middle">candidates by family</text>
+            </g>
+            <text x="280" y="578" fill="var(--fg)" font-size="10.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">Catalog CLI</text>
+
+            <!-- adding-songs: Song Selection → Segment Selection → Production Batch -->
+            <g stroke="var(--line)" stroke-width="2.2" fill="none">
+              <path d="M512,316 L512,185 L544,185" marker-end="url(#tip)"/>
+              <path d="M670,222 L670,340 L732,340" marker-end="url(#tip)"/>
+            </g>
+            <text x="622" y="136" fill="var(--claude)" font-size="10.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">adding-songs.md</text>
+            <g transform="translate(544,148)">
+              <rect width="156" height="74" rx="8" fill="none" stroke="var(--line2)" stroke-width="1.6"/>
+              <use href="#ic-claude" x="65" y="8" width="26" height="26"/>
+              <text x="78" y="48" fill="var(--fg)" font-size="12.5" font-weight="700" text-anchor="middle">Segment Selection</text>
+              <text x="78" y="61" fill="var(--muted)" font-size="9" text-anchor="middle">segment · voice · captions</text>
+            </g>
+            <text x="622" y="238" fill="var(--fg)" font-size="10.5" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">Catalog CLI</text>
+
+            <text x="685" y="454" fill="var(--claude)" font-size="14" font-weight="600" letter-spacing="1.4" text-anchor="middle">CONTEXT WINDOW</text>
+          </svg>
         </div>
 
-        <ProjectWorkbench client:load demoUrl={DEMO_URL} canicasFlow={canicasbrawlFlow} canicasDiagrams={canicasbrawlDiagrams} />
+        <p class="production-footnote">Built with Claude Code. <a href="https://github.com/jesusgomeznuz/canicasbrawl-production" target="_blank">The full pipeline is on GitHub</a>.</p>
       </div>
     </div>
 
+    <div class="wrap gametypes-wrap">
+      <div class="gametypes-block">
+        <div class="production-heading">
+          <h2>Two ways to make it worth watching</h2>
+        </div>
+        <p class="production-intro">Same goal, different engine underneath. One earns its bounce, the other earns its beat. Hover a tag for a peek at the logic — full clips coming soon.</p>
+
+        <div class="gametypes-grid">
+          <div class="gametype-card">
+            <span class="repo-tag">canicasbrawl-rapier</span>
+            <h3>Physics-driven</h3>
+            <p>Marbles collide, bounce, freeze, swap, shrink — the video is whatever the physics decides in that run. Nothing is scripted after the race starts.</p>
+            <div class="hotspot-row">
+              <span class="hotspot" data-preview="GIF pendiente — bounce off wall, restitution">bounce</span>
+              <span class="hotspot" data-preview="GIF pendiente — freeze trap">freeze</span>
+              <span class="hotspot" data-preview="GIF pendiente — shrink trap">shrink</span>
+              <span class="hotspot" data-preview="GIF pendiente — swap trap">swap</span>
+            </div>
+          </div>
+
+          <div class="gametype-card">
+            <span class="repo-tag">musical-path-rapier</span>
+            <h3>Song-driven</h3>
+            <p>No collisions to referee — the terrain is generated from the song, and the ball just follows the beat along a kinematic path.</p>
+            <div class="hotspot-row">
+              <span class="hotspot" data-preview="GIF pendiente — terrain generated from the song">terrain generation</span>
+              <span class="hotspot" data-preview="GIF pendiente — path curve to collider strip">path curve</span>
+              <span class="hotspot" data-preview="GIF pendiente — note triggers on beat">beat sync</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap othergames-wrap">
+      <div class="othergames-block">
+        <div class="production-heading">
+          <h2>Other games that went viral</h2>
+        </div>
+        <p class="production-intro">Before canicasbrawl, the same method — small physics engines built to make a video worth watching — went viral more than once.</p>
+
+        <div class="othergames-grid">
+          <div class="othergame-card">
+            <div class="thumb">clip pendiente</div>
+            <div class="name">Bounce Battle</div>
+            <div class="note">resultados pendientes</div>
+          </div>
+          <div class="othergame-card">
+            <div class="thumb">clip pendiente</div>
+            <div class="name">Tunnel</div>
+            <div class="note">resultados pendientes</div>
+          </div>
+          <div class="othergame-card">
+            <div class="thumb">+ más</div>
+            <div class="name">…</div>
+            <div class="note">por agregar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline>
+      function toggleTheme() {
+        var html = document.documentElement;
+        var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        var label = document.getElementById('theme-label');
+        if (label) label.textContent = next.toUpperCase();
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var label = document.getElementById('theme-label');
+        if (label) label.textContent = document.documentElement.getAttribute('data-theme').toUpperCase();
+      });
+    </script>
   </body>
 </html>

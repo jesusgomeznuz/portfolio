@@ -1,5 +1,6 @@
 ---
 import CanicasDemo from '../components/canicas-demo/CanicasDemo';
+import '../styles/tokens.css';
 ---
 
 <html lang="es">
@@ -10,30 +11,28 @@ import CanicasDemo from '../components/canicas-demo/CanicasDemo';
     <title>CanicasBrawl — demo físico en vivo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script is:inline>
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
     <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body { min-height: 100%; background: #0c0c0e; }
       body {
-        color: #ececec;
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 18px;
         padding: 28px 16px 40px;
       }
-      a { color: #b8e832; text-decoration: none; }
-      a:hover { color: #cff05a; }
-      .page-title { font: 800 22px Inter; letter-spacing: -0.02em; }
+      .page-title { font: 700 22px Futura, Jost, sans-serif; letter-spacing: -0.02em; }
       .page-subtitle {
-        font: 500 13px 'JetBrains Mono', monospace;
-        color: #9a9aa2;
+        font: 400 13px Jost, sans-serif;
+        color: var(--muted);
         text-align: center;
         max-width: 560px;
       }
       .demo-frame { width: min(92vw, 46vh); }
-      .back { font: 600 12px 'JetBrains Mono', monospace; }
+      .back { font: 400 12px Jost, sans-serif; }
     </style>
   </head>
   <body>

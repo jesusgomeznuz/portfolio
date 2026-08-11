@@ -1,0 +1,81 @@
+/* La identidad visual, en un solo lugar.
+   Fuente de verdad: /Users/jesus/jesus-design-tokens.json (formato W3C DTCG).
+
+   Vive aquí y no dentro de index.astro porque los componentes (FlowViewer,
+   ProjectWorkbench) hablan puro var(--x): sin este archivo importado, la
+   página los renderiza sin color — que es exactamente como estaban los bancos
+   flow.astro / canicas.astro antes de esto.
+
+   Dark es el default del :root; light es el tema que ve un visitante nuevo
+   (lo fija el script inline de cada página antes de pintar, para no parpadear). */
+
+:root {
+  --page: #071820;
+  --card: #0B2530;
+  --band: #113844;
+  --fg: #E9F4F5;
+  --muted: #9FC7CE;
+  --line: #1EB6BE;
+  --line2: #6BB8C2;
+  --dash: #4A6A68;
+  --claude: #D97757;
+  --cfill: #2E1A10;
+  --cfg2: #CF9C78;
+  --ghost: rgba(159, 199, 206, .16);
+
+  /* Departamentos: la CARPETA es la responsabilidad. Los nombres salen del
+     path (game/world → world), así que agregar una carpeta al juego solo pide
+     su color aquí — el parser y el visor no se enteran. */
+  --d-world: #2dd4bf;
+  --d-race: #fb923c;
+  --d-scene: #c084fc;
+  --d-song: #f472b6;
+  --d-production: #4ade80;
+  --d-figma_to_modules: #4fc3f7;
+  --d-song_to_timeline: #4fc3f7;
+  --d-content: #facc15;
+  --d-debug: #a1a1aa;
+  --d-engine: #f87171;
+  --d-spine: #94a3b8;
+}
+
+:root[data-theme='light'] {
+  --page: #E9F4F5;
+  --card: #F5FAFB;
+  --band: #CFEAEC;
+  --fg: #073B4C;
+  --muted: #0A5A6D;
+  --line: #0E7C92;
+  --line2: #6BB8C2;
+  --dash: #6BB8C2;
+  --claude: #D97757;
+  --cfill: #FBEAE3;
+  --cfg2: #A85D3D;
+  --ghost: rgba(7, 59, 76, .15);
+
+  --d-world: #0f766e;
+  --d-race: #c2650f;
+  --d-scene: #7c3aed;
+  --d-song: #be185d;
+  --d-production: #16794f;
+  --d-figma_to_modules: #0369a1;
+  --d-song_to_timeline: #0369a1;
+  --d-content: #a16207;
+  --d-debug: #52525b;
+  --d-engine: #b91c1c;
+  --d-spine: #475569;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { background: var(--page); }
+
+body {
+  color: var(--fg);
+  font-family: Futura, Jost, 'Century Gothic', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background .15s, color .15s;
+}
+
+a { color: var(--line); text-decoration: none; }
+a:hover { color: var(--line2); }

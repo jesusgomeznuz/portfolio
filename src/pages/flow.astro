@@ -1,7 +1,10 @@
 ---
+// Banco de pruebas del visor, aislado: el mismo componente que va en la
+// portada pero sin los dos demos WASM al lado, para poder iterarlo rápido.
 import FlowViewer from '../components/FlowViewer';
 import generated from '../data/flow-viewer.generated.json';
 import overlay from '../data/flow-viewer-overlay.json';
+import '../styles/tokens.css';
 ---
 
 <html lang="es">
@@ -9,42 +12,62 @@ import overlay from '../data/flow-viewer-overlay.json';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>Explorador de código — capa viewer (borrador)</title>
+    <title>Explorador de código — banco (canicasbrawl)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script is:inline>
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
     <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body { min-height: 100%; background: #0c0c0e; }
       body {
-        color: #ececec;
-        font-family: 'Inter', system-ui, sans-serif;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 14px;
-        padding: 28px 16px 40px;
+        gap: 12px;
+        padding: 26px 16px 40px;
       }
-      a { color: #b8e832; text-decoration: none; }
-      .page-title { font: 800 20px Inter; letter-spacing: -0.02em; }
-      .page-note { font: 500 12px 'JetBrains Mono', monospace; color: #6f6f78; }
-      .viewer-frame {
-        width: min(94vw, 420px);
-        height: 78vh;
-        border: 1px solid #1a1a1e;
-        border-radius: 14px;
-        padding: 10px 14px;
-        background: #0a0a0c;
+      .bench-nav { display: flex; gap: 14px; align-items: center; font: 400 12px Jost, sans-serif; }
+      .bench-nav .sep { color: var(--dash); }
+      h1 { font: 700 20px Futura, Jost, sans-serif; letter-spacing: -.02em; }
+      .bench-note { font: 400 11.5px ui-monospace, Menlo, monospace; color: var(--muted); }
+      .theme-toggle {
+        display: flex; align-items: center; gap: 8px; padding: 6px 13px;
+        border: 1.4px solid var(--line); border-radius: 999px; background: var(--band);
+        color: var(--fg); font: 600 10px Futura, Jost, sans-serif; letter-spacing: .1em;
+        cursor: pointer; font-family: inherit;
       }
+      .theme-toggle .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+      .viewer-frame { width: min(94vw, 400px); height: 74vh; }
     </style>
   </head>
   <body>
-    <a href="/">← portfolio</a>
-    <p class="page-note">canicasbrawl · <a href="/flow-musical">ver musical-path →</a></p>
-    <h1 class="page-title">Explorador de código — borrador funcional</h1>
-    <p class="page-note">{generated.nodes.length} nodos parseados de {generated.repo} @ {generated.sourceCommit} · la estética viene después</p>
+    <div class="bench-nav">
+      <a href="/">← portfolio</a>
+      <span class="sep">·</span>
+      <a href="/flow-musical">musical-path →</a>
+      <span class="sep">·</span>
+      <button class="theme-toggle" onclick="toggleTheme()"><span class="dot"></span><span id="theme-label">LIGHT</span></button>
+    </div>
+    <h1>Explorador de código — banco</h1>
+    <p class="bench-note">{generated.nodes.length} nodos · {generated.repo} @ {generated.sourceCommit}</p>
     <div class="viewer-frame">
       <FlowViewer client:only="react" generated={generated} overlay={overlay} />
     </div>
+
+    <script is:inline>
+      function toggleTheme() {
+        var html = document.documentElement;
+        var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        document.getElementById('theme-label').textContent = next.toUpperCase();
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('theme-label').textContent =
+          document.documentElement.getAttribute('data-theme').toUpperCase();
+      });
+    </script>
   </body>
 </html>

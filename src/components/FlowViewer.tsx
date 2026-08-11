@@ -7,7 +7,7 @@
 // race, scene…). El relleno + chevron dicen SI TE LLEVA A ALGÚN LADO. Son dos
 // canales separados a propósito: cuando el color cargaba las dos cosas hacía
 // falta una leyenda de siete y se leía como tarea.
-import { useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 interface FlowNode {
   id: string;
@@ -45,6 +45,59 @@ interface FlowData {
   nodes: FlowNode[];
 }
 
+/// El patrón "hover card" (GitHub, Wikipedia, Notion): el preview se ancla al
+/// ELEMENTO, no al cursor — el contenido habla del nodo entero, no del pixel
+/// donde entraste, así que moverse con el mouse sugería una relación que no
+/// existe. Seguir al cursor se reserva para espacio continuo (gráficas, mapas).
+/// Los retardos son la otra mitad del patrón: sin ellos, pasar "de camino" a
+/// otro nodo dispara el clip y se siente nervioso. Cortos a propósito — lo
+/// justo para filtrar el paso de largo, no tanto como para tener que esperar.
+const OPEN_DELAY_MS = 50;
+const CLOSE_DELAY_MS = 80;
+
+interface NodeProps {
+  node: FlowNode;
+  sub?: string;
+  onGo?: () => void;
+  badge?: string;
+  media?: string;
+  onShow: (src: string, anchor: HTMLElement) => void;
+  onHide: () => void;
+}
+
+/// Un nodo: barra de color al canto (el departamento), nombre en Futura,
+/// identificador en mono. Relleno + chevron solo si lleva a otra vista.
+///
+/// Vive FUERA de FlowViewer a propósito: definido adentro, cada render creaba
+/// un TIPO de componente nuevo, así que React desmontaba y volvía a montar
+/// todos los botones en cada cambio de estado — incluido el que dispara el
+/// propio hover. El mouse quedaba sobre un DOM distinto al que registró el
+/// onMouseLeave y el clip se quedaba abierto para siempre.
+function Node({ node, sub, onGo, badge, media, onShow, onHide }: NodeProps) {
+  return (
+    <button
+      className={`fv-node${onGo ? ' go' : ''}`}
+      style={{ '--nc': deptColor(node.dept) } as React.CSSProperties}
+      onClick={onGo}
+      disabled={!onGo && !media}
+      onMouseEnter={(event) => media && onShow(media, event.currentTarget)}
+      onMouseLeave={onHide}
+      onFocus={(event) => media && onShow(media, event.currentTarget)}
+      onBlur={onHide}
+    >
+      <span className="fv-name">
+        {media && <span className="fv-hasclip" aria-label="tiene clip">▸</span>}
+        {node.name}
+        {badge && <span className="fv-badge">{badge}</span>}
+      </span>
+      {sub && <span className="fv-sub">{sub}</span>}
+      {onGo && <span className="fv-chev">›</span>}
+    </button>
+  );
+}
+
+const Stem = () => <span className="fv-stem" aria-hidden="true" />;
+
 export default function FlowViewer({ generated, overlay }: { generated: FlowData; overlay: Record<string, Criterio> }) {
   const criterioOf = (id: string): Criterio => overlay[id] ?? {};
   const nodes = useMemo(
@@ -56,9 +109,79 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
   );
   const [stack, setStack] = useState<View[]>([{ kind: 'main' }]);
   const view = stack[stack.length - 1];
+  // El clip flota en position:fixed anclado al nodo. En el estado va solo el
+  // src; la posición se escribe directo al DOM por ref, así recolocar (al
+  // cargar el video, al hacer scroll) no re-renderiza el árbol de nodos.
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const anchorEl = useRef<HTMLElement | null>(null);
+  const openTimer = useRef<number>();
+  const closeTimer = useRef<number>();
 
-  const enter = (next: View) => setStack((current) => [...current, next]);
-  const backTo = (index: number) => setStack((current) => current.slice(0, index + 1));
+  /// A la izquierda del nodo si cabe, si no a la derecha; centrado vertical
+  /// sobre él y siempre dentro de pantalla. Mide el elemento real en vez de
+  /// asumir su tamaño: un clip vertical y uno apaisado ocupan cosas distintas.
+  const place = () => {
+    const el = previewRef.current;
+    const anchor = anchorEl.current;
+    if (!el || !anchor) return;
+    const gap = 14;
+    const rect = anchor.getBoundingClientRect();
+    const width = el.offsetWidth;
+    const height = el.offsetHeight;
+    const toLeft = rect.left - gap - width;
+    const left = toLeft >= 8 ? toLeft : Math.min(rect.right + gap, window.innerWidth - width - 8);
+    const top = Math.min(
+      Math.max(8, rect.top + rect.height / 2 - height / 2),
+      Math.max(8, window.innerHeight - height - 8),
+    );
+    el.style.left = `${Math.max(8, left)}px`;
+    el.style.top = `${top}px`;
+  };
+
+  const showPreview = (src: string, anchor: HTMLElement) => {
+    window.clearTimeout(closeTimer.current);
+    window.clearTimeout(openTimer.current);
+    openTimer.current = window.setTimeout(() => {
+      anchorEl.current = anchor;
+      setPreviewSrc(src);
+    }, OPEN_DELAY_MS);
+  };
+  const hidePreview = () => {
+    window.clearTimeout(openTimer.current);
+    closeTimer.current = window.setTimeout(() => setPreviewSrc(null), CLOSE_DELAY_MS);
+  };
+  /// Cerrar YA, sin el retardo de cortesía: al navegar el nodo se desmonta y su
+  /// onMouseLeave nunca llega, así que esperar dejaría el clip huérfano.
+  const dropPreview = () => {
+    window.clearTimeout(openTimer.current);
+    window.clearTimeout(closeTimer.current);
+    setPreviewSrc(null);
+  };
+  // Al aparecer aún no tiene medidas: se coloca cuando ya existe en el DOM,
+  // antes de pintar, para que no se vea saltar desde la esquina.
+  useLayoutEffect(() => {
+    if (previewSrc) place();
+  }, [previewSrc]);
+  useEffect(
+    () => () => {
+      window.clearTimeout(openTimer.current);
+      window.clearTimeout(closeTimer.current);
+    },
+    [],
+  );
+
+  // Navegar siempre cierra el clip: al cambiar de vista el nodo se desmonta y
+  // su onMouseLeave nunca llega a dispararse, así que el preview se quedaba
+  // abierto hasta que movieras el mouse.
+  const enter = (next: View) => {
+    dropPreview();
+    setStack((current) => [...current, next]);
+  };
+  const backTo = (index: number) => {
+    dropPreview();
+    setStack((current) => current.slice(0, index + 1));
+  };
 
   const phases = nodes.filter((node) => node.level === 1 && node.kind === 'phase' && !node.phase);
   const runHelpers = nodes.filter((node) => node.level === 1 && node.kind === 'helper');
@@ -102,35 +225,12 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
     else if (mode.target) enter({ kind: 'phase', name: mode.target.split('::')[0] });
   };
 
-  /// Un nodo: barra de color al canto (el departamento), nombre en Futura,
-  /// identificador en mono. Relleno + chevron solo si lleva a otra vista.
-  const Node = ({
-    node,
-    sub,
-    onGo,
-    badge,
-  }: {
-    node: FlowNode;
-    sub?: string;
-    onGo?: () => void;
-    badge?: string;
-  }) => (
-    <button
-      className={`fv-node${onGo ? ' go' : ''}`}
-      style={{ '--nc': deptColor(node.dept) } as React.CSSProperties}
-      onClick={onGo}
-      disabled={!onGo}
-    >
-      <span className="fv-name">
-        {node.name}
-        {badge && <span className="fv-badge">{badge}</span>}
-      </span>
-      {sub && <span className="fv-sub">{sub}</span>}
-      {onGo && <span className="fv-chev">›</span>}
-    </button>
-  );
-
-  const Stem = () => <span className="fv-stem" aria-hidden="true" />;
+  // Los tres props que todo nodo necesita para el clip, en un solo lugar.
+  const clip = (id: string) => ({
+    media: criterioOf(id).media,
+    onShow: showPreview,
+    onHide: hidePreview,
+  });
 
   return (
     <div className="fv-root">
@@ -139,6 +239,17 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
 
         .fv-head { flex-shrink: 0; }
         .fv-crumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; font: 500 11px/1.5 ui-monospace, Menlo, monospace; }
+        .fv-back {
+          align-self: flex-start;
+          display: inline-flex; align-items: center; gap: 9px;
+          margin-bottom: 16px; padding: 10px 18px 10px 14px;
+          border: 1.4px solid var(--line); border-radius: 999px;
+          background: var(--band); color: var(--fg);
+          font: 600 12.5px/1 ui-monospace, Menlo, monospace;
+          cursor: pointer; transition: background .14s, color .14s, transform .14s;
+        }
+        .fv-back-arrow { font-size: 16px; line-height: 1; }
+        .fv-back:hover { background: var(--line); color: var(--card); transform: translateX(-2px); }
         .fv-crumb { background: none; border: none; color: var(--muted); font: inherit; cursor: pointer; padding: 0; }
         .fv-crumb:hover { color: var(--fg); }
         .fv-crumb.current { color: var(--fg); cursor: default; font-weight: 700; }
@@ -191,6 +302,28 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
           border: 1px solid var(--ghost); color: var(--muted); vertical-align: middle;
         }
 
+        /* Un nodo con clip lo avisa con un solo carácter — si no se avisa,
+           nadie descubre que hay algo que ver ahí. */
+        .fv-hasclip { color: var(--nc); margin-right: 5px; font-size: .85em; }
+
+        /* El clip manda su proporción: los del juego son verticales, los de una
+           función podrían ser apaisados. Se limita por los dos lados para que
+           ninguno se coma la pantalla. */
+        .fv-preview {
+          /* Arriba de 16777271: los nombres de las canicas son <Html> de
+             @react-three/drei, que calcula su z-index desde la distancia a la
+             cámara para ordenarlos en profundidad — llegan a ~16.4 millones.
+             Con un z-index normal el clip quedaba DEBAJO de esos nombres. */
+          position: fixed; z-index: 16777300; line-height: 0;
+          border: 1.4px solid var(--line); border-radius: 10px; overflow: hidden;
+          background: var(--card); box-shadow: 0 18px 50px rgba(0, 0, 0, .35);
+          pointer-events: none;
+        }
+        .fv-preview video {
+          display: block; max-width: 250px; max-height: 42vh;
+          width: auto; height: auto;
+        }
+
         .fv-stem { display: block; width: 1.4px; height: 14px; margin-left: 22px; background: var(--line2); flex-shrink: 0; }
         .fv-fork { display: block; width: 100%; height: 24px; flex-shrink: 0; }
         .fv-section { margin: 18px 0 8px; font: 600 8.5px/1 Futura, Jost, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
@@ -220,12 +353,38 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
         </div>
       </div>
 
+      {previewSrc && (
+        <div className="fv-preview" ref={previewRef}>
+          {/* Recolocar al saber su tamaño: en el primer frame el <video> aún no
+              tiene dimensiones y se colocaría midiendo una caja de alto cero. */}
+          <video
+            key={previewSrc}
+            src={previewSrc}
+            autoPlay
+            muted
+            loop
+            playsInline
+            onLoadedMetadata={place}
+          />
+        </div>
+      )}
+
       <div className={`fv-canvas ${density}`}>
+        {/* Volver vive PEGADO a los nodos, no en la esquina: el mouse ya está
+            aquí abajo cuando acabas de entrar a algo. Arriba del bloque porque
+            volver es subir en el árbol, y ahí es donde estaba el padre. */}
+        {stack.length > 1 && (
+          <button className="fv-back" onClick={() => backTo(stack.length - 2)}>
+            <span className="fv-back-arrow" aria-hidden="true">←</span>
+            {crumbLabel(stack[stack.length - 2])}
+          </button>
+        )}
         {view.kind === 'main' && (
           <div className="fv-col">
             {gate && (
               <Node
                 node={gate}
+                {...clip(gate.id)}
                 sub={`${gate.file.replace('src/', '')}:${gate.line}`}
                 onGo={fileHasMore(gate) ? () => enter({ kind: 'file', file: gate.file }) : undefined}
               />
@@ -240,6 +399,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
                 <Node
                   key={mode.id}
                   node={mode}
+                  {...clip(mode.id)}
                   sub={mode.target ? `${mode.target}()` : undefined}
                   onGo={mode.target?.startsWith('game') ? () => enterMode(mode) : undefined}
                 />
@@ -254,6 +414,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
               <span key={engine.id} style={{ display: 'contents' }}>
                 <Node
                   node={engine}
+                  {...clip(engine.id)}
                   sub="el engine arma la mesa"
                   onGo={() => enter({ kind: 'phase', name: engine.name })}
                 />
@@ -263,7 +424,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
             {phases.map((phase, index) => (
               <span key={phase.id} style={{ display: 'contents' }}>
                 {index > 0 && <Stem />}
-                <Node node={phase} onGo={() => enter({ kind: 'phase', name: phase.name })} />
+                <Node node={phase} {...clip(phase.id)} onGo={() => enter({ kind: 'phase', name: phase.name })} />
               </span>
             ))}
             {runHelpers.length > 0 && <div className="fv-section">helpers de run()</div>}
@@ -272,6 +433,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
                 {index > 0 && <Stem />}
                 <Node
                   node={helper}
+                  {...clip(helper.id)}
                   sub={`${helper.file.replace('src/', '')}:${helper.line}`}
                   onGo={fileHasMore(helper) ? () => enter({ kind: 'file', file: helper.file }) : undefined}
                 />
@@ -287,6 +449,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
                 {index > 0 && <Stem />}
                 <Node
                   node={node}
+                  {...clip(node.id)}
                   sub={`${node.file.replace('src/', '')}${node.line ? `:${node.line}` : ''}`}
                   badge={node.ritmo ?? (criterioOf(node.id).devOnly ? 'solo dev' : undefined)}
                   onGo={
@@ -304,7 +467,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
             {branchesOf(view.name).map((branch) => (
               <span key={branch.id} style={{ display: 'contents' }}>
                 <Stem />
-                <Node node={branch} onGo={() => enter({ kind: 'phase', name: branch.name })} />
+                <Node node={branch} {...clip(branch.id)} onGo={() => enter({ kind: 'phase', name: branch.name })} />
               </span>
             ))}
           </div>
@@ -317,7 +480,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
               .map((node, index) => (
                 <span key={node.id} style={{ display: 'contents' }}>
                   {index > 0 && <Stem />}
-                  <Node node={node} sub={`línea ${node.line}`} />
+                  <Node node={node} {...clip(node.id)} sub={`línea ${node.line}`} />
                 </span>
               ))}
           </div>

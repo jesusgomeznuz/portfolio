@@ -308,6 +308,57 @@ function extractModes() {
   return modes;
 }
 
+/// Los hijos de una gorda, colgados bajo su nombre — y si un hijo es a su vez
+/// gorda (registra en el App), se abre igual. Antes solo se bajaba UN piso, así
+/// que al agrupar los sensores por efecto, update_freeze quedaba como hoja
+/// vacía: existía la caja pero sus tres systems no aparecían por ningún lado.
+function expandGroup(host, hostFn, hostFunctions, nodes, filesInPlay, visited) {
+  if (visited.has(host.file + '::' + host.name)) return 0;
+  visited.add(host.file + '::' + host.name);
+
+  let pisos = 0;
+  const hostModule = moduleOfFile(host.file);
+  const siblingNames = [...hostFunctions.keys()].filter((name) => name !== host.name);
+  for (const child of extractGroupReferences(hostFn.body, hostModule, siblingNames)) {
+    let resolved = resolvePath(child.path);
+    if (!resolved) continue;
+
+    let functions = extractFunctions(readSource(path.join(GAME_REPO, resolved.file)));
+    let target = functions.get(resolved.name);
+    if (!target) {
+      const reExported = followReExport(resolved);
+      if (reExported) {
+        resolved = reExported;
+        functions = extractFunctions(readSource(path.join(GAME_REPO, resolved.file)));
+        target = functions.get(resolved.name);
+      }
+    }
+    const isGroup = child.kind === 'system' && target && registersInApp(target.body);
+
+    const node = {
+      id: child.path,
+      name: resolved.name,
+      level: 2,
+      phase: host.name,
+      kind: isGroup ? 'group' : child.kind,
+      // El ritmo lo declara quien REGISTRA: una gorda no tiene ritmo propio,
+      // sus hijos declaran el suyo adentro.
+      ritmo: !isGroup && child.kind === 'system' ? scheduleAt(hostFn.body, child.at) : undefined,
+      file: resolved.file,
+      line: lineOf(resolved.file, resolved.name),
+    };
+    nodes.push(node);
+    if (!filesInPlay.has(resolved.file)) filesInPlay.set(resolved.file, new Set());
+    filesInPlay.get(resolved.file).add(resolved.name);
+    pisos += 1;
+
+    if (isGroup) {
+      node.pisos = expandGroup(resolved, target, functions, nodes, filesInPlay, visited);
+    }
+  }
+  return pisos;
+}
+
 function generate() {
   const source = readSource(PORTADA);
   const functions = extractFunctions(source);
@@ -467,28 +518,7 @@ function generate() {
       filesInPlay.get(resolved.file).add(resolved.name);
 
       if (!isGroup) continue;
-      let pisos = 0;
-      // Los hijos de la gorda: lo que registra, colgado bajo su nombre
-      const hostModule = moduleOfFile(resolved.file);
-      const siblingNames = [...targetFunctions.keys()].filter((name) => name !== resolved.name);
-      for (const child of extractGroupReferences(target.body, hostModule, siblingNames)) {
-        const childResolved = resolvePath(child.path);
-        if (!childResolved) continue;
-        nodes.push({
-          id: child.path,
-          name: childResolved.name,
-          level: 2,
-          phase: resolved.name,
-          kind: child.kind,
-          ritmo: child.kind === 'system' ? scheduleAt(target.body, child.at) : undefined,
-          file: childResolved.file,
-          line: lineOf(childResolved.file, childResolved.name),
-        });
-        if (!filesInPlay.has(childResolved.file)) filesInPlay.set(childResolved.file, new Set());
-        filesInPlay.get(childResolved.file).add(childResolved.name);
-        pisos += 1;
-      }
-      groupNode.pisos = pisos;
+      groupNode.pisos = expandGroup(resolved, target, targetFunctions, nodes, filesInPlay, new Set());
     }
   }
 

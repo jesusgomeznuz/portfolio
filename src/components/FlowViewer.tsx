@@ -61,8 +61,9 @@ interface NodeProps {
   onGo?: () => void;
   badge?: string;
   media?: string;
-  onShow: (src: string, anchor: HTMLElement) => void;
+  onShow: (src: string, anchor: HTMLElement, at: { x: number; y: number }) => void;
   onHide: () => void;
+  onArm: (at: { x: number; y: number }) => void;
 }
 
 /// Un nodo: barra de color al canto (el departamento), nombre en Futura,
@@ -73,16 +74,19 @@ interface NodeProps {
 /// todos los botones en cada cambio de estado — incluido el que dispara el
 /// propio hover. El mouse quedaba sobre un DOM distinto al que registró el
 /// onMouseLeave y el clip se quedaba abierto para siempre.
-function Node({ node, sub, onGo, badge, media, onShow, onHide }: NodeProps) {
+function Node({ node, sub, onGo, badge, media, onShow, onHide, onArm }: NodeProps) {
   return (
     <button
       className={`fv-node${onGo ? ' go' : ''}`}
       style={{ '--nc': deptColor(node.dept) } as React.CSSProperties}
-      onClick={onGo}
+      onClick={(event) => {
+        onArm({ x: event.clientX, y: event.clientY });
+        onGo?.();
+      }}
       disabled={!onGo && !media}
-      onMouseEnter={(event) => media && onShow(media, event.currentTarget)}
+      onMouseEnter={(event) => media && onShow(media, event.currentTarget, { x: event.clientX, y: event.clientY })}
       onMouseLeave={onHide}
-      onFocus={(event) => media && onShow(media, event.currentTarget)}
+      onFocus={(event) => media && onShow(media, event.currentTarget, { x: -1, y: -1 })}
       onBlur={onHide}
     >
       <span className="fv-name">
@@ -114,32 +118,47 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
   // cargar el video, al hacer scroll) no re-renderiza el árbol de nodos.
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const anchorEl = useRef<HTMLElement | null>(null);
   const openTimer = useRef<number>();
   const closeTimer = useRef<number>();
+  /// Dónde estaba el cursor al navegar. Los nodos nuevos se dibujan debajo de
+  /// un mouse quieto y el navegador dispara su hover solo: tú no apuntaste a
+  /// nada, la vista se te acomodó encima. Mientras el puntero siga en ESE
+  /// punto exacto, ese nodo se comporta como espacio vacío.
+  const deadPoint = useRef<{ x: number; y: number } | null>(null);
 
-  /// A la izquierda del nodo si cabe, si no a la derecha; centrado vertical
-  /// sobre él y siempre dentro de pantalla. Mide el elemento real en vez de
-  /// asumir su tamaño: un clip vertical y uno apaisado ocupan cosas distintas.
+  /// Horizontal SIEMPRE igual: pegado al borde del panel, no del nodo. Los
+  /// nodos no miden lo mismo — los brazos del match de main.rs son de media
+  /// anchura — así que anclarlo al nodo hacía que unos clips salieran fuera
+  /// del flujo y otros encima de él. Vertical sí sigue al nodo: centrado sobre
+  /// él y siempre dentro de pantalla.
   const place = () => {
     const el = previewRef.current;
     const anchor = anchorEl.current;
-    if (!el || !anchor) return;
+    const root = rootRef.current;
+    if (!el || !anchor || !root) return;
     const gap = 14;
     const rect = anchor.getBoundingClientRect();
+    const panel = root.getBoundingClientRect();
     const width = el.offsetWidth;
     const height = el.offsetHeight;
-    const toLeft = rect.left - gap - width;
-    const left = toLeft >= 8 ? toLeft : Math.min(rect.right + gap, window.innerWidth - width - 8);
+    // Nunca a la izquierda: ahí vive el demo en la portada. Si el margen no
+    // alcanza, se recorre lo mínimo para caber en pantalla en vez de saltar
+    // al otro lado — la posición se mantiene reconocible.
+    const left = Math.max(8, Math.min(panel.right + gap, window.innerWidth - width - 8));
     const top = Math.min(
       Math.max(8, rect.top + rect.height / 2 - height / 2),
       Math.max(8, window.innerHeight - height - 8),
     );
-    el.style.left = `${Math.max(8, left)}px`;
+    el.style.left = `${left}px`;
     el.style.top = `${top}px`;
   };
 
-  const showPreview = (src: string, anchor: HTMLElement) => {
+  const showPreview = (src: string, anchor: HTMLElement, at: { x: number; y: number }) => {
+    // El hover llegó sin que el cursor se moviera: no fuiste tú.
+    if (deadPoint.current && at.x === deadPoint.current.x && at.y === deadPoint.current.y) return;
+    deadPoint.current = null;
     window.clearTimeout(closeTimer.current);
     window.clearTimeout(openTimer.current);
     openTimer.current = window.setTimeout(() => {
@@ -148,6 +167,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
     }, OPEN_DELAY_MS);
   };
   const hidePreview = () => {
+    deadPoint.current = null;
     window.clearTimeout(openTimer.current);
     closeTimer.current = window.setTimeout(() => setPreviewSrc(null), CLOSE_DELAY_MS);
   };
@@ -230,19 +250,26 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
     media: criterioOf(id).media,
     onShow: showPreview,
     onHide: hidePreview,
+    onArm: (at: { x: number; y: number }) => {
+      deadPoint.current = at;
+    },
   });
 
   return (
-    <div className="fv-root">
+    <div className="fv-root" ref={rootRef}>
       <style>{`
         .fv-root { height: 100%; display: flex; flex-direction: column; }
 
         .fv-head { flex-shrink: 0; }
         .fv-crumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; font: 500 11px/1.5 ui-monospace, Menlo, monospace; }
+        /* Altura propia: no la fijan los tags, así que da igual si esa vista
+           trae tres, uno o ninguno — el botón no se mueve. */
+        .fv-topline { display: flex; align-items: center; gap: 12px; min-height: 44px; margin-top: 6px; }
+        .fv-topline .fv-depts { margin-top: 0; flex: 1; min-width: 0; }
         .fv-back {
-          align-self: flex-start;
+          flex-shrink: 0;
           display: inline-flex; align-items: center; gap: 9px;
-          margin-bottom: 16px; padding: 10px 18px 10px 14px;
+          padding: 9px 15px 9px 12px;
           border: 1.4px solid var(--line); border-radius: 999px;
           background: var(--band); color: var(--fg);
           font: 600 12.5px/1 ui-monospace, Menlo, monospace;
@@ -336,20 +363,42 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
               {index > 0 && <span className="fv-sep">›</span>}
               <button
                 className={`fv-crumb${index === stack.length - 1 ? ' current' : ''}`}
-                onClick={() => backTo(index)}
+                onClick={(event) => {
+                  deadPoint.current = { x: event.clientX, y: event.clientY };
+                  backTo(index);
+                }}
               >
                 {crumbLabel(item)}
               </button>
             </span>
           ))}
         </nav>
-        <div className="fv-depts">
-          {depts.map((dept) => (
-            <span key={dept} className="fv-dept" style={{ '--dc': `var(--d-${dept}, var(--line2))` } as React.CSSProperties}>
-              <i />
-              {dept.replaceAll('_', ' ')}
-            </span>
-          ))}
+        {/* Los tags y el botón de volver comparten renglón: los tags a la
+            izquierda, volver a la derecha. Debajo de los tags no servía —
+            cuando una vista no trae tags el renglón se encoge y el botón se
+            mueve. Aquí el renglón tiene altura propia y no depende de que
+            haya tags, ni de cuántos nodos tenga la vista. */}
+        <div className="fv-topline">
+          <div className="fv-depts">
+            {depts.map((dept) => (
+              <span key={dept} className="fv-dept" style={{ '--dc': `var(--d-${dept}, var(--line2))` } as React.CSSProperties}>
+                <i />
+                {dept.replaceAll('_', ' ')}
+              </span>
+            ))}
+          </div>
+          {stack.length > 1 && (
+            <button
+              className="fv-back"
+              onClick={(event) => {
+                deadPoint.current = { x: event.clientX, y: event.clientY };
+                backTo(stack.length - 2);
+              }}
+            >
+              <span className="fv-back-arrow" aria-hidden="true">←</span>
+              {crumbLabel(stack[stack.length - 2])}
+            </button>
+          )}
         </div>
       </div>
 
@@ -370,15 +419,6 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
       )}
 
       <div className={`fv-canvas ${density}`}>
-        {/* Volver vive PEGADO a los nodos, no en la esquina: el mouse ya está
-            aquí abajo cuando acabas de entrar a algo. Arriba del bloque porque
-            volver es subir en el árbol, y ahí es donde estaba el padre. */}
-        {stack.length > 1 && (
-          <button className="fv-back" onClick={() => backTo(stack.length - 2)}>
-            <span className="fv-back-arrow" aria-hidden="true">←</span>
-            {crumbLabel(stack[stack.length - 2])}
-          </button>
-        )}
         {view.kind === 'main' && (
           <div className="fv-col">
             {gate && (

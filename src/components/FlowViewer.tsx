@@ -244,6 +244,16 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
     if (mode.target?.startsWith('game')) enter({ kind: 'root' });
     else if (mode.target) enter({ kind: 'phase', name: mode.target.split('::')[0] });
   };
+  /// Un modo lleva a algún lado si su destino tiene contenido. Antes solo se
+  /// abría el que apunta a `game::`, así que los conversores quedaban muertos
+  /// sin serlo: BuildModules esconde tres pasos y WriteTimeline cinco — que en
+  /// musical-path son justo los de la canción volviéndose mapa.
+  const modeLeadsSomewhere = (mode: FlowNode) => {
+    if (!mode.target) return false;
+    if (mode.target.startsWith('game')) return true;
+    const destino = mode.target.split('::')[0];
+    return nodes.some((node) => node.phase === destino);
+  };
 
   // Los tres props que todo nodo necesita para el clip, en un solo lugar.
   const clip = (id: string) => ({
@@ -441,7 +451,7 @@ export default function FlowViewer({ generated, overlay }: { generated: FlowData
                   node={mode}
                   {...clip(mode.id)}
                   sub={mode.target ? `${mode.target}()` : undefined}
-                  onGo={mode.target?.startsWith('game') ? () => enterMode(mode) : undefined}
+                  onGo={modeLeadsSomewhere(mode) ? () => enterMode(mode) : undefined}
                 />
               ))}
             </div>

@@ -7,7 +7,8 @@
     "nivel": 0
   },
   "game::on_start": {
-    "nivel": 1
+    "nivel": 1,
+    "media": "/flow-media/on-start.webm"
   },
   "game::race::finish::RaceResult": {
     "nivel": 2
@@ -22,13 +23,16 @@
     "nivel": 2
   },
   "game::scene::background::sky::spawn_sky": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/spawn-sky.webm"
   },
   "game::scene::background::stars::spawn_stars": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/spawn-stars.webm"
   },
   "game::scene::background::clouds::spawn_clouds": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/spawn-clouds.webm"
   },
   "game::scene::camera::spawn_camera_and_lights": {
     "nivel": 2
@@ -60,9 +64,6 @@
   "game::world::sensors::swap::fade_swap_rings": {
     "nivel": 2
   },
-  "game::world::sensors::icons::spin_icons": {
-    "nivel": 2
-  },
   "game::world::sensors::bouncy::animate_bounce_pulse": {
     "nivel": 2
   },
@@ -84,19 +85,10 @@
   "game::scene::background::clouds::update_clouds": {
     "nivel": 2
   },
-  "game::world::sensors::freeze::manage_freeze_badges": {
-    "nivel": 2
-  },
-  "game::world::sensors::shrink::manage_shrink_badges": {
-    "nivel": 2
-  },
   "game::race::labels::update_marble_labels": {
     "nivel": 2
   },
   "game::race::leader::crown_follows_leader": {
-    "nivel": 2
-  },
-  "game::world::sensors::badges::update_badges": {
     "nivel": 2
   },
   "game::on_exit": {
@@ -154,7 +146,8 @@
     "nivel": 3
   },
   "game::on_update": {
-    "nivel": 1
+    "nivel": 1,
+    "media": "/flow-media/on-update.webm"
   },
   "engine::game_app": {
     "nivel": 1
@@ -183,9 +176,6 @@
   "game::world::sensors::swap::spawn_swap_rings": {
     "nivel": 3
   },
-  "game::world::sensors::badges::spawn_badge": {
-    "nivel": 3
-  },
   "game::race::labels::spawn_marble_label": {
     "nivel": 3
   },
@@ -193,16 +183,19 @@
     "nivel": 2
   },
   "game::world::structures::spawn_walls": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/spawn-walls.webm"
   },
   "game::world::structures::set_gravity": {
     "nivel": 2
   },
   "game::world::level_generation::spawn_first_module": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/spawn-first-module.webm"
   },
   "game::world::marbles::spawn_marbles": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/spawn-marbles.webm"
   },
   "game::world::structures::spawn_floor": {
     "nivel": 3
@@ -217,7 +210,8 @@
     "nivel": 3
   },
   "game::world::update_sensors": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/sensor-freeze.webm"
   },
   "game::race::follow_the_leader": {
     "nivel": 2
@@ -226,16 +220,19 @@
     "nivel": 2
   },
   "game::world::build_world": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/build-world.webm"
   },
   "game::world::update_world": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/update-world.webm"
   },
   "game::race::build_race": {
     "nivel": 2
   },
   "game::scene::build_scene": {
-    "nivel": 2
+    "nivel": 2,
+    "media": "/flow-media/build-scene.webm"
   },
   "figma_to_modules::split_frame_name": {
     "nivel": 2
@@ -290,5 +287,36 @@
   },
   "args::parse_command": {
     "nivel": 0
+  },
+  "game::world::sensors::freeze::update_freeze": {
+    "nivel": 2,
+    "media": "/flow-media/sensor-freeze.webm"
+  },
+  "game::world::sensors::shrink::update_shrink": {
+    "nivel": 2,
+    "media": "/flow-media/sensor-shrink.webm"
+  },
+  "game::world::sensors::swap::update_swap": {
+    "nivel": 2,
+    "media": "/flow-media/sensor-swap.webm"
+  },
+  "game::world::sensors::bouncy::update_bouncy": {
+    "nivel": 2,
+    "media": "/flow-media/sensor-bouncy.webm"
+  },
+  "game::world::sensors::freeze::manage_freeze_timer": {
+    "nivel": 2
+  },
+  "game::world::sensors::shrink::manage_shrink_timer": {
+    "nivel": 2
+  },
+  "game::world::sensors::icons::update_sensor_icons": {
+    "nivel": 2
+  },
+  "game::world::sensors::marble_timers::update_marble_timers": {
+    "nivel": 2
+  },
+  "game::world::sensors::marble_timers::spawn_marble_timer": {
+    "nivel": 3
   }
 }

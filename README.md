@@ -1,43 +1,114 @@
-# Astro Starter Kit: Minimal
+# CanicasBrawl — web demos
 
-```sh
-npm create astro@latest -- --template minimal
+Astro site running two games **in the browser**: CanicasBrawl and Musical Path.
+Physics is Rapier compiled to WASM, through `@react-three/rapier` on top of
+React Three Fiber.
+
+This is the web port of a game whose original lives in Rust
+([canicasbrawl-rapier](https://github.com/jesusgomeznuz/canicasbrawl-rapier) +
+[rapier-bevy](https://github.com/jesusgomeznuz/rapier-bevy)). Read
+[What's not here](#whats-not-here) before assuming parity.
+
+---
+
+## Run it
+
+All you need is **Node ≥ 22.12.0**. No Rust, no ffmpeg, no tokens, no env vars.
+
+```bash
+git clone https://github.com/jesusgomeznuz/portfolio.git
+cd portfolio
+npm install
+npm run dev        # → http://localhost:4321
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Then open **http://localhost:4321/canicas** — that's the game.
 
-## 🚀 Project Structure
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server at `localhost:4321` |
+| `npm run build` | Static site to `dist/` (~2.5s, 5 pages) |
+| `npm run preview` | Serve the built output |
 
-Inside of your Astro project, you'll see the following folders and files:
+> `npm install` reports some audit warnings from transitive dev dependencies.
+> They don't affect the build or the demo — no need to `audit fix` before running.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+---
+
+## Routes
+
+| Route | What it is |
+|---|---|
+| `/canicas` | **The marble game**, playable in the browser |
+| `/musical` | Musical Path — the score drives the runners |
+| `/flow` | Diagram of the CanicasBrawl production pipeline |
+| `/flow-musical` | Same, for Musical Path |
+| `/` | Portfolio landing page |
+
+---
+
+## Where the game lives
+
+```
+src/
+  components/
+    canicas-demo/
+      CanicasDemo.tsx   ← mounts the canvas and the scene
+      Race.tsx          ← the race: marbles, camera, timer
+      Module.tsx        ← the modules the level is built from
+      Background.tsx    ← background and palette
+      race_rules.ts     ← ALL the game constants
+    musical-demo/
+      MusicalDemo.tsx  Show.tsx  Corridor.tsx  song_rules.ts
+  pages/                ← one .astro per route
+  data/                 ← JSON for the flow diagrams
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Components mount with `client:only="react"` — the game is 100% client-side,
+nothing renders on the server. That matters if you embed it: it needs a browser.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### To tune the game, start at `race_rules.ts`
 
-Any static assets, like images, can be placed in the `public/` directory.
+Every constant is in one file, so you don't have to hunt through components:
 
-## 🧞 Commands
+```ts
+UNIT = 0.35             // base level unit
+MARBLE_RADIUS = 0.085   // marble radius
+GRAVITY_Y = -3.0        // gravity (softer than real, on purpose)
+RACE_SECS = 35          // race duration
+CAMERA_Z = 2.5          // camera distance
+DESIGN_ASPECT = 9/16    // vertical — TikTok/Reels format
+WALL_HALF_WIDTH = 0.55  // lane width
+```
 
-All commands are run from the root of the project, from a terminal:
+Power-ups are `PickupVariant`: `freeze`, `shrink`, `swap`.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+---
 
-## 👀 Want to learn more?
+## What's not here
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+This is a **partial port**, not the full game. Against the Rust original:
+
+| | Rust (`canicasbrawl-rapier`) | Web (this repo) |
+|---|---|---|
+| Lines | 3,758 | 1,644 |
+| Last evolved | August 2026 | July 2026 |
+
+Rust-only:
+
+- **mp4 recording.** The whole video pipeline (`--record`, timelines,
+  `--write-timeline` / `--play`) lives in the Rust engine. The web build only
+  plays in real time.
+- **Traps with sensors grouped by effect**, trap icons, and the per-marble
+  timer — an August refactor that was never ported.
+- **The voice tracker**, which decides which character sings at each moment and
+  feeds the audio production.
+
+Treat it as a working base to build on, not as the finished game ported over.
+
+---
+
+## Stack
+
+Astro 6 · React 19 · Three.js · React Three Fiber · `@react-three/rapier` ·
+`@react-three/drei` · Mermaid (flow diagrams).
